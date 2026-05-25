@@ -1,0 +1,67 @@
+name: Grupo 12 CI - Impostos PJ
+
+on:
+  push:
+    paths:
+      - 'grupos/grupo-12/**'
+      - '.github/workflows/grupo-12-ci.yml'
+  pull_request:
+    paths:
+      - 'grupos/grupo-12/**'
+      - '.github/workflows/grupo-12-ci.yml'
+
+jobs:
+  backend:
+    name: Backend Grupo 12
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: grupos/grupo-12/backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: grupos/grupo-12/backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint if present
+        run: npm run lint --if-present
+
+      - name: Run backend tests
+        run: npm test
+
+  frontend:
+    name: Frontend Grupo 12
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: grupos/grupo-12/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: grupos/grupo-12/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint if present
+        run: npm run lint --if-present
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Build frontend
+        run: npm run build
