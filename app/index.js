@@ -10,6 +10,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "http://localhost:3001";
 
+app.get("/env.js", (req, res) => {
+  res.type("application/javascript");
+  res.send(`window.ENV = { API_URL: ${JSON.stringify(API_URL)} };`);
+});
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
