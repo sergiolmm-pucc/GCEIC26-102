@@ -13,7 +13,7 @@ const erros = [];
 
 async function buildDriver() {
   const opts = new chrome.Options();
-  opts.addArguments('--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--window-size=1280,800', '--disable-gpu');
+  opts.addArguments('--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--window-size=1280,800', '--disable-gpu', '--disable-extensions', '--disable-background-networking');
   driver = await new Builder().forBrowser('chrome').setChromeOptions(opts).build();
   await driver.manage().setTimeouts({ implicit: 5000, pageLoad: 15000 });
 }
