@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Folha de Pagamento</title>
+  <link rel="stylesheet" href="/flp.css">
+</head>
+<body>
+  <div class="layout">
+    <%- include('nav') %>
+    <main class="page-content">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h1 style="font-size:20px;font-weight:800;color:var(--text)">Folha de Pagamento</h1>
+          <p style="font-size:13px;color:var(--text-secondary);margin-top:2px">
+            <%= new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) %> &nbsp;·&nbsp; <%= resultados.length %> funcionário<%= resultados.length !== 1 ? 's' : '' %>
+          </p>
+        </div>
+        <a href="/flp/funcionarios" class="btn" style="background:var(--surface);border:1.5px solid var(--border);color:var(--text)">
+          ← Funcionários
+        </a>
+      </div>
+
+      <% if (resultados.length === 0) { %>
+        <div style="background:var(--surface);border-radius:var(--radius-lg);padding:56px 24px;text-align:center;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;align-items:center;gap:16px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Nenhum funcionário cadastrado</p>
+            <p style="font-size:14px;color:var(--text-secondary)">Cadastre ao menos um funcionário para processar a folha de pagamento.</p>
+          </div>
+          <a href="/flp/funcionarios" class="btn btn-primary" style="margin-top:4px">Ir para Funcionários</a>
+        </div>
+      <% } else { %>
+
+      <!-- Resumo geral -->
+      <%
+        var totalBruto = 0, totalLiquido = 0, totalInss = 0, totalIrrf = 0, totalFgts = 0;
+        resultados.forEach(function(r) {
+          totalBruto   += r.holerite.salario_bruto  || 0;
+          totalLiquido += r.holerite.salario_liquido || 0;
+          totalInss    += r.holerite.descontos.inss  || 0;
+          totalIrrf    += r.holerite.descontos.irrf  || 0;
+          totalFgts    += r.holerite.fgts            || 0;
+        });
+      %>
+      <div class="info-banner" style="margin-bottom:24px">
+        <div class="info-banner-col">
+          <div class="info-banner-label">Total Bruto</div>
+          <div class="info-banner-value"><%= totalBruto.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></div>
+        </div>
+        <div class="info-banner-col">
+          <div class="info-banner-label">Total INSS</div>
+          <div class="info-banner-value" style="color:#ef9a9a"><%= totalInss.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></div>
+        </div>
+        <div class="info-banner-col">
+          <div class="info-banner-label">Total IRRF</div>
+          <div class="info-banner-value" style="color:#ef9a9a"><%= totalIrrf.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></div>
+        </div>
+        <div class="info-banner-col">
+          <div class="info-banner-label">Total Líquido</div>
+          <div class="info-banner-value" style="color:#a5d6a7"><%= totalLiquido.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></div>
+        </div>
+        <div class="info-banner-col">
+          <div class="info-banner-label">FGTS (patronal)</div>
+          <div class="info-banner-value"><%= totalFgts.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></div>
+        </div>
+      </div>
+
+      <!-- Tabela resumo -->
+      <div class="tabela-bloco" style="margin-bottom:28px">
+        <div class="tabela-bloco-titulo">Resumo da Folha</div>
+        <table class="tabela-dados">
+          <thead>
+            <tr>
+              <th>Funcionário</th>
+              <th>Cargo</th>
+              <th>Sal. Bruto</th>
+              <th>INSS</th>
+              <th>IRRF</th>
+              <th>Outros Desc.</th>
+              <th>Sal. Líquido</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% resultados.forEach(function(r, i) {
+              var h = r.holerite;
+              var outros = h.descontos.beneficios ? h.descontos.beneficios.total : 0;
+            %>
+            <tr>
+              <td style="font-weight:600"><%= r.funcionario.nome %></td>
+              <td style="color:var(--text-secondary);font-size:13px"><%= r.funcionario.cargo %></td>
+              <td><%= h.salario_bruto.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td>
+              <td style="color:var(--danger)"><%= h.descontos.inss.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td>
+              <td style="color:var(--danger)"><%= h.descontos.irrf.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td>
+              <td style="color:var(--danger)"><%= outros.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td>
+              <td style="font-weight:700;color:var(--success)"><%= h.salario_liquido.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td>
+              <td>
+                <button id="btn-holerite-<%= i %>" class="holerite-btn"
+                  onclick="toggleHolerite(<%= i %>)">
+                  <span class="btn-label">Ver holerite</span>
+                  <svg class="holerite-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr id="holerite-<%= i %>" style="display:none">
+              <td colspan="8" style="padding:0">
+                <div class="contracheque-doc" style="margin:8px 0;border-radius:var(--radius)">
+                  <div class="ct-header">
+                    <div class="ct-empresa">Sistema FLP</div>
+                    <div class="ct-titulo">Demonstrativo de Pagamento</div>
+                    <div class="ct-periodo"><%= new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'}) %></div>
+                    <div style="width:100%;font-size:13px;color:var(--accent-light);margin-top:4px">
+                      Funcionário: <%= r.funcionario.nome %> — <%= r.funcionario.cargo %>
+                    </div>
+                  </div>
+                  <div class="ct-secao-titulo">Proventos</div>
+                  <table class="ct-table">
+                    <tbody>
+                      <tr><td>Salário Base</td><td><%= h.salario_base.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <% if (h.horas_extras.extras_50 > 0) { %>
+                        <tr><td>H. Extras 50%</td><td><%= h.horas_extras.extras_50.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <% } %>
+                      <% if (h.horas_extras.extras_100 > 0) { %>
+                        <tr><td>H. Extras 100%</td><td><%= h.horas_extras.extras_100.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <% } %>
+                    </tbody>
+                    <tfoot><tr class="ct-subtotal"><td>Total Proventos</td><td><%= h.salario_bruto.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr></tfoot>
+                  </table>
+                  <div class="ct-secao-titulo">Descontos</div>
+                  <table class="ct-table">
+                    <tbody>
+                      <tr class="ct-red"><td>INSS</td><td><%= h.descontos.inss.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <tr class="ct-red"><td>IRRF (<%= h.descontos.irrf_aliquota %>)</td><td><%= h.descontos.irrf.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <% if (h.descontos.deducao_dependentes > 0) { %>
+                        <tr><td>Ded. Dependentes (<%= r.funcionario.dependentes %>x)</td><td>− <%= h.descontos.deducao_dependentes.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                      <% } %>
+                      <% if (h.descontos.beneficios) { var b = h.descontos.beneficios; %>
+                        <% if (b.vale_transporte > 0) { %><tr class="ct-red"><td>Vale-Transporte (desc.)</td><td><%= b.vale_transporte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr><% } %>
+                        <% if (b.vale_alimentacao > 0) { %><tr class="ct-red"><td>Vale-Alimentação (desc.)</td><td><%= b.vale_alimentacao.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr><% } %>
+                        <% if (b.plano_saude > 0) { %><tr class="ct-red"><td>Plano de Saúde</td><td><%= b.plano_saude.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr><% } %>
+                        <% if (b.faltas > 0) { %><tr class="ct-red"><td>Faltas (<%= r.funcionario.diasFalta %> dias)</td><td><%= b.faltas.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr><% } %>
+                        <% if (b.atrasos > 0) { %><tr class="ct-red"><td>Atrasos (<%= r.funcionario.horasAtraso %>h)</td><td><%= b.atrasos.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr><% } %>
+                      <% } %>
+                    </tbody>
+                    <tfoot><tr class="ct-subtotal ct-subtotal-red"><td>Total Descontos</td><td><%= h.descontos.total.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr></tfoot>
+                  </table>
+                  <div class="ct-secao-titulo">Encargo Patronal</div>
+                  <table class="ct-table"><tbody>
+                    <tr><td>FGTS (8%)</td><td><%= h.fgts.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                    <% if (h.descontos.beneficios && h.descontos.beneficios.vt_empresa > 0) { %>
+                      <tr><td>Vale-Transporte — parte empresa</td><td><%= h.descontos.beneficios.vt_empresa.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                    <% } %>
+                    <% if (h.descontos.beneficios && h.descontos.beneficios.va_empresa > 0) { %>
+                      <tr><td>Vale-Alimentação — parte empresa</td><td><%= h.descontos.beneficios.va_empresa.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                    <% } %>
+                    <% if (h.descontos.beneficios && h.descontos.beneficios.ps_empresa > 0) { %>
+                      <tr><td>Plano de Saúde — empresa paga</td><td><%= h.descontos.beneficios.ps_empresa.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></td></tr>
+                    <% } %>
+                  </tbody></table>
+                  <div class="ct-liquido">
+                    <span class="ct-liquido-label">Salário Líquido</span>
+                    <span class="ct-liquido-valor"><%= h.salario_liquido.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %></span>
+                  </div>
+                  <div class="ct-rodape">Base IRRF: <%= h.base_irrf.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) %> &nbsp;|&nbsp; Alíquota: <%= h.descontos.irrf_aliquota %> &nbsp;|&nbsp; Jornada: <%= r.funcionario.jornadaMensal || 220 %>h/mês</div>
+                </div>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <% } %>
+
+    </main>
+  </div>
+  <script>
+    function toggleHolerite(i) {
+      var row = document.getElementById('holerite-' + i);
+      var btn = document.getElementById('btn-holerite-' + i);
+      var isOpen = row.style.display !== 'none';
+      row.style.display = isOpen ? 'none' : 'table-row';
+      btn.classList.toggle('open', !isOpen);
+      btn.querySelector('.btn-label').textContent = isOpen ? 'Ver holerite' : 'Fechar';
+    }
+  </script>
+</body>
+</html>
