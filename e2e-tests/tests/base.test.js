@@ -6,6 +6,8 @@ const runExgTests = require("./exg/exg-all-screens.test.js");
 const runCddTests = require("./cdd/cdd-all-screens.test.js");
 const runCltTests = require("./clt/clt-all-screens.test.js");
 const runFlpTests = require("./flp/flp-all-screens.test.js");
+const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
+const runMkpTests = require("./mkp/mkp-all-screens.test.js");
 
 const BASE_URL = process.env.APP_URL || "http://localhost:3000";
 const SCREENSHOTS_DIR = path.join(__dirname, "..", "screenshots");
@@ -39,37 +41,32 @@ async function main() {
       .forBrowser("chrome")
       .setChromeOptions(opts)
       .build();
-
     await driver.manage().setTimeouts({ implicit: 5000, pageLoad: 15000 });
     console.log(BASE_URL);
     await driver.get(BASE_URL + "/login");
-
     tiraFoto("Pagina Entrada");
     //preenche os campos
-
     await driver.findElement(By.id("username")).sendKeys("Adm");
     await driver.findElement(By.id("password")).sendKeys("admin");
-
     tiraFoto("Valores Digitados");
     // vamos acionar o botao de login e ver o que acontece
     await driver.findElement(By.id("loginForm")).submit();
     await new Promise((r) => setTimeout(r, 800));
-
     tiraFoto("Submit form com erro");
-
     const errMsg = await driver.findElement(By.css(".erro")).getText();
     if (!errMsg.includes("inválidos") && !errMsg.includes("invalidos"))
       throw new Error(`Falhou : ${errMsg}`);
 
+    console.log("\n--- Iniciando testes do MKP ---");
+    await runMkpTests();
     console.log("\n--- Iniciando testes do EXG ---");
     await runExgTests();
-
     console.log("\n--- Iniciando testes do CDD ---");
     await runCddTests();
-
     console.log("\n--- Iniciando testes do CLT+ ---");
     await runCltTests();
-
+    console.log("\n--- Iniciando testes do FinanceCar ---");
+    await runFinanceTests();
     console.log("\n--- Iniciando testes do FLP ---");
     await runFlpTests();
   } finally {

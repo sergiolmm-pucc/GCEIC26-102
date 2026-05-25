@@ -13,6 +13,7 @@ const API_URL = process.env.API_URL || "http://localhost:3001";
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,26 +27,26 @@ app.use(
 );
 
 const equipes = [
-  { numero: 1, nome: 'ETEC1', rota: '/ETEC1/splash' },
-  { numero: 2, nome: 'EXCHANGE', rota: '/exg' },
-  { numero: 3, nome: 'CDD', rota: '/cdd' },
-  { numero: 4, nome: 'CLT', rota: '/clt' },
-  { numero: 5, nome: 'Equipe-5', rota: '/equipe-5' },
-  { numero: 6, nome: 'Equipe-6', rota: '/equipe-6' },
-  { numero: 7, nome: 'Equipe-7', rota: '/equipe-7' },
-  { numero: 8, nome: 'Equipe-8', rota: '/equipe-8' },
-  { numero: 9, nome: 'Equipe-9', rota: '/equipe-9' },
-  { numero: 10, nome: 'Equipe-10', rota: '/equipe-10' },
-  { numero: 11, nome: 'Equipe-11', rota: '/equipe-11' },
-  { numero: 12, nome: 'Equipe-12', rota: '/equipe-12' },
-  { numero: 13, nome: 'FLP', rota: '/flp' },
-  { numero: 14, nome: 'Equipe-14', rota: '/equipe-14' },
-  { numero: 15, nome: 'Equipe-15', rota: '/equipe-15' },
-  { numero: 16, nome: 'Equipe-16', rota: '/equipe-16' },
-  { numero: 17, nome: 'Equipe-17', rota: '/equipe-17' },
-  { numero: 18, nome: 'Equipe-18', rota: '/equipe-18' },
-  { numero: 19, nome: 'Equipe-19', rota: '/equipe-19' },
-  { numero: 20, nome: 'Equipe-20', rota: '/equipe-20' },
+  { numero: 1,  nome: 'ETEC1',       rota: '/ETEC1/splash' },
+  { numero: 2,  nome: 'EXCHANGE',    rota: '/exg' },
+  { numero: 3,  nome: 'CDD',         rota: '/cdd' },
+  { numero: 4,  nome: 'CLT',         rota: '/clt' },
+  { numero: 5,  nome: 'MKP',         rota: '/MKP' },
+  { numero: 6,  nome: 'FinanceCar',  rota: '/financecar' },
+  { numero: 7,  nome: 'Equipe-7',    rota: '/equipe-7' },
+  { numero: 8,  nome: 'DASN-SIMEI',  rota: '/DASN' },
+  { numero: 9,  nome: 'Equipe-9',    rota: '/equipe-9' },
+  { numero: 10, nome: 'CalcPiscina', rota: '/piscina' },
+  { numero: 11, nome: 'Equipe-11',   rota: '/equipe-11' },
+  { numero: 12, nome: 'Equipe-12',   rota: '/equipe-12' },
+  { numero: 13, nome: 'FLP',         rota: '/flp' },
+  { numero: 14, nome: 'Equipe-14',   rota: '/equipe-14' },
+  { numero: 15, nome: 'Equipe-15',   rota: '/equipe-15' },
+  { numero: 16, nome: 'Equipe-16',   rota: '/equipe-16' },
+  { numero: 17, nome: 'Equipe-17',   rota: '/equipe-17' },
+  { numero: 18, nome: 'Markup',      rota: '/markup' },
+  { numero: 19, nome: 'Equipe-19',   rota: '/equipe-19' },
+  { numero: 20, nome: 'Equipe-20',   rota: '/equipe-20' },
 ];
 
 // Auth middleware
@@ -136,16 +137,13 @@ app.post('/ETEC1/:rota', requireAuthETEC1, async (req, res) => {
   }
 });
 
-// Rotas EXG (equipe)
-
+// -- Rotas EXG --
 function requireExgAuth(req, res, next) {
   if (req.session && req.session.exgUser) return next();
   res.redirect("/exg/login");
 }
 
-app.get("/exg", (req, res) => {
-  res.render("exg/splash");
-});
+app.get("/exg", (req, res) => { res.render("exg/splash"); });
 
 app.get("/exg/login", (req, res) => {
   if (req.session.exgUser) return res.redirect("/exg/dashboard");
@@ -237,21 +235,205 @@ app.get("/exg/help", requireExgAuth, (req, res) => {
   res.render("exg/help", { user: req.session.exgUser });
 });
 
-// Rota CD - serve o React compilado
+// -- Rotas FINANCECAR (Time 6) --
+function requireFinanceAuth(req, res, next) {
+  if (req.session && req.session.financeUser) return next();
+  res.redirect("/financecar/login");
+}
+
+app.get("/financecar", (req, res) => { res.render("financecar/splash"); });
+
+app.get("/financecar/login", (req, res) => {
+  if (req.session.financeUser) return res.redirect("/financecar/home");
+  res.render("financecar/login", { error: null });
+});
+
+app.post("/financecar/login", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password)
+    return res.render("financecar/login", { error: "Preencha todos os campos" });
+  if (username === "adm" && password === "adm") {
+    req.session.financeUser = { username: "adm", nome: "Administrador" };
+    return res.redirect("/financecar/home");
+  }
+  res.render("financecar/login", { error: "Usuário ou senha inválidos" });
+});
+
+app.get("/financecar/logout", (req, res) => {
+  req.session.destroy((err) => {
+    res.clearCookie("connect.sid");
+    return res.redirect("/financecar/login");
+  });
+});
+
+app.get("/financecar/home", requireFinanceAuth, (req, res) => {
+  res.render("financecar/home", { user: req.session.financeUser });
+});
+app.get("/financecar/juros", requireFinanceAuth, (req, res) => {
+  res.render("financecar/juros", { user: req.session.financeUser });
+});
+app.get("/financecar/financiamento", requireFinanceAuth, (req, res) => {
+  res.render("financecar/financiamento", { user: req.session.financeUser });
+});
+app.get("/financecar/fundo", requireFinanceAuth, (req, res) => {
+  res.render("financecar/fundo", { user: req.session.financeUser });
+});
+app.get("/financecar/regra", requireFinanceAuth, (req, res) => {
+  res.render("financecar/regra", { user: req.session.financeUser });
+});
+app.get("/financecar/sobre", requireFinanceAuth, (req, res) => {
+  res.render("financecar/sobre", { user: req.session.financeUser });
+});
+
+app.post("/api/financecar/juros", requireFinanceAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/financecar/juros`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/financecar/financiamento", requireFinanceAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/financecar/financiamento`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/financecar/fundo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/financecar/regra`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// -- Time_10 Piscina --
+function requirePiscinaAuth(req, res, next) {
+  if (req.session && req.session.piscinaUser) return next();
+  res.redirect('/piscina/login');
+}
+
+app.get('/piscina', (req, res) => { res.render('Time_10_Piscina/splash'); });
+
+app.get('/piscina/login', (req, res) => {
+  if (req.session.piscinaUser) return res.redirect('/piscina/calculo');
+  res.render('Time_10_Piscina/login', { error: null });
+});
+
+app.post('/piscina/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === 'admin' && password === 'admin') {
+    req.session.piscinaUser = username;
+    return res.redirect('/piscina/calculo');
+  }
+  res.render('Time_10_Piscina/login', { error: 'Usuário ou senha inválidos' });
+});
+
+app.get('/piscina/calculo', requirePiscinaAuth, (req, res) => {
+  res.render('Time_10_Piscina/calculo', { resultado: null });
+});
+
+app.post('/piscina/calculo', requirePiscinaAuth, async (req, res) => {
+  try {
+    const fetch = (await import('node-fetch')).default;
+    const response = await fetch(`${API_URL}/api/Time_10_piscina/calcular-total`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        comprimento: Number(req.body.comprimento),
+        largura: Number(req.body.largura),
+        profundidade: Number(req.body.profundidade),
+        temIluminacao: req.body.temIluminacao === 'on',
+      }),
+    });
+    const resultado = await response.json();
+    res.render('Time_10_Piscina/calculo', { resultado });
+  } catch (error) {
+    console.log(error);
+    res.render('Time_10_Piscina/calculo', { resultado: null });
+  }
+});
+
+app.get('/piscina/sobre', requirePiscinaAuth, (req, res) => { res.render('Time_10_Piscina/sobre'); });
+app.get('/piscina/help', requirePiscinaAuth, (req, res) => { res.render('Time_10_Piscina/help'); });
+app.get('/piscina/logout', (req, res) => {
+  req.session.piscinaUser = null;
+  res.redirect('/piscina/login');
+});
+
+// -- Rota CDD (React compilado) --
 app.get("/cdd", (req, res) => {
   res.sendFile(path.join(__dirname, "views/cdd/index.html"));
 });
 
-// Rotas CLT Empresarial
+// -- Rotas MKP --
+app.get('/MKP', (req, res) => { res.render('mkp/mkp'); });
 
+async function proxyMkpToApi(path, req, res) {
+  try {
+    const target = `${API_URL}${path}`;
+    const fetchRes = await fetch(target, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+    const data = await fetchRes.text();
+    res.status(fetchRes.status).type('application/json').send(data);
+  } catch (err) {
+    console.error('Proxy error', err);
+    res.status(500).json({ error: 'Erro ao encaminhar a requisição para a API.' });
+  }
+}
+
+app.post('/MKP/markup', (req, res) => proxyMkpToApi('/MKP/markup', req, res));
+app.post('/MKP/custos', (req, res) => proxyMkpToApi('/MKP/custos', req, res));
+app.post('/MKP/preco-venda', (req, res) => proxyMkpToApi('/MKP/preco-venda', req, res));
+
+// -- Rotas CLT --
 function requireCltAuth(req, res, next) {
   if (req.session && req.session.cltUser) return next();
   res.redirect('/clt/login');
 }
 
-app.get('/clt', (_req, res) => {
-  res.render('clt/splash');
-});
+app.get('/clt', (_req, res) => { res.render('clt/splash'); });
 
 app.get('/clt/login', (req, res) => {
   if (req.session.cltUser) return res.redirect('/clt/dashboard');
@@ -261,9 +443,8 @@ app.get('/clt/login', (req, res) => {
 app.post('/clt/login', (req, res) => {
   const username = String(req.body.username || '').trim();
   const password = String(req.body.password || '').trim();
-  if (!username || !password) {
+  if (!username || !password)
     return res.render('clt/login', { error: 'Preencha usuário e senha' });
-  }
   if (username === 'admin' && password === 'admin') {
     req.session.cltUser = { username: 'admin', nome: 'Administrador' };
     return res.redirect('/clt/dashboard');
@@ -279,7 +460,6 @@ app.get('/clt/logout', (req, res) => {
 app.get('/clt/dashboard', requireCltAuth, (req, res) => {
   res.render('clt/dashboard', { user: req.session.cltUser });
 });
-
 app.get('/clt/calculadora', requireCltAuth, (req, res) => {
   res.render('clt/calculadora', { user: req.session.cltUser });
 });
@@ -303,13 +483,11 @@ app.post('/clt/calcular', requireCltAuth, async (req, res) => {
 app.get('/clt/about', requireCltAuth, (req, res) => {
   res.render('clt/about', { user: req.session.cltUser });
 });
-
 app.get('/clt/help', requireCltAuth, (req, res) => {
   res.render('clt/help', { user: req.session.cltUser });
 });
 
-// ── Rotas FLP (Time 13) ───────────────────────────────────────────────────────
-
+// -- Rotas FLP (Time 13) --
 function requireFlpAuth(req, res, next) {
   if (req.session && req.session.flpUser) return next();
   res.redirect('/flp/login');
@@ -318,9 +496,7 @@ function requireFlpAuth(req, res, next) {
 const funcionarios = [];
 let nextId = 1;
 
-app.get('/flp', (req, res) => {
-  res.render('flp/splash');
-});
+app.get('/flp', (req, res) => { res.render('flp/splash'); });
 
 app.get('/flp/login', (req, res) => {
   if (req.session.flpUser) return res.redirect('/flp/dashboard');
@@ -412,20 +588,13 @@ app.post('/flp/funcionarios/:id/atualizar', requireFlpAuth, (req, res) => {
   }
   funcionarios[idx] = {
     ...funcionarios[idx],
-    nome: nome.trim(),
-    cargo: cargo.trim(),
-    salarioBase: sal,
+    nome: nome.trim(), cargo: cargo.trim(), salarioBase: sal,
     jornadaMensal: parseInt(jornadaMensal) || 220,
-    horas50: parseFloat(horas50) || 0,
-    horas100: parseFloat(horas100) || 0,
-    diasFalta: parseFloat(diasFalta) || 0,
-    horasAtraso: parseFloat(horasAtraso) || 0,
-    custoVT: parseFloat(custoVT) || 0,
-    pgtVT: pgtVT || 'clt',
-    beneficioVA: parseFloat(beneficioVA) || 0,
-    pctDescontoVA: parseInt(pctDescontoVA) || 20,
-    planoSaude: parseFloat(planoSaude) || 0,
-    pgtPlanoSaude: pgtPlanoSaude || 'funcionario',
+    horas50: parseFloat(horas50) || 0, horas100: parseFloat(horas100) || 0,
+    diasFalta: parseFloat(diasFalta) || 0, horasAtraso: parseFloat(horasAtraso) || 0,
+    custoVT: parseFloat(custoVT) || 0, pgtVT: pgtVT || 'clt',
+    beneficioVA: parseFloat(beneficioVA) || 0, pctDescontoVA: parseInt(pctDescontoVA) || 20,
+    planoSaude: parseFloat(planoSaude) || 0, pgtPlanoSaude: pgtPlanoSaude || 'funcionario',
   };
   res.redirect('/flp/funcionarios');
 });
@@ -437,27 +606,17 @@ app.post('/flp/funcionarios', requireFlpAuth, (req, res) => {
   if (!nome || !cargo || isNaN(sal) || sal <= 0) {
     return res.render('flp/funcionarios', {
       user: req.session.flpUser, funcionarios,
-      erro: 'Preencha nome, cargo e salário válido.',
-      editando: null,
+      erro: 'Preencha nome, cargo e salário válido.', editando: null,
     });
   }
   funcionarios.push({
-    id: nextId++,
-    nome: nome.trim(),
-    cargo: cargo.trim(),
-    salarioBase: sal,
-    dependentes: 0,
+    id: nextId++, nome: nome.trim(), cargo: cargo.trim(), salarioBase: sal, dependentes: 0,
     jornadaMensal: parseInt(jornadaMensal) || 220,
-    horas50: parseFloat(horas50) || 0,
-    horas100: parseFloat(horas100) || 0,
-    diasFalta: parseFloat(diasFalta) || 0,
-    horasAtraso: parseFloat(horasAtraso) || 0,
-    custoVT: parseFloat(custoVT) || 0,
-    pgtVT: pgtVT || 'clt',
-    beneficioVA: parseFloat(beneficioVA) || 0,
-    pctDescontoVA: parseInt(pctDescontoVA) || 20,
-    planoSaude: parseFloat(planoSaude) || 0,
-    pgtPlanoSaude: pgtPlanoSaude || 'funcionario',
+    horas50: parseFloat(horas50) || 0, horas100: parseFloat(horas100) || 0,
+    diasFalta: parseFloat(diasFalta) || 0, horasAtraso: parseFloat(horasAtraso) || 0,
+    custoVT: parseFloat(custoVT) || 0, pgtVT: pgtVT || 'clt',
+    beneficioVA: parseFloat(beneficioVA) || 0, pctDescontoVA: parseInt(pctDescontoVA) || 20,
+    planoSaude: parseFloat(planoSaude) || 0, pgtPlanoSaude: pgtPlanoSaude || 'funcionario',
   });
   res.redirect('/flp/funcionarios');
 });
@@ -477,19 +636,14 @@ app.get('/flp/folha', requireFlpAuth, async (req, res) => {
     const resultados = await Promise.all(funcionarios.map(async f => {
       const payload = {
         token: 'token-flp-2026',
-        salarioBase: f.salarioBase,
-        dependentes: f.dependentes,
+        salarioBase: f.salarioBase, dependentes: f.dependentes,
         horaMes: f.jornadaMensal || 220,
-        horas50: f.horas50,
-        horas100: f.horas100,
-        custoVT: f.custoVT || 0,
-        pgtVT: f.pgtVT || 'clt',
+        horas50: f.horas50, horas100: f.horas100,
+        custoVT: f.custoVT || 0, pgtVT: f.pgtVT || 'clt',
         beneficioVA: f.beneficioVA || 0,
         pctDescontoVA: f.pctDescontoVA !== undefined ? f.pctDescontoVA : 20,
-        planoSaude: f.planoSaude || 0,
-        pgtPlanoSaude: f.pgtPlanoSaude || 'funcionario',
-        diasFalta: f.diasFalta || 0,
-        horasAtraso: f.horasAtraso || 0,
+        planoSaude: f.planoSaude || 0, pgtPlanoSaude: f.pgtPlanoSaude || 'funcionario',
+        diasFalta: f.diasFalta || 0, horasAtraso: f.horasAtraso || 0,
       };
       const r = await fetch(`${API_URL}/api/flp/calcular`, {
         method: 'POST',
@@ -508,23 +662,158 @@ app.get('/flp/folha', requireFlpAuth, async (req, res) => {
 app.get('/flp/about', requireFlpAuth, (req, res) => {
   res.render('flp/about', { user: req.session.flpUser });
 });
-
 app.get('/flp/help', requireFlpAuth, (req, res) => {
   res.render('flp/help', { user: req.session.flpUser });
+});
+
+// -- Time_8 DASN-SIMEI --
+function requireAuthDASN(req, res, next) {
+  if (req.session && req.session.dasnUser) return next();
+  res.redirect('/DASN/login');
+}
+
+app.get('/DASN', (req, res) => res.render('Time_8(DASN)/splash'));
+app.get('/DASN/login', (req, res) => res.render('Time_8(DASN)/login', { erro: null }));
+app.post('/DASN/login', (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === 'admin' && senha === '1234') {
+    req.session.dasnUser = { username: usuario };
+    return res.redirect('/DASN/calculo');
+  }
+  res.render('Time_8(DASN)/login', { erro: 'Usuário ou senha inválidos.' });
+});
+app.get('/DASN/calculo', requireAuthDASN, (req, res) => res.render('Time_8(DASN)/calculo'));
+app.get('/DASN/sobre', requireAuthDASN, (req, res) => res.render('Time_8(DASN)/sobre'));
+app.get('/DASN/help', requireAuthDASN, (req, res) => res.render('Time_8(DASN)/help'));
+app.get('/DASN/logout', (req, res) => {
+  req.session.destroy(() => { res.redirect('/DASN/login'); });
+});
+
+app.post('/DASN/valida-limite', requireAuthDASN, async (req, res) => {
+  try {
+    const fetch = (await import('node-fetch')).default;
+    const response = await fetch(`${API_URL}/DASN/valida-limite`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// -- Rotas Markup --
+function requireMarkupAuth(req, res, next) {
+  if (req.session && req.session.markupUser) return next();
+  res.redirect("/markup/login");
+}
+
+app.get("/markup", (req, res) => {
+  res.render("markup/splash", { user: req.session.markupUser || null });
+});
+
+app.get("/markup/login", (req, res) => {
+  if (req.session.markupUser) return res.redirect("/markup/dashboard");
+  res.render("markup/login", { error: null, user: null });
+});
+
+app.post("/markup/login", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password)
+    return res.render("markup/login", { error: "Preencha todos os campos", user: null });
+  if (username === "admin" && password === "admin") {
+    req.session.markupUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/markup/dashboard");
+  }
+  res.render("markup/login", { error: "Usuário ou senha inválidos", user: null });
+});
+
+app.get("/markup/logout", (req, res) => {
+  req.session.markupUser = null;
+  res.redirect("/markup/login");
+});
+
+app.get("/markup/dashboard", requireMarkupAuth, (req, res) => {
+  res.render("markup/calculo", { user: req.session.markupUser, tipo: "preco-venda" });
+});
+app.get("/markup/preco-venda", requireMarkupAuth, (req, res) => {
+  res.render("markup/calculo", { user: req.session.markupUser, tipo: "preco-venda" });
+});
+app.get("/markup/margem-lucro", requireMarkupAuth, (req, res) => {
+  res.render("markup/margemLucro", { user: req.session.markupUser, tipo: "margem-lucro" });
+});
+app.get("/markup/desconto", requireMarkupAuth, (req, res) => {
+  res.render("markup/desconto", { user: req.session.markupUser, tipo: "desconto" });
+});
+app.get("/markup/markup-multiplicador", requireMarkupAuth, (req, res) => {
+  res.render("markup/calcularMarkupMultiplicador", { user: req.session.markupUser, tipo: "markup-multiplicador" });
+});
+app.get("/markup/sobre", requireMarkupAuth, (req, res) => {
+  res.render("markup/sobre", { user: req.session.markupUser });
+});
+app.get("/markup/help", requireMarkupAuth, (req, res) => {
+  res.render("markup/help", { user: req.session.markupUser });
+});
+
+app.post("/markup/calcularPrecoVenda", requireMarkupAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/markup/calcularPrecoVenda`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/markup/calcularDesconto", requireMarkupAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/markup/calcularDesconto`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/markup/calcularMarkupMultiplicador", requireMarkupAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/markup/calcularMarkupMultiplicador`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
   app.get(`/equipe-${i}`, (req, res) => {
     console.log(`/equipe-${i}/equipe`);
-    res.render(`equipe`, {
-      numero: i,
-      nome: `Equipe-${i}`,
-    });
+    res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
   });
 }
 
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
+
 module.exports = app;
