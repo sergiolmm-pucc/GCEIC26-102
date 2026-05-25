@@ -1,0 +1,23 @@
+{
+  "name": "grupo-12-backend-impostos-pj",
+  "version": "1.0.0",
+  "description": "API do Grupo 12 para simulacao de impostos de desenvolvedores PJ.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "grupo-12",
+    "impostos-pj",
+    "node",
+    "express"
+  ],
+  "author": "Grupo 12",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
