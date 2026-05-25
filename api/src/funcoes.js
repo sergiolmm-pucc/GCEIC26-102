@@ -1,19 +1,17 @@
-
-
 const TABELA = {
-	BASE_CALC: {
-		faixas: [
-		 { ate: 15, alicota: 0.01 },
-		 { ate: 30, alicota: 0.03 },
-		],
-	},
-	REFERENCIA : 20/100,
+  BASE_CALC: {
+    faixas: [
+      { ate: 15, alicota: 0.01 },
+      { ate: 30, alicota: 0.03 },
+    ],
+  },
+  REFERENCIA: 20 / 100,
 };
 
-function calcularArea(base,altura) {
-	
+function calcularArea(base, altura) {
+
   if (base <= 0) throw new Error('Base com valor errado');
-  if (altura <=0) throw new Error('Altura com valor errado');
+  if (altura <= 0) throw new Error('Altura com valor errado');
   let resultado = 0;
   resultado = base * altura;
   return resultado.toFixed(2);
@@ -21,19 +19,26 @@ function calcularArea(base,altura) {
 }
 
 function calcular(dados) {
-  console.log(dados);	
-  const {altura = 0, largura = 0 ,} = dados;	 
+  console.log(dados);
+  const { altura = 0, largura = 0, } = dados;
   if (altura <= 0) throw new Error('Base com valor errado');
-  if (largura <=0) throw new Error('Altura com valor errado');
+  if (largura <= 0) throw new Error('Altura com valor errado');
   let resultado = 0;
   resultado = largura * altura;
   return resultado.toFixed(2);
 
 }
 
+// Re-exports FLP (Time 13)
+const { calcularINSS, calcularIRRF, calcularFolha, TABELA_INSS, TABELA_IRRF } = require('./flp/flpFuncoes');
 
 module.exports = {
-	calcularArea,
-	TABELA,
-	calcular,
+  calcularArea,
+  TABELA,
+  calcular,
+  calcularINSS,
+  calcularIRRF,
+  calcularFolha,
+  TABELA_INSS,
+  TABELA_IRRF,
 };

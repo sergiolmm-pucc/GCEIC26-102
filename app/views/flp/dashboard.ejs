@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Tabelas Vigentes</title>
+  <link rel="stylesheet" href="/flp.css">
+</head>
+<body>
+  <div class="layout">
+    <%- include('nav') %>
+    <main class="page-content">
+
+      <div id="loadingState" style="display:flex;justify-content:center;padding:64px">
+        <span class="spinner dark"></span>
+      </div>
+
+      <div id="conteudo" style="display:none">
+
+        <!-- Cabeçalho informativo -->
+        <div class="info-banner">
+          <div class="info-banner-col">
+            <div class="info-banner-label">Teto INSS</div>
+            <div class="info-banner-value" id="bannerTeto">—</div>
+          </div>
+          <div class="info-banner-col">
+            <div class="info-banner-label">FGTS</div>
+            <div class="info-banner-value">8,0%</div>
+          </div>
+          <div class="info-banner-col">
+            <div class="info-banner-label">Vigência</div>
+            <div class="info-banner-value">2026</div>
+          </div>
+        </div>
+
+        <!-- Tabelas lado a lado -->
+        <div class="tabelas-wrapper">
+
+          <!-- INSS -->
+          <div class="tabela-bloco" id="inssSection">
+            <div class="tabela-bloco-titulo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              INSS — Progressivo
+            </div>
+            <table class="tabela-dados" id="tabelaInss">
+              <thead>
+                <tr>
+                  <th>Faixa</th>
+                  <th>Salário até</th>
+                  <th>Alíquota</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div class="tabela-nota">
+              Cálculo por faixas — cada alíquota incide apenas sobre a parcela do salário dentro do limite.
+            </div>
+          </div>
+
+          <!-- IRRF -->
+          <div class="tabela-bloco">
+            <div class="tabela-bloco-titulo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+              IRRF — Imposto de Renda
+            </div>
+            <table class="tabela-dados" id="tabelaIrrf">
+              <thead>
+                <tr>
+                  <th>Base de Cálculo</th>
+                  <th>Alíquota</th>
+                  <th>Parcela a Deduzir</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div class="tabela-nota">
+              Base = Salário Bruto − INSS − Dedução por Dependentes.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Rodapé CTA -->
+        <div class="cta-bar">
+          <div>
+            <strong>Pronto para calcular?</strong>
+            <span style="color:var(--text-secondary);font-size:14px;margin-left:8px">
+              Informe o salário, dependentes e horas extras para gerar o contracheque.
+            </span>
+          </div>
+          <a href="/flp/calculo" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="8" x2="16" y1="10" y2="10"/><line x1="8" x2="12" y1="14" y2="14"/></svg>
+            Gerar Contracheque
+          </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function brl(n) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+    }
+    function pct(n) { return (n * 100).toFixed(1) + '%'; }
+
+    (async function() {
+      try {
+        var res  = await fetch('/flp/tabelas');
+        var data = await res.json();
+
+        document.getElementById('bannerTeto').textContent = brl(data.inss.teto);
+
+        var labels = ['1ª Faixa', '2ª Faixa', '3ª Faixa', '4ª Faixa'];
+        var tbodyInss = document.querySelector('#tabelaInss tbody');
+        data.inss.faixas.forEach(function(f, i) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + labels[i] + '</td>' +
+            '<td>' + brl(f.ate) + '</td>' +
+            '<td><span class="pct-badge">' + pct(f.aliquota) + '</span></td>';
+          tbodyInss.appendChild(tr);
+        });
+
+        var labelsIrrf = ['Isento', '1ª Faixa', '2ª Faixa', '3ª Faixa', 'Faixa Final'];
+        var tbodyIrrf = document.querySelector('#tabelaIrrf tbody');
+        data.irrf.forEach(function(f, i) {
+          var ate = typeof f.ate === 'number' ? brl(f.ate) : 'Acima de R$ 4.664,68';
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + ate + '</td>' +
+            '<td><span class="pct-badge ' + (f.aliquota === 0 ? 'pct-isento' : '') + '">' + pct(f.aliquota) + '</span></td>' +
+            '<td>' + brl(f.deducao) + '</td>';
+          tbodyIrrf.appendChild(tr);
+        });
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('conteudo').style.display     = 'block';
+      } catch (e) {
+        document.getElementById('loadingState').innerHTML =
+          '<div style="text-align:center"><p style="color:var(--text-secondary);margin-bottom:16px">Não foi possível carregar as tabelas.</p>' +
+          '<a href="/flp/dashboard" class="btn btn-primary">Tentar novamente</a></div>';
+      }
+    })();
+  </script>
+</body>
+</html>

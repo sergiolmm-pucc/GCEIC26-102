@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const etec1 = require("./Time_2(ETEC1)/etec1.route");
+const etec1 = require('./Time_2(ETEC1)/etec1.route');
 const exgRouter = require("./exg/exgApp");
 const cltRouter = require("./clt/cltApp");
+const flpRouter = require('./flp/flpApp');
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/api/tabelas", (req, res) => {
-  const { TABELA } = require("./funcoes");
+  const { TABELA, calcular } = require("./funcoes");
   res.json({
     success: true,
     data: {
@@ -35,12 +36,12 @@ app.get("/api/tabelas", (req, res) => {
 // POST /api/calcular
 app.post("/api/calcular", (req, res) => {
   try {
-    const { calcular } = require("./funcoes");
+    const { TABELA, calcular } = require("./funcoes");
     const dados = req.body;
     console.log(dados);
 
     if (!dados || typeof dados !== "object") {
-      return res.status(400).json({ error: "Corpo da requisicao invalido" });
+      return res.status(400).json({ error: "Corpo da requisição inválido" });
     }
 
     const resultado = calcular(dados);
@@ -52,9 +53,10 @@ app.post("/api/calcular", (req, res) => {
   }
 });
 
-app.use("/ETEC1", etec1);
+app.use('/ETEC1', etec1);
 app.use("/api/exg", exgRouter);
 app.use("/api/clt", cltRouter);
+app.use('/api/flp', flpRouter);
 
 // Rotas CD (compilado TS)
 const cdRouter = require("./cdd/routes/dividendRouter").default;
