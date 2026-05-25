@@ -31,7 +31,7 @@ const equipes = [
   { numero: 2, nome: 'EXCHANGE', rota: '/exg' },
   { numero: 3, nome: 'CDD', rota: '/cdd' },
   { numero: 4, nome: 'CLT', rota: '/clt' },
-  { numero: 5, nome: 'Equipe-5', rota: '/equipe-5' },
+  { numero: 5, nome: 'OCL', rota: '/ocl' },
   { numero: 6, nome: 'FinanceCar', rota: '/financecar' },
   { numero: 7, nome: 'Equipe-7', rota: '/equipe-7' },
   { numero: 8, nome: 'DASN-SIMEI', rota: '/DASN' },
@@ -664,6 +664,68 @@ app.post("/markup/calcularMarkupMultiplicador", requireMarkupAuth, async (req, r
     });
     const data = await response.json();
     res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// ============================================================
+// OCL — Time 5 — Calculadora de custo de produção de óculos
+// ============================================================
+
+function requireOclAuth(req, res, next) {
+  if (req.session && req.session.oclUser) return next();
+  res.redirect("/ocl/login");
+}
+
+app.get("/ocl", (req, res) => {
+  res.render("ocl/splash");
+});
+
+app.get("/ocl/login", (req, res) => {
+  if (req.session.oclUser) return res.redirect("/ocl/calculo");
+  res.render("ocl/login", { error: null });
+});
+
+app.post("/ocl/login", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.render("ocl/login", { error: "Preencha todos os campos" });
+  }
+  if (username === "admin" && password === "admin") {
+    req.session.oclUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/ocl/calculo");
+  }
+  res.render("ocl/login", { error: "Usuário ou senha inválidos" });
+});
+
+app.get("/ocl/logout", (req, res) => {
+  req.session.oclUser = null;
+  res.redirect("/ocl/login");
+});
+
+app.get("/ocl/calculo", requireOclAuth, (req, res) => {
+  res.render("ocl/calculo", { user: req.session.oclUser });
+});
+
+app.get("/ocl/sobre", requireOclAuth, (req, res) => {
+  res.render("ocl/sobre", { user: req.session.oclUser });
+});
+
+app.get("/ocl/help", requireOclAuth, (req, res) => {
+  res.render("ocl/help", { user: req.session.oclUser });
+});
+
+app.post("/ocl/calcular", requireOclAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/ocl/custoTotal`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
   }
