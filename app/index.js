@@ -37,7 +37,7 @@ const equipes = [
   { numero: 7, nome: 'Equipe-7', rota: '/equipe-7' },
   { numero: 8, nome: 'DASN-SIMEI', rota: '/DASN' },
   { numero: 9, nome: 'Equipe-9', rota: '/equipe-9' },
-  { numero: 10, nome: 'Equipe-10', rota: '/equipe-10' },
+  { numero: 10, nome: 'CalcPiscina', rota: '/piscina' },
   { numero: 11, nome: 'Equipe-11', rota: '/equipe-11' },
   { numero: 12, nome: 'Equipe-12', rota: '/equipe-12' },
   { numero: 13, nome: 'Equipe-13', rota: '/equipe-13' },
