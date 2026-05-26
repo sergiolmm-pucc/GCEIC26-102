@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Acesso ao Sistema</title>
+  <link rel="stylesheet" href="/flp.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+
+      <div class="login-header">
+        <div class="login-logo">FL<span>P</span></div>
+        <div class="login-title">Departamento de Pessoal</div>
+      </div>
+
+      <form id="loginForm" method="POST" action="/flp/login" class="login-form">
+        <% if (error) { %>
+          <div class="erro"><%= error %></div>
+        <% } %>
+
+        <div class="field">
+          <label for="username">Usuário</label>
+          <input id="username" name="username" type="text"
+                 placeholder="Digite seu usuário" autocomplete="username">
+        </div>
+
+        <div class="field">
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password"
+                 placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <button class="btn btn-primary btn-full" type="submit" id="submitBtn"
+                style="margin-top:4px">
+          Entrar
+        </button>
+      </form>
+
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--text-secondary)">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-secondary);margin-bottom:6px">Credenciais de acesso</div>
+        <div>Usuário: <code style="background:rgba(0,0,0,0.05);padding:1px 6px;border-radius:4px;font-weight:600;font-size:12px">rh</code></div>
+        <div style="margin-top:4px">Senha: <code style="background:rgba(0,0,0,0.05);padding:1px 6px;border-radius:4px;font-weight:600;font-size:12px">1234</code></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      var u = document.getElementById('username').value.trim();
+      var p = document.getElementById('password').value.trim();
+      if (!u || !p) {
+        e.preventDefault();
+        var existing = document.querySelector('.erro');
+        if (existing) existing.remove();
+        var err = document.createElement('div');
+        err.className = 'erro';
+        err.textContent = 'Preencha o usuário e a senha';
+        this.insertBefore(err, this.firstChild);
+        return;
+      }
+      document.getElementById('submitBtn').disabled    = true;
+      document.getElementById('submitBtn').textContent = 'Entrando…';
+    });
+  </script>
+</body>
+</html>
