@@ -20,6 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
+app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
@@ -42,7 +43,7 @@ const equipes = [
   { numero: 8, nome: "DASN-SIMEI", rota: "/DASN" },
   { numero: 9, nome: "Equipe-9", rota: "/equipe-9" },
   { numero: 10, nome: "CalcPiscina", rota: "/piscina" },
-  { numero: 11, nome: "Equipe-11", rota: "/equipe-11" },
+  { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
   { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
   { numero: 13, nome: "FLP", rota: "/flp" },
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
@@ -963,6 +964,32 @@ for (let i = 5; i <= 20; i++) {
     res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
   });
 }
+
+// -- Time_11(ETEC) - Encargos Trabalhistas Empregada Doméstica --
+app.get("/ETEC11", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
+});
+app.get("/ETEC11/*path", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
+});
+
+const ETEC11_ROTAS = ['salario', 'ferias', 'decimo-terceiro', 'rescisao'];
+ETEC11_ROTAS.forEach(rota => {
+  app.post(`/ETEC11/calcular/${rota}`, async (req, res) => {
+    try {
+      const fetch = (await import('node-fetch')).default;
+      const response = await fetch(`${API_URL}/ETEC11/${rota}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+      const data = await response.json();
+      res.status(response.status).json(data);
+    } catch (err) {
+      res.status(400).json({ success: false, erro: err.message });
+    }
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
