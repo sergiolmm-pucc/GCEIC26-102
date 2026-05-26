@@ -8,12 +8,12 @@ function calcularDecimoTerceiro(salarioBruto, mesesTrabalhados) {
   }
 
   // 1ª parcela (paga até 30/nov): metade do valor bruto, sem descontos
-  const totalBruto = parseFloat(((salarioBruto / 12) * mesesTrabalhados).toFixed(2));
-  const primeiraParcela = parseFloat((totalBruto / 2).toFixed(2));
+  const totalBruto = Number.parseFloat(((salarioBruto / 12) * mesesTrabalhados).toFixed(2));
+  const primeiraParcela = Number.parseFloat((totalBruto / 2).toFixed(2));
 
   // 2ª parcela (paga até 20/dez): descontam INSS e IRRF
   const inss = calcularINSSProgressivo(totalBruto);
-  const segundaParcela = parseFloat((totalBruto - primeiraParcela - inss).toFixed(2));
+  const segundaParcela = Number.parseFloat((totalBruto - primeiraParcela - inss).toFixed(2));
 
   return {
     salarioBruto,

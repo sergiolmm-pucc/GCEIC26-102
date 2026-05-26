@@ -15,11 +15,11 @@ function calcularSalario(salarioBruto) {
   const salarioLiquido = salarioBruto - inssEmpregado;
 
   // Custo total do empregador
-  const inssPatronal = parseFloat((salarioBruto * INSS_PATRONAL).toFixed(2));
-  const fgts = parseFloat((salarioBruto * FGTS).toFixed(2));
-  const reservaIndenizatoria = parseFloat((salarioBruto * RESERVA_INDENIZATORIA).toFixed(2));
-  const seguroAcidente = parseFloat((salarioBruto * SEGURO_ACIDENTE).toFixed(2));
-  const custoTotalEmpregador = parseFloat(
+  const inssPatronal = Number.parseFloat((salarioBruto * INSS_PATRONAL).toFixed(2));
+  const fgts = Number.parseFloat((salarioBruto * FGTS).toFixed(2));
+  const reservaIndenizatoria = Number.parseFloat((salarioBruto * RESERVA_INDENIZATORIA).toFixed(2));
+  const seguroAcidente = Number.parseFloat((salarioBruto * SEGURO_ACIDENTE).toFixed(2));
+  const custoTotalEmpregador = Number.parseFloat(
     (salarioBruto + inssPatronal + fgts + reservaIndenizatoria + seguroAcidente).toFixed(2)
   );
 
@@ -28,7 +28,7 @@ function calcularSalario(salarioBruto) {
     
     // Descontos do empregado
     inssEmpregado,
-    salarioLiquido: parseFloat(salarioLiquido.toFixed(2)),
+    salarioLiquido: Number.parseFloat(salarioLiquido.toFixed(2)),
     
     // Encargos do empregador (não descontam do empregado)
     encargosEmpregador: {

@@ -1,5 +1,5 @@
- request = require('supertest');
- app     = require('../../../src/app');
+const request = require('supertest');
+const app     = require('../../../src/app');
 let respostaEsperada;
 let payload;
 let res;

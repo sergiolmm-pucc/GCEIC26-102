@@ -23,7 +23,7 @@ function calcularINSSProgressivo(salarioBruto) {
         if (salarioBruto <= faixa.limite) break;
     }
 
-    return parseFloat(inssTotal.toFixed(2));
+    return Number.parseFloat(inssTotal.toFixed(2));
 }
 
 module.exports = { calcularINSSProgressivo };

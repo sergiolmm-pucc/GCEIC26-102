@@ -1,6 +1,6 @@
- request = require('supertest');
- app     = require('../../../src/app');
- const { calcularFerias } = require('../../../src/Time_11(ETEC)/services/feriasService');
+const  request = require('supertest');
+const app     = require('../../../src/app');
+const { calcularFerias } = require('../../../src/Time_11(ETEC)/services/feriasService');
 let respostaEsperada;
 let payload;
 let res;

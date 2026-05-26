@@ -31,11 +31,11 @@ router.post('/', (req, res) => {
     const valor = Number(salarioBruto);
     const dias = Number(diasTrabalhados);
 
-    if (isNaN(valor) || valor <= 0) {
+    if (Number.isNaN(valor) || valor <= 0) {
       return res.status(400).json({ erro: 'Salário Bruto deve ser um número maior que zero' });
     }
 
-    if (isNaN(dias) || dias < 1 || dias > 31) {
+    if (Number.isNaN(dias) || dias < 1 || dias > 31) {
       return res.status(400).json({ erro: 'Dias Trabalhados deve ser um número entre 1 e 31' });
     }
 
@@ -48,11 +48,11 @@ router.post('/', (req, res) => {
     const admissao = new Date(dataAdmissao);
     const rescisao = new Date(dataRescisao);
 
-    if (isNaN(admissao.getTime())) {
+    if (Number.isNaN(admissao.getTime())) {
       return res.status(400).json({ erro: 'Data de Admissão inválida. Use o formato AAAA-MM-DD' });
     }
 
-    if (isNaN(rescisao.getTime())) {
+    if (Number.isNaN(rescisao.getTime())) {
       return res.status(400).json({ erro: 'Data de Rescisão inválida. Use o formato AAAA-MM-DD' });
     }
 
@@ -62,7 +62,7 @@ router.post('/', (req, res) => {
 
     const resultado = calcularRescisao(valor, dataAdmissao, dataRescisao, tipoRescisao, dias);
     res.json(resultado);
-  } catch (erro) {
+  } catch (error_) {
     res.status(400).json({ erro: erro.message });
   }
 });

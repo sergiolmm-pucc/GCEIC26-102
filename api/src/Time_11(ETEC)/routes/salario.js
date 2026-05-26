@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
 
     const valor = Number(salarioBruto);
 
-    if (isNaN(valor)) {
+    if (Number.isNaN(valor)) {
       return res.status(400).json({ erro: 'Salário Bruto deve ser um número' });
     }
 
@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
 
     const resultado = calcularSalario(valor);
     res.json(resultado);
-  } catch (erro) {
+  } catch (error_) {
     res.status(400).json({ erro: erro.message });
   }
 });

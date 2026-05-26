@@ -33,29 +33,6 @@ app.use(
 );
 
 const equipes = [
-<<<<<<< HEAD
-  { numero: 1, nome: 'ETEC1', rota: '/ETEC1/splash' },
-  { numero: 2, nome: 'EXCHANGE', rota: '/exg' },
-  { numero: 3, nome: 'CDD', rota: '/cdd' },
-  { numero: 4, nome: 'CLT', rota: '/clt' },
-  { numero: 5, nome: 'MKP', rota: '/MKP' },
-  { numero: 6, nome: 'FinanceCar', rota: '/financecar' },
-  { numero: 7, nome: 'Equipe-7', rota: '/equipe-7' },
-  { numero: 8, nome: 'DASN-SIMEI', rota: '/DASN' },
-  { numero: 9, nome: 'Equipe-9', rota: '/equipe-9' },
-  { numero: 10, nome: 'Equipe-10', rota: '/equipe-10' },
-  { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
-  { numero: 12, nome: 'Equipe-12', rota: '/equipe-12' },
-  { numero: 13, nome: 'Equipe-13', rota: '/equipe-13' },
-  { numero: 14, nome: 'Equipe-14', rota: '/equipe-14' },
-  { numero: 15, nome: 'Equipe-15', rota: '/equipe-15' },
-  { numero: 16, nome: 'Equipe-16', rota: '/equipe-16' },
-  { numero: 17, nome: 'Equipe-17', rota: '/equipe-17' },
-  { numero: 18, nome: 'Markup', rota: '/markup' },
-  { numero: 19, nome: 'Equipe-19', rota: '/equipe-19' },
-  { numero: 20, nome: 'Equipe-20', rota: '/equipe-20' }
-]
-=======
   { numero: 1, nome: "ETEC1", rota: "/ETEC1/splash" },
   { numero: 2, nome: "EXCHANGE", rota: "/exg" },
   { numero: 3, nome: "CDD", rota: "/cdd" },
@@ -66,7 +43,7 @@ const equipes = [
   { numero: 8, nome: "DASN-SIMEI", rota: "/DASN" },
   { numero: 9, nome: "Equipe-9", rota: "/equipe-9" },
   { numero: 10, nome: "CalcPiscina", rota: "/piscina" },
-  { numero: 11, nome: "Equipe-11", rota: "/equipe-11" },
+  { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
   { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
   { numero: 13, nome: "FLP", rota: "/flp" },
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
@@ -77,7 +54,6 @@ const equipes = [
   { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
   { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
 ];
->>>>>>> 209f56dbf60c2a40450a47ce2613e1d941d05c5e
 
 // Auth middleware
 function requireAuth(req, res, next) {

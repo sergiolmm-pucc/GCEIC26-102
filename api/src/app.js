@@ -3,14 +3,11 @@ const cors = require("cors");
 const helmet = require("helmet");
 const etec1 = require('./Time_2(ETEC1)/etec1.route');
 const exgRouter = require("./exg/exgApp");
-<<<<<<< HEAD
 const etec11Salario = require("./Time_11(ETEC)/routes/salario");
 const etec11Ferias = require("./Time_11(ETEC)/routes/ferias");
 const etec11Decimo = require("./Time_11(ETEC)/routes/decimoTerceiro");
 const etec11Rescisao = require("./Time_11(ETEC)/routes/rescisao");
 const etec11Health = require("./Time_11(ETEC)/routes/health");
-=======
->>>>>>> 209f56dbf60c2a40450a47ce2613e1d941d05c5e
 const financeRouter = require("./financecar/financeApp");
 const cltRouter = require("./clt/cltApp");
 const flpRouter = require('./flp/flpApp');
@@ -70,7 +67,6 @@ app.use("/api/exg", exgRouter);
 app.use("/api/financecar", financeRouter);
 // Rotas ETEC1
 app.use("/ETEC1", etec1);
-<<<<<<< HEAD
 
 // Rotas ETEC11
 app.use("/ETEC11/health", etec11Health);
@@ -79,8 +75,6 @@ app.use("/ETEC11/ferias", etec11Ferias);
 app.use("/ETEC11/decimo-terceiro", etec11Decimo);
 app.use("/ETEC11/rescisao", etec11Rescisao);
 
-=======
->>>>>>> 209f56dbf60c2a40450a47ce2613e1d941d05c5e
 // Rotas CLT
 app.use("/api/clt", cltRouter);
 // Rotas FLP

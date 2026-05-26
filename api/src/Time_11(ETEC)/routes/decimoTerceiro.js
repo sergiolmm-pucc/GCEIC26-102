@@ -17,11 +17,11 @@ router.post('/', (req, res) => {
     const valor = Number(salarioBruto);
     const meses = Number(mesesTrabalhados);
 
-    if (isNaN(valor)) {
+    if (Number.isNaN(valor)) {
       return res.status(400).json({ erro: 'Salário Bruto deve ser um número' });
     }
 
-    if (isNaN(meses)) {
+    if (Number.isNaN(meses)) {
       return res.status(400).json({ erro: 'Meses Trabalhados deve ser um número' });
     }
 
@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
 
     const resultado = calcularDecimoTerceiro(valor, meses);
     res.json(resultado);
-  } catch (erro) {
+  } catch (error_) {
     res.status(400).json({ erro: erro.message });
   }
 });

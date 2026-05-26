@@ -16,21 +16,21 @@ function calcularRescisao(salarioBruto, dataAdmissao, dataRescisao, tipoRescisao
   const mesesParaDecimo = Math.min(mesesAno % 12 + 1, 12);
 
   // Saldo de salário (dias trabalhados no mês da rescisão)
-  const saldoSalario = parseFloat(((salarioBruto / 30) * diasTrabalhados).toFixed(2));
+  const saldoSalario = Number.parseFloat(((salarioBruto / 30) * diasTrabalhados).toFixed(2));
 
   // Férias proporcionais + 1/3
   const mesesParaFerias = Math.min(mesesAno, 12);
-  const feriasProporcionais = parseFloat(((salarioBruto / 12) * mesesParaFerias).toFixed(2));
-  const umTercoFerias = parseFloat((feriasProporcionais / 3).toFixed(2));
-  const totalFerias = parseFloat((feriasProporcionais + umTercoFerias).toFixed(2));
+  const feriasProporcionais = Number.parseFloat(((salarioBruto / 12) * mesesParaFerias).toFixed(2));
+  const umTercoFerias = Number.parseFloat((feriasProporcionais / 3).toFixed(2));
+  const totalFerias = Number.parseFloat((feriasProporcionais + umTercoFerias).toFixed(2));
 
   // 13º proporcional
-  const decimoTerceiro = parseFloat(((salarioBruto / 12) * mesesParaDecimo).toFixed(2));
+  const decimoTerceiro = Number.parseFloat(((salarioBruto / 12) * mesesParaDecimo).toFixed(2));
 
   // Aviso prévio (Lei 12.506/2011)
   // 30 dias base + 3 dias por ano completo, máximo 90 dias
   const diasAviso = Math.min(30 + (anosCompletos * 3), 90);
-  const valorAvisoPrevio = parseFloat(((salarioBruto / 30) * diasAviso).toFixed(2));
+  const valorAvisoPrevio = Number.parseFloat(((salarioBruto / 30) * diasAviso).toFixed(2));
 
   // Descontos (INSS sobre saldo e 13º)
   const inssRescisao = calcularINSSProgressivo(saldoSalario + decimoTerceiro);
@@ -49,19 +49,19 @@ function calcularRescisao(salarioBruto, dataAdmissao, dataRescisao, tipoRescisao
     // Aviso prévio proporcional indenizado + reserva indenizatória (3,2% acumulado)
     resultado.avisoPrevioIndenizado = valorAvisoPrevio;
     resultado.observacaoFGTS = 'A empregada pode sacar FGTS (8%) + reserva indenizatória (3,2%) acumulados. O empregador NÃO paga multa de 40% na rescisão — esse valor já foi recolhido mensalmente via eSocial (LC 150/2015).';
-    resultado.totalBruto = parseFloat(
+    resultado.totalBruto = Number.parseFloat(
       (saldoSalario + totalFerias + decimoTerceiro + valorAvisoPrevio).toFixed(2)
     );
   } else if (tipoRescisao === 'acordoComum') {
     // Metade do aviso prévio indenizado
-    resultado.avisoPrevioIndenizado = parseFloat((valorAvisoPrevio / 2).toFixed(2));
+    resultado.avisoPrevioIndenizado = Number.parseFloat((valorAvisoPrevio / 2).toFixed(2));
     resultado.observacaoFGTS = 'A empregada pode sacar até 80% do FGTS. Reserva indenizatória: 20% do acumulado. Sem seguro-desemprego.';
-    resultado.totalBruto = parseFloat(
+    resultado.totalBruto = Number.parseFloat(
       (saldoSalario + totalFerias + decimoTerceiro + resultado.avisoPrevioIndenizado).toFixed(2)
     );
   } else if (tipoRescisao === 'pedidoDemissao') {
     resultado.observacaoFGTS = 'Sem saque de FGTS. Reserva indenizatória retorna ao empregador.';
-    resultado.totalBruto = parseFloat(
+    resultado.totalBruto = Number.parseFloat(
       (saldoSalario + totalFerias + decimoTerceiro).toFixed(2)
     );
   } else if (tipoRescisao === 'comJustaCausa') {
@@ -69,7 +69,7 @@ function calcularRescisao(salarioBruto, dataAdmissao, dataRescisao, tipoRescisao
     resultado.totalBruto = saldoSalario;
   }
 
-  resultado.totalLiquido = parseFloat((resultado.totalBruto - inssRescisao).toFixed(2));
+  resultado.totalLiquido = Number.parseFloat((resultado.totalBruto - inssRescisao).toFixed(2));
 
   return resultado;
 }
