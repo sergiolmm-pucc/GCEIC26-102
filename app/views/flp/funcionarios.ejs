@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Funcionários</title>
+  <link rel="stylesheet" href="/flp.css">
+</head>
+<body>
+  <div class="layout">
+    <%- include('nav') %>
+    <main class="page-content">
+
+      <div class="func-wrapper">
+
+        <!-- Formulário de cadastro / edição -->
+        <section class="folha-form-section">
+          <h2 class="section-heading">
+            <% if (editando) { %>Editar Funcionário<% } else { %>Cadastrar Funcionário<% } %>
+          </h2>
+
+          <% if (erro) { %>
+            <div class="erro"><%= erro %></div>
+          <% } %>
+
+          <form method="POST" action="<% if (editando) { %>/flp/funcionarios/<%= editando.id %>/atualizar<% } else { %>/flp/funcionarios<% } %>">
+            <div style="display:flex;flex-direction:column;gap:14px">
+
+              <div class="field">
+                <label for="nome">Nome completo</label>
+                <input id="nome" name="nome" type="text" placeholder="Ex: João da Silva"
+                  value="<%= editando ? editando.nome : '' %>" required>
+              </div>
+              <div class="field">
+                <label for="cargo">Cargo / Função</label>
+                <input id="cargo" name="cargo" type="text" placeholder="Ex: Analista de TI"
+                  value="<%= editando ? editando.cargo : '' %>" required>
+              </div>
+              <div class="field">
+                <label for="salarioBase">Salário Base (R$)</label>
+                <input id="salarioBase" name="salarioBase" type="number" placeholder="0,00" min="0.01" step="0.01"
+                  value="<%= editando ? editando.salarioBase : '' %>" required>
+              </div>
+
+              <div class="field">
+                <label for="jornadaMensal">Jornada Mensal</label>
+                <select id="jornadaMensal" name="jornadaMensal">
+                  <option value="220" <%= (!editando || editando.jornadaMensal === 220) ? 'selected' : '' %>>220h/mês — CLT 44h/semana</option>
+                  <option value="200" <%= (editando && editando.jornadaMensal === 200) ? 'selected' : '' %>>200h/mês — CLT 40h/semana</option>
+                  <option value="180" <%= (editando && editando.jornadaMensal === 180) ? 'selected' : '' %>>180h/mês — CLT 36h/semana</option>
+                </select>
+              </div>
+
+              <fieldset class="fieldset-extras">
+                <legend>Horas Extras do Mês</legend>
+                <div class="extras-grid">
+                  <div class="field">
+                    <label for="horas50">50% — normais</label>
+                    <input id="horas50" name="horas50" type="number" placeholder="0" min="0" step="0.5"
+                      value="<%= editando ? editando.horas50 : 0 %>">
+                  </div>
+                  <div class="field">
+                    <label for="horas100">100% — feriados</label>
+                    <input id="horas100" name="horas100" type="number" placeholder="0" min="0" step="0.5"
+                      value="<%= editando ? editando.horas100 : 0 %>">
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Faltas e Atrasos</legend>
+                <div class="extras-grid">
+                  <div class="field">
+                    <label for="diasFalta">Dias de falta</label>
+                    <input id="diasFalta" name="diasFalta" type="number" placeholder="0" min="0" step="1"
+                      value="<%= editando ? editando.diasFalta : 0 %>">
+                    <span class="field-hint">1 dia = salário ÷ 30</span>
+                  </div>
+                  <div class="field">
+                    <label for="horasAtraso">Horas de atraso</label>
+                    <input id="horasAtraso" name="horasAtraso" type="number" placeholder="0" min="0" step="0.5"
+                      value="<%= editando ? editando.horasAtraso : 0 %>">
+                    <span class="field-hint" id="hintAtraso">1h = salário ÷ <%= editando ? (editando.jornadaMensal || 220) : 220 %></span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Vale-Transporte</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="custoVT">Custo mensal total (R$)</label>
+                    <input id="custoVT" name="custoVT" type="number" placeholder="0,00" min="0" step="0.01"
+                      value="<%= editando ? editando.custoVT : 0 %>">
+                    <span class="field-hint" id="hintVT">Se o custo for maior que 6% do salário, a empresa arca com o excedente</span>
+                  </div>
+                  <div class="field">
+                    <label style="margin-bottom:5px;display:block">Quem paga o VT?</label>
+                    <div class="radio-seg" id="segPgtVT">
+                      <label class="<%= (!editando || !editando.pgtVT || editando.pgtVT === 'clt') ? 'active' : '' %>">
+                        <input type="radio" name="pgtVT" value="clt" <%= (!editando || !editando.pgtVT || editando.pgtVT === 'clt') ? 'checked' : '' %>>
+                        <span>Funcionário</span>
+                      </label>
+                      <label class="<%= (editando && editando.pgtVT === 'empresa') ? 'active' : '' %>">
+                        <input type="radio" name="pgtVT" value="empresa" <%= (editando && editando.pgtVT === 'empresa') ? 'checked' : '' %>>
+                        <span>Empresa</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Vale-Alimentação / Refeição</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="beneficioVA">Valor do benefício (R$)</label>
+                    <input id="beneficioVA" name="beneficioVA" type="number" placeholder="0,00" min="0" step="0.01"
+                      value="<%= editando ? editando.beneficioVA : 0 %>">
+                  </div>
+                  <div class="field">
+                    <label>Desconto do funcionário: <strong id="pctVALabel"><%= editando ? (editando.pctDescontoVA || 20) : 20 %>%</strong> <span style="font-size:11px;color:var(--text-secondary);font-weight:400">(desconto máximo de 20%)</span></label>
+                    <input type="range" id="pctDescontoVA" name="pctDescontoVA"
+                      min="0" max="20" step="1" style="width:100%;accent-color:var(--accent);margin-top:6px"
+                      value="<%= editando ? (editando.pctDescontoVA || 20) : 20 %>">
+                    <span class="field-hint" id="hintVA">Desconto: R$ 0,00 | Empresa arca: R$ 0,00</span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Plano de Saúde</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="planoSaude">Mensalidade (R$)</label>
+                    <input id="planoSaude" name="planoSaude" type="number" placeholder="0,00" min="0" step="0.01"
+                      value="<%= editando ? editando.planoSaude : 0 %>">
+                  </div>
+                  <div class="field">
+                    <label style="margin-bottom:5px;display:block">Quem paga o plano?</label>
+                    <div class="radio-seg" id="segPgtPS">
+                      <label class="<%= (!editando || !editando.pgtPlanoSaude || editando.pgtPlanoSaude === 'funcionario') ? 'active' : '' %>">
+                        <input type="radio" name="pgtPlanoSaude" value="funcionario" <%= (!editando || !editando.pgtPlanoSaude || editando.pgtPlanoSaude === 'funcionario') ? 'checked' : '' %>>
+                        <span>Funcionário</span>
+                      </label>
+                      <label class="<%= (editando && editando.pgtPlanoSaude === 'empresa') ? 'active' : '' %>">
+                        <input type="radio" name="pgtPlanoSaude" value="empresa" <%= (editando && editando.pgtPlanoSaude === 'empresa') ? 'checked' : '' %>>
+                        <span>Empresa</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div style="display:flex;gap:10px">
+                <button class="btn btn-primary btn-full" type="submit">
+                  <% if (editando) { %>Salvar Alterações<% } else { %>Cadastrar Funcionário<% } %>
+                </button>
+                <% if (editando) { %>
+                  <a href="/flp/funcionarios" class="btn btn-full"
+                    style="background:var(--bg);border:1.5px solid var(--border);color:var(--text)">
+                    Cancelar
+                  </a>
+                <% } %>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- Lista de funcionários -->
+        <section class="func-lista-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <h2 class="section-heading" style="border:none;padding:0">
+              Funcionários
+              <span class="func-count"><%= funcionarios.length %></span>
+            </h2>
+            <% if (funcionarios.length > 0) { %>
+              <a href="/flp/folha" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Processar Folha Completa
+              </a>
+            <% } %>
+          </div>
+
+          <!-- Aviso de armazenamento em memória -->
+          <div style="background:#E8F5E9;border:1.5px solid #C8E6C9;border-radius:var(--radius);padding:12px 14px;font-size:13px;color:#2E7D32;display:flex;gap:10px;align-items:flex-start">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>
+              <strong>Armazenamento temporário</strong> — os funcionários cadastrados ficam na memória do servidor enquanto ele estiver rodando. Ao reiniciar o servidor, todos os registros são apagados automaticamente.
+            </div>
+          </div>
+
+          <% if (funcionarios.length === 0) { %>
+            <div class="func-vazio">
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <p>Nenhum funcionário cadastrado.<br>Use o formulário ao lado para adicionar.</p>
+            </div>
+          <% } else { %>
+            <div class="func-lista">
+              <% funcionarios.forEach(function(f) { %>
+                <div class="func-card<%= editando && editando.id === f.id ? ' func-card-editando' : '' %>">
+                  <div class="func-info">
+                    <div class="func-nome"><%= f.nome %></div>
+                    <div class="func-cargo"><%= f.cargo %></div>
+                    <div class="func-detalhes">
+                      R$ <%= f.salarioBase.toLocaleString('pt-BR', {minimumFractionDigits:2}) %>
+                      · <%= f.jornadaMensal || 220 %>h/mês
+                      <% if (f.diasFalta > 0) { %> · <%= f.diasFalta %>d falta<% } %>
+                      <% if (f.horasAtraso > 0) { %> · <%= f.horasAtraso %>h atraso<% } %>
+                      <% if (f.custoVT > 0) { %> · VT<% } %>
+                      <% if (f.beneficioVA > 0) { %> · VA<% } %>
+                      <% if (f.planoSaude > 0) { %> · Plano<% } %>
+                    </div>
+                  </div>
+                  <div class="func-acoes">
+                    <a href="/flp/funcionarios/<%= f.id %>/editar"
+                       class="btn btn-sm" style="background:var(--accent);color:#fff">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                      Editar
+                    </a>
+                    <form method="POST" action="/flp/funcionarios/<%= f.id %>/remover" style="margin:0">
+                      <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Remover <%= f.nome %>?')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                        Remover
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
+        </section>
+
+      </div>
+    </main>
+  </div>
+  <script>
+    function fmt(n) {
+      return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    document.getElementById('jornadaMensal').addEventListener('change', function() {
+      document.getElementById('hintAtraso').textContent = '1h = salário ÷ ' + this.value;
+    });
+
+    function atualizarHintVT() {
+      var sal = parseFloat(document.getElementById('salarioBase').value) || 0;
+      var vt  = parseFloat(document.getElementById('custoVT').value) || 0;
+      var pgt = document.querySelector('input[name="pgtVT"]:checked').value;
+      var hint = document.getElementById('hintVT');
+      if (pgt === 'empresa') {
+        hint.textContent = vt > 0 ? 'Empresa arca com todo o custo: ' + fmt(vt) : 'Empresa arca com todo o custo';
+      } else if (sal > 0) {
+        var limite = sal * 0.06;
+        if (vt > 0) {
+          var funcPaga = Math.min(vt, limite);
+          var empPaga  = Math.max(0, vt - limite);
+          var txt = '6% do salário = ' + fmt(limite) + ' | Funcionário paga: ' + fmt(funcPaga);
+          if (empPaga > 0) txt += ' | Empresa arca: ' + fmt(empPaga);
+          hint.textContent = txt;
+        } else {
+          hint.textContent = '6% do salário = ' + fmt(limite) + ' (limite de desconto — excedente a empresa arca)';
+        }
+      } else {
+        hint.textContent = 'Se o custo for maior que 6% do salário, a empresa arca com o excedente';
+      }
+    }
+
+    function atualizarHintVA() {
+      var benef = parseFloat(document.getElementById('beneficioVA').value) || 0;
+      var pct   = parseInt(document.getElementById('pctDescontoVA').value) || 0;
+      document.getElementById('pctVALabel').textContent = pct + '%';
+      var hint = document.getElementById('hintVA');
+      if (benef > 0) {
+        hint.textContent = 'Desconto: ' + fmt(benef * pct / 100) + ' | Empresa arca: ' + fmt(benef * (100 - pct) / 100);
+      } else {
+        hint.textContent = 'Desconto: R$ 0,00 | Empresa arca: R$ 0,00';
+      }
+    }
+
+    function setupRadioSeg(segId) {
+      document.getElementById(segId).querySelectorAll('label').forEach(function(lbl) {
+        lbl.querySelector('input').addEventListener('change', function() {
+          document.getElementById(segId).querySelectorAll('label').forEach(function(l) { l.classList.remove('active'); });
+          lbl.classList.add('active');
+          atualizarHintVT();
+        });
+      });
+    }
+
+    setupRadioSeg('segPgtVT');
+    setupRadioSeg('segPgtPS');
+
+    document.getElementById('salarioBase').addEventListener('input', atualizarHintVT);
+    document.getElementById('custoVT').addEventListener('input', atualizarHintVT);
+    document.getElementById('beneficioVA').addEventListener('input', atualizarHintVA);
+    document.getElementById('pctDescontoVA').addEventListener('input', atualizarHintVA);
+
+    // Inicializa hints ao carregar
+    (function() {
+      atualizarHintVT();
+      atualizarHintVA();
+    })();
+  </script>
+</body>
+</html>
