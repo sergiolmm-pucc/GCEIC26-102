@@ -1,14 +1,17 @@
-const request = require('supertest');
-const app     = require('../../../src/app');
+ request = require('supertest');
+ app     = require('../../../src/app');
+let respostaEsperada;
+let payload;
+let res;
 
 describe('Teste do endpoint de cálculo da rescisão', () => {
     test('Deve retornar 400 quando salário bruto for nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Salário Bruto é obrigatório',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: null,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -16,18 +19,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando salário bruto for menor que zero', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Salário Bruto deve ser um número maior que zero',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: -1000.0,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -35,18 +38,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando salário bruto for igual a zero', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Salário Bruto deve ser um número maior que zero',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 0.0,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -54,18 +57,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data admissão for nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Admissão é obrigatória (formato: AAAA-MM-DD)',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 2000.00,
             dataAdmissao: null, 
             dataRescisao: '2025-08-10',
@@ -73,18 +76,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data rescisão for nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Rescisão é obrigatória (formato: AAAA-MM-DD)',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: null, 
@@ -92,18 +95,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando tipo rescisão for nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Tipo de Rescisão é obrigatório',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -111,18 +114,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando dias trabalhados for nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Dias Trabalhados é obrigatório',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -130,19 +133,19 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: null, 
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
 
     test('Deve retornar 400 quando dias trabalhados for menor que zero', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Dias Trabalhados deve ser um número entre 1 e 31',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -150,19 +153,19 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: -1, 
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
 
     test('Deve retornar 400 quando dias trabalhados for igual a zero', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Dias Trabalhados deve ser um número entre 1 e 31',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -170,19 +173,19 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 0, 
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
 
     test('Deve retornar 400 quando dias trabalhados for maior que 31', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Dias Trabalhados deve ser um número entre 1 e 31',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -190,18 +193,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 32, 
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando todos os argumentos forem nulo', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Salário Bruto é obrigatório', // Pega o primeiro erro e já da return
         };
 
-        const payload = {
+         payload = {
             salarioBruto: null,
             dataAdmissao: null,
             dataRescisao: null, 
@@ -209,18 +212,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: null,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando tipo rescisão for um tipo inválido', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'tipoRescisao inválido. Use: ',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -228,18 +231,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toContain(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data admissão tiver formato inválido', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Admissão inválida. Use o formato AAAA-MM-DD',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: 'data-invalida',
             dataRescisao: '2025-08-10',
@@ -247,18 +250,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data rescisão tiver formato inválido', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Rescisão inválida. Use o formato AAAA-MM-DD',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: 'data-invalida',
@@ -266,18 +269,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data rescisão for anterior à data admissão', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Rescisão deve ser posterior à dataAdmissao',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-08-10',
             dataRescisao: '2025-06-10',
@@ -285,18 +288,18 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando data rescisão for igual à data admissão', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 400,
             erro: 'Data de Rescisão deve ser posterior à dataAdmissao',
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-06-10',
@@ -304,23 +307,23 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
         expect(res.body.erro).toStrictEqual(respostaEsperada.erro);
     });
 
     test('Deve retornar 400 quando o service lançar uma exceção', async () => {
-        const mensagemErro = 'Falha inesperada no cálculo';
+         mensagemErro = 'Falha inesperada no cálculo';
 
         let appComServiceQueLanca;
         jest.isolateModules(() => {
-            jest.doMock('../../../src/Time_11(ETEC)/rescisaoService', () => ({
+            jest.doMock('../../../src/Time_11(ETEC)/services/rescisaoService', () => ({
                 calcularRescisao: () => { throw new Error(mensagemErro); },
             }));
             appComServiceQueLanca = require('../../../src/app');
         });
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -328,17 +331,17 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(appComServiceQueLanca).post('/ETEC11/rescisao').send(payload));
+         res = (await request(appComServiceQueLanca).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(400);
         expect(res.body.erro).toStrictEqual(mensagemErro);
     });
 
     test('Deve retornar 200 quando todos os dados forem válidos', async () => {
-        const respostaEsperada = {
+         respostaEsperada = {
             status: 200,
         };
 
-        const payload = {
+         payload = {
             salarioBruto: 4000.00,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
@@ -346,7 +349,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
             diasTrabalhados: 20,
         };
 
-        const res = (await request(app).post('/ETEC11/rescisao').send(payload));
+         res = (await request(app).post('/ETEC11/rescisao').send(payload));
         expect(res.statusCode).toBe(respostaEsperada.status);
     });
 })

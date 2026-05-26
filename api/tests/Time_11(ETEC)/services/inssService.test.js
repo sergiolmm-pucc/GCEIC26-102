@@ -1,4 +1,4 @@
-const { calcularINSSProgressivo } = require('../../../src/Time_11(ETEC)/inssService')
+const { calcularINSSProgressivo } = require('../../../src/Time_11(ETEC)/services/inssService')
 
 describe('Teste do cálculo do INSS', () => {
     test('Deve retornar 0 quando salário bruto for menor que 0', async () => {

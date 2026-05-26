@@ -1,4 +1,4 @@
-const { calcularFerias } = require('../../../src/Time_11(ETEC)/feriasService');
+const { calcularFerias } = require('../../../src/Time_11(ETEC)/services/feriasService');
 
 describe('Teste do cálculo de férias', () => {
     test('Deve calcular férias de 30 dias como salário cheio + 1/3 constitucional', () => {

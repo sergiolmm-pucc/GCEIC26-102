@@ -1,4 +1,4 @@
-const { calcularRescisao } = require('../../../src/Time_11(ETEC)/rescisaoService');
+const { calcularRescisao } = require('../../../src/Time_11(ETEC)/services/rescisaoService');
 
 describe('Teste do cálculo de rescisão', () => {
     test('Deve calcular a rescisão quando for sem justa causa', () => {

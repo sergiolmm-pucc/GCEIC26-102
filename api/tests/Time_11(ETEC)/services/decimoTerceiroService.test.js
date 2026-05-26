@@ -1,4 +1,4 @@
-const { calcularDecimoTerceiro } = require('../../../src/Time_11(ETEC)/decimoTerceiroService')
+const { calcularDecimoTerceiro } = require('../../../src/Time_11(ETEC)/services/decimoTerceiroService')
 
 describe('Teste do cálculo do décimo terceiro', () => {
     test('Deve retornar erro ao inserir mês -1', () => {

@@ -1,4 +1,4 @@
-const { calcularSalario } = require('../../../src/Time_11(ETEC)/salarioService');
+const { calcularSalario } = require('../../../src/Time_11(ETEC)/services/salarioService');
 
 describe('Teste do cálculo do salário', () => {
     test('Deve lançar erro quando o salário for menor que o mínimo', () => {
