@@ -3,7 +3,7 @@ const { calcularINSSProgressivo } = require('../../../src/Time_11(ETEC)/services
 describe('Teste do cálculo do INSS', () => {
     test('Deve retornar 0 quando salário bruto for menor que 0', async () => {
         const valorEsperado = 0;
-        const salarioBruto = -1000.00;
+        const salarioBruto = -1000;
         
         const res = calcularINSSProgressivo(salarioBruto);
         expect(res).toEqual(valorEsperado)

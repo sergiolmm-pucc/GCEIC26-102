@@ -9,10 +9,10 @@ describe('Teste do cálculo do salário', () => {
     });
 
     test('Deve calcular corretamente o salário mínimo de 2026', () => {
-        const salario = 1621.00
+        const salario = 1621
 
         const valorEsperado = {
-            salarioBruto: 1621.00,
+            salarioBruto: 1621,
             inssEmpregado: 121.57,
             salarioLiquido: 1499.43,
             encargosEmpregador: {
@@ -29,19 +29,19 @@ describe('Teste do cálculo do salário', () => {
         expect(res).toEqual(valorEsperado);
     });
 
-    test('Deve calcular corretamente um salário de R$ 3.000,00', () => {
-        const salario = 3000.00;
+    test('Deve calcular corretamente um salário de R$ 30,00', () => {
+        const salario = 3000;
 
         const valorEsperado = {
-            salarioBruto: 3000.00,
+            salarioBruto: 3000,
             inssEmpregado: 248.60,
             salarioLiquido: 2751.40,
             encargosEmpregador: {
-                inssPatronal: 240.00,
-                fgts: 240.00, 
-                reservaIndenizatoria: 96.00, 
-                seguroAcidente: 24.00,
-                custoTotalEmpregador: 3600.00
+                inssPatronal: 240,
+                fgts: 240, 
+                reservaIndenizatoria: 96, 
+                seguroAcidente: 24,
+                custoTotalEmpregador: 3600
             },
         };
 
@@ -52,18 +52,18 @@ describe('Teste do cálculo do salário', () => {
     });
     
     test('Deve calcular corretamente um salário acima do teto das faixas do INSS', () => {
-        const salario = 9000.00;
+        const salario = 9000;
 
         const valorEsperado = {
-            salarioBruto: 9000.00,
+            salarioBruto: 9000,
             inssEmpregado: 988.09,
             salarioLiquido: 8011.91,
             encargosEmpregador: {
-                inssPatronal: 720.00,
-                fgts: 720.00, 
-                reservaIndenizatoria: 288.00, 
-                seguroAcidente: 72.00,
-                custoTotalEmpregador: 10800.00
+                inssPatronal: 720,
+                fgts: 720, 
+                reservaIndenizatoria: 288, 
+                seguroAcidente: 72,
+                custoTotalEmpregador: 10800
             },
         };
 

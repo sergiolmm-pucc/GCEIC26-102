@@ -62,7 +62,7 @@ describe('Teste do endpoint de cálculo de férias', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             diasConcedidos: undefined,
         };
 
@@ -79,7 +79,7 @@ describe('Teste do endpoint de cálculo de férias', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             diasConcedidos: 20,
         };
 
@@ -111,7 +111,7 @@ describe('Teste do endpoint de cálculo de férias', () => {
         };
 
          payload = {
-            salarioBruto: '2000.00',
+            salarioBruto: '2000',
             diasConcedidos: 'string',
         };
 
@@ -131,7 +131,7 @@ describe('Teste do endpoint de cálculo de férias', () => {
         });
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             diasConcedidos: 20,
         };
 

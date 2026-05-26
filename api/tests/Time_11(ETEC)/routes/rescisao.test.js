@@ -69,7 +69,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             dataAdmissao: null, 
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -88,7 +88,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: null, 
             tipoRescisao: 'semJustaCausa',
@@ -107,7 +107,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: null, 
@@ -126,7 +126,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -146,7 +146,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -166,7 +166,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -186,7 +186,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -224,7 +224,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'tipoInvalido',
@@ -243,7 +243,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: 'data-invalida',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -262,7 +262,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: 'data-invalida',
             tipoRescisao: 'semJustaCausa',
@@ -281,7 +281,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-08-10',
             dataRescisao: '2025-06-10',
             tipoRescisao: 'semJustaCausa',
@@ -300,7 +300,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-06-10',
             tipoRescisao: 'semJustaCausa',
@@ -324,7 +324,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         });
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'semJustaCausa',
@@ -342,7 +342,7 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
             dataAdmissao: '2025-06-10',
             dataRescisao: '2025-08-10',
             tipoRescisao: 'comJustaCausa',

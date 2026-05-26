@@ -79,7 +79,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: null,
         };
 
@@ -143,7 +143,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: -1, // Dando erro quando for 0, cai no if da route
         };
 
@@ -176,7 +176,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: 13, // Dando erro quando for 0, cai no if da route
         };
 
@@ -193,7 +193,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: 0,
         };
 
@@ -209,7 +209,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: 2.21,
         };
 
@@ -230,7 +230,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         });
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: 2,
         };
 
@@ -245,7 +245,7 @@ describe('Teste do endpoint de cálculo do décimo terceiro', () => {
         };
 
          payload = {
-            salarioBruto: 2000.00,
+            salarioBruto: 2000,
             mesesTrabalhados: 12,
         };
 

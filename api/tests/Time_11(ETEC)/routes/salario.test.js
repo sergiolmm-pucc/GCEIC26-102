@@ -42,7 +42,7 @@ describe('Tese do endpoint de cálculo de salário', () => {
         };
 
          payload = {
-            salarioBruto: -1600.00,
+            salarioBruto: -1600,
         };
 
          res = (await request(app).post('/ETEC11/salario').send(payload));
@@ -72,7 +72,7 @@ describe('Tese do endpoint de cálculo de salário', () => {
         };
 
          payload = {
-            salarioBruto: 1600.00,
+            salarioBruto: 1600,
         };
 
          res = (await request(app).post('/ETEC11/salario').send(payload));
@@ -83,11 +83,11 @@ describe('Tese do endpoint de cálculo de salário', () => {
     test('Deve retornar 200 quando salário bruto for um valor válido', async () => {
          respostaEsperada = {
             status: 200,
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
         };
 
          payload = {
-            salarioBruto: 4000.00,
+            salarioBruto: 4000,
         };
 
          res = (await request(app).post('/ETEC11/salario').send(payload));
