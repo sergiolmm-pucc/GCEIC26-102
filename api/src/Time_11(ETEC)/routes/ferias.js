@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
     const resultado = calcularFerias(valor, 30, dias);
     res.json(resultado);
   } catch (error_) {
-    res.status(400).json({ erro: erro.message });
+    res.status(400).json({ erro: error_.message });
   }
 });
 

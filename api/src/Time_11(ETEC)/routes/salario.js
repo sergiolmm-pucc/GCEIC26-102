@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
     const resultado = calcularSalario(valor);
     res.json(resultado);
   } catch (error_) {
-    res.status(400).json({ erro: erro.message });
+    res.status(400).json({ erro: error_.message });
   }
 });
 
