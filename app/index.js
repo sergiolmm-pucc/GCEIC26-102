@@ -991,6 +991,8 @@ ETEC11_ROTAS.forEach(rota => {
   });
 });
 
+
+// ajuste 1
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
