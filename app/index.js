@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const path = require("path");
+const { calcularFolha } = require("./flpFuncoes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -603,24 +604,24 @@ app.get("/flp/calculo", requireFlpAuth, (req, res) => {
   res.render("flp/calculo", { user: req.session.flpUser });
 });
 
-app.post("/flp/calcular", requireFlpAuth, async (req, res) => {
+app.post("/flp/calcular", requireFlpAuth, (req, res) => {
   try {
-    const fetch = (await import("node-fetch")).default;
-    const payload = {
-      ...req.body,
-      token: "token-flp-2026",
+    const dados = {
       salarioBase: parseFloat(req.body.salarioBase),
       dependentes: parseInt(req.body.dependentes) || 0,
-      horas50: parseFloat(req.body.horas50) || 0,
-      horas100: parseFloat(req.body.horas100) || 0,
-      horaMes: parseInt(req.body.horaMes) || 220,
+      horas50:     parseFloat(req.body.horas50) || 0,
+      horas100:    parseFloat(req.body.horas100) || 0,
+      horaMes:     parseInt(req.body.horaMes) || 220,
+      custoVT:       parseFloat(req.body.custoVT) || 0,
+      pgtVT:         req.body.pgtVT || "clt",
+      beneficioVA:   parseFloat(req.body.beneficioVA) || 0,
+      pctDescontoVA: parseFloat(req.body.pctDescontoVA) !== undefined ? parseFloat(req.body.pctDescontoVA) : 20,
+      planoSaude:    parseFloat(req.body.planoSaude) || 0,
+      pgtPlanoSaude: req.body.pgtPlanoSaude || "funcionario",
+      diasFalta:     parseFloat(req.body.diasFalta) || 0,
+      horasAtraso:   parseFloat(req.body.horasAtraso) || 0,
     };
-    const response = await fetch(`${API_URL}/api/flp/calcular`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await response.json();
+    const data = calcularFolha(dados);
     res.json(data);
   } catch (err) {
     res.status(400).json({ success: false, erro: err.message });
@@ -751,41 +752,31 @@ app.post("/flp/funcionarios/:id/remover", requireFlpAuth, (req, res) => {
   res.redirect("/flp/funcionarios");
 });
 
-app.get("/flp/folha", requireFlpAuth, async (req, res) => {
+app.get("/flp/folha", requireFlpAuth, (req, res) => {
   if (funcionarios.length === 0)
     return res.render("flp/folha", {
       user: req.session.flpUser,
       resultados: [],
     });
   try {
-    const fetch = (await import("node-fetch")).default;
-    const resultados = await Promise.all(
-      funcionarios.map(async (f) => {
-        const payload = {
-          token: "token-flp-2026",
-          salarioBase: f.salarioBase,
-          dependentes: f.dependentes,
-          horaMes: f.jornadaMensal || 220,
-          horas50: f.horas50,
-          horas100: f.horas100,
-          custoVT: f.custoVT || 0,
-          pgtVT: f.pgtVT || "clt",
-          beneficioVA: f.beneficioVA || 0,
-          pctDescontoVA: f.pctDescontoVA !== undefined ? f.pctDescontoVA : 20,
-          planoSaude: f.planoSaude || 0,
-          pgtPlanoSaude: f.pgtPlanoSaude || "funcionario",
-          diasFalta: f.diasFalta || 0,
-          horasAtraso: f.horasAtraso || 0,
-        };
-        const r = await fetch(`${API_URL}/api/flp/calcular`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const data = await r.json();
-        return { funcionario: f, holerite: data };
-      }),
-    );
+    const resultados = funcionarios.map((f) => {
+      const holerite = calcularFolha({
+        salarioBase:   f.salarioBase,
+        dependentes:   f.dependentes,
+        horaMes:       f.jornadaMensal || 220,
+        horas50:       f.horas50,
+        horas100:      f.horas100,
+        custoVT:       f.custoVT || 0,
+        pgtVT:         f.pgtVT || "clt",
+        beneficioVA:   f.beneficioVA || 0,
+        pctDescontoVA: f.pctDescontoVA !== undefined ? f.pctDescontoVA : 20,
+        planoSaude:    f.planoSaude || 0,
+        pgtPlanoSaude: f.pgtPlanoSaude || "funcionario",
+        diasFalta:     f.diasFalta || 0,
+        horasAtraso:   f.horasAtraso || 0,
+      });
+      return { funcionario: f, holerite };
+    });
     res.render("flp/folha", { user: req.session.flpUser, resultados });
   } catch (err) {
     res.redirect("/flp/funcionarios");
