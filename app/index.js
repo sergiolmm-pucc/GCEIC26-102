@@ -570,15 +570,33 @@ app.get("/flp/dashboard", requireFlpAuth, (req, res) => {
   res.render("flp/dashboard", { user: req.session.flpUser });
 });
 
-app.get("/flp/tabelas", requireFlpAuth, async (req, res) => {
-  try {
-    const fetch = (await import("node-fetch")).default;
-    const response = await fetch(`${API_URL}/api/flp/tabelas`);
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(503).json({ erro: "Serviço indisponível" });
-  }
+app.get("/flp/tabelas", requireFlpAuth, (req, res) => {
+  res.json({
+    inss: {
+      faixas: [
+        { ate: 1621.00, aliquota: 0.075 },
+        { ate: 2902.84, aliquota: 0.090 },
+        { ate: 4354.27, aliquota: 0.120 },
+        { ate: 8475.55, aliquota: 0.140 },
+      ],
+      teto: 988.09,
+    },
+    irrf: [
+      { ate: 2428.80, aliquota: 0,     deducao: 0      },
+      { ate: 2826.65, aliquota: 0.075, deducao: 182.16 },
+      { ate: 3751.05, aliquota: 0.150, deducao: 394.16 },
+      { ate: 4664.68, aliquota: 0.225, deducao: 675.49 },
+      { ate: '> R$ 4.664,68', aliquota: 0.275, deducao: 908.73 },
+    ],
+    irrf_redutor_2026: {
+      limite_isencao: 5000.00,
+      limite_reducao: 7350.00,
+      reducao_maxima: 312.89,
+    },
+    salario_minimo:     1621.00,
+    deducao_dependente: 189.59,
+    fgts_aliquota:      0.08,
+  });
 });
 
 app.get("/flp/calculo", requireFlpAuth, (req, res) => {
