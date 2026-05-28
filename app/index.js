@@ -790,16 +790,14 @@ app.get("/flp/help", requireFlpAuth, (req, res) => {
   res.render("flp/help", { user: req.session.flpUser });
 });
 
-// -- Time_8 DASN-SIMEI --
+// Time_8 DASN-SIMEI 
 function requireAuthDASN(req, res, next) {
   if (req.session && req.session.dasnUser) return next();
   res.redirect("/DASN/login");
 }
 
 app.get("/DASN", (req, res) => res.render("Time_8(DASN)/splash"));
-app.get("/DASN/login", (req, res) =>
-  res.render("Time_8(DASN)/login", { erro: null }),
-);
+app.get("/DASN/login", (req, res) => res.render("Time_8(DASN)/login", { erro: null }));
 app.post("/DASN/login", (req, res) => {
   const { usuario, senha } = req.body;
   if (usuario === "admin" && senha === "1234") {
@@ -808,25 +806,18 @@ app.post("/DASN/login", (req, res) => {
   }
   res.render("Time_8(DASN)/login", { erro: "Usuário ou senha inválidos." });
 });
-app.get("/DASN/calculo", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/calculo"),
-);
-app.get("/DASN/sobre", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/sobre"),
-);
-app.get("/DASN/help", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/help"),
-);
+
+app.get("/DASN/calculo", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/calculo"));
+app.get("/DASN/sobre", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/sobre"));
+app.get("/DASN/help", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/help"));
 app.get("/DASN/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/DASN/login");
-  });
+  req.session.destroy(() => res.redirect("/DASN/login"));
 });
 
-app.post("/DASN/valida-limite", requireAuthDASN, async (req, res) => {
+app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
   try {
     const fetch = (await import("node-fetch")).default;
-    const response = await fetch(`${API_URL}/DASN/valida-limite`, {
+    const response = await fetch(`${API_URL}/DASN/${req.params.rota}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
