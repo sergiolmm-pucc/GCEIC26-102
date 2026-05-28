@@ -49,7 +49,7 @@ const equipes = [
   { numero: 13, nome: "FLP", rota: "/flp" },
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
   { numero: 15, nome: "Equipe-15", rota: "/equipe-15" },
-  { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
+  { numero: 16, nome: "Sustentabilidade", rota: "/sus" },
   { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
   { numero: 18, nome: "Markup", rota: "/markup" },
   { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
@@ -956,6 +956,121 @@ app.post(
     }
   },
 );
+
+// -- Time_16 SUS - Calculadora de Sustentabilidade --
+function requireSusAuth(req, res, next) {
+  if (req.session && req.session.susUser) return next();
+  res.redirect("/sus/login");
+}
+
+async function chamarApiSus(rota, body) {
+  const fetch = (await import("node-fetch")).default;
+  const r = await fetch(`${API_URL}/SUS/${rota}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return r.json();
+}
+
+app.get("/sus", (req, res) => res.render("Time_16(SUS)/splash"));
+
+app.get("/sus/login", (req, res) => {
+  if (req.session.susUser) return res.redirect("/sus/dashboard");
+  res.render("Time_16(SUS)/login", { erro: null });
+});
+
+app.post("/sus/login", (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === "admin" && senha === "admin") {
+    req.session.susUser = { username: usuario };
+    return res.redirect("/sus/dashboard");
+  }
+  res.render("Time_16(SUS)/login", { erro: "Usuario ou senha invalidos." });
+});
+
+app.get("/sus/logout", (req, res) => {
+  req.session.susUser = null;
+  res.redirect("/sus/login");
+});
+
+app.get("/sus/dashboard", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/dashboard");
+});
+
+app.get("/sus/transporte", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/transporte", { resultado: null });
+});
+
+app.post("/sus/transporte", requireSusAuth, async (req, res) => {
+  try {
+    const data = await chamarApiSus("emissao-transporte", {
+      transporte: req.body.transporte,
+      km: Number(req.body.km),
+    });
+    res.render("Time_16(SUS)/transporte", { resultado: data });
+  } catch (err) {
+    res.render("Time_16(SUS)/transporte", {
+      resultado: { success: false, error: err.message },
+    });
+  }
+});
+
+app.get("/sus/pegada", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/pegada", { resultado: null });
+});
+
+app.post("/sus/pegada", requireSusAuth, async (req, res) => {
+  try {
+    const kmPorTransporte = {
+      carro_gasolina: Number(req.body.km_carro_gasolina) || 0,
+      onibus:         Number(req.body.km_onibus) || 0,
+      metro:          Number(req.body.km_metro) || 0,
+      moto:           Number(req.body.km_moto) || 0,
+      aviao:          Number(req.body.km_aviao) || 0,
+    };
+    const data = await chamarApiSus("pegada-mensal", {
+      kmPorTransporte,
+      energiaKwh:  Number(req.body.energiaKwh) || 0,
+      pessoasCasa: Number(req.body.pessoasCasa) || 1,
+      dieta:       req.body.dieta || "mista",
+    });
+    res.render("Time_16(SUS)/pegada", { resultado: data });
+  } catch (err) {
+    res.render("Time_16(SUS)/pegada", {
+      resultado: { success: false, error: err.message },
+    });
+  }
+});
+
+app.get("/sus/arvores", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/arvores", {
+    resultado: null,
+    kgPre: req.query.kg || "",
+  });
+});
+
+app.post("/sus/arvores", requireSusAuth, async (req, res) => {
+  try {
+    const data = await chamarApiSus("compensacao-arvores", {
+      kg_co2: Number(req.body.kg_co2),
+    });
+    res.render("Time_16(SUS)/arvores", { resultado: data, kgPre: req.body.kg_co2 });
+  } catch (err) {
+    res.render("Time_16(SUS)/arvores", {
+      resultado: { success: false, error: err.message },
+      kgPre: req.body.kg_co2,
+    });
+  }
+});
+
+app.get("/sus/sobre", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/sobre");
+});
+
+app.get("/sus/help", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/help");
+});
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
