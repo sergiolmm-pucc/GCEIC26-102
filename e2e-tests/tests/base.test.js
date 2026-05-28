@@ -8,6 +8,7 @@ const runCltTests = require("./clt/clt-all-screens.test.js");
 const runFlpTests = require("./flp/flp-all-screens.test.js");
 const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
 const runMkpTests = require("./mkp/mkp-all-screens.test.js");
+const runSusTests = require("./sus/sus-all-screens.test.js");
 
 const BASE_URL = process.env.APP_URL || "http://localhost:3000";
 const SCREENSHOTS_DIR = path.join(__dirname, "..", "screenshots");
@@ -69,6 +70,8 @@ async function main() {
     await runFinanceTests();
     console.log("\n--- Iniciando testes do FLP ---");
     await runFlpTests();
+    console.log("\n--- Iniciando testes do SUS ---");
+    await runSusTests(driver);
   } finally {
     if (driver) await driver.quit();
   }
