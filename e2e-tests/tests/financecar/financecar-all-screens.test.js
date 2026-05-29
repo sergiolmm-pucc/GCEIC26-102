@@ -19,7 +19,7 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
 }
 
 let driver;
-const erros = [];
+const erros = []; 
 
 function ok(msg) {
   console.log(`  ✅ ${msg}`);
@@ -39,6 +39,13 @@ async function testeSplash() {
 
   try {
     await driver.get(BASE_URL + "/financecar");
+
+    await driver.wait(async () => {
+        const readyState = await driver.executeScript(
+            "return document.readyState"
+        );
+        return readyState === "complete";
+    }, 10000);
 
     const logo = await driver.wait(
       until.elementLocated(By.css('.logo-splash')),
@@ -87,6 +94,14 @@ async function testeLogin() {
 
   try {
     await driver.get(BASE_URL + '/financecar/login');
+
+    await driver.wait(async () => {
+        const readyState = await driver.executeScript(
+            "return document.readyState"
+        );
+        return readyState === "complete";
+    }, 10000);
+
     await screenshot(driver, 'login-pagina');
 
     // CASO 1 - campos vazios
@@ -100,6 +115,13 @@ async function testeLogin() {
 
     // CASO 2 - senha inválida
     await driver.get(BASE_URL + '/financecar/login');
+
+    await driver.wait(async () => {
+        const readyState = await driver.executeScript(
+            "return document.readyState"
+        );
+        return readyState === "complete";
+    }, 10000);
 
     await type(driver, '[data-testid="user-input"]', 'adm');
     await type(driver, '[data-testid="password-input"]', 'senha_errada');
@@ -119,6 +141,13 @@ async function testeLogin() {
     // CASO 3 - usuário inexistente
     await driver.get(BASE_URL + '/financecar/login');
 
+    await driver.wait(async () => {
+        const readyState = await driver.executeScript(
+            "return document.readyState"
+        );
+        return readyState === "complete";
+    }, 10000);
+
     await type(driver, 'input[type="text"]', 'teste');
     await type(driver, 'input[type="password"]', 'senha_errada');
 
@@ -136,6 +165,13 @@ async function testeLogin() {
 
     // CASO 4 - login válido
     await driver.get(BASE_URL + '/financecar/login');
+
+    await driver.wait(async () => {
+        const readyState = await driver.executeScript(
+            "return document.readyState"
+        );
+        return readyState === "complete";
+    }, 10000);
 
     await type(driver, 'input[type="text"]', 'adm');
     await type(driver, 'input[type="password"]', 'adm');

@@ -32,24 +32,31 @@ async function buildDriver() {
 
 // clique seguro
 async function click(driver, selector) {
-  await driver.wait(until.elementLocated(By.css(selector)), 10000);
+  const el = await driver.wait(
+    until.elementLocated(By.css(selector)),
+    10000
+  );
 
-  const el = await driver.findElement(By.css(selector));
   await driver.wait(until.elementIsVisible(el), 10000);
+  await driver.wait(until.elementIsEnabled(el), 10000);
 
   await el.click();
 }
 
 // digitar seguro
 async function type(driver, selector, value) {
-  await driver.wait(until.elementLocated(By.css(selector)), 10000);
+  const el = await driver.wait(
+    until.elementLocated(By.css(selector)),
+    10000
+  );
 
-  const el = await driver.findElement(By.css(selector));
   await driver.wait(until.elementIsVisible(el), 10000);
+  await driver.wait(until.elementIsEnabled(el), 10000);
 
   await el.clear();
   await el.sendKeys(value);
 }
+
 // esperar elemento aparecer
 async function waitFor(driver, selector, timeout = 5000) {
   await driver.wait(until.elementLocated(By.css(selector)), timeout);

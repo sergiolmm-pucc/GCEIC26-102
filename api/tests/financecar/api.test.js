@@ -287,7 +287,7 @@ describe('POST /api/financecar/fundo', () => {
                 mesesSeguranca: 0
             });
 
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(400); 
 
     });
 
