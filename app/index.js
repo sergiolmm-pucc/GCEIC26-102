@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { calcularFolha } = require("./flpFuncoes");
 
-require("dotenv").config();
 console.log("API_URL do env:", process.env.API_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;

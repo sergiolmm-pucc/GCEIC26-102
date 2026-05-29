@@ -3,8 +3,6 @@ const chrome = require('selenium-webdriver/chrome');
 const fs = require('fs');
 const path = require('path');
 
-require("dotenv").config();
-
 const {
   buildDriver,
   screenshot,
@@ -13,7 +11,7 @@ const {
   autenticar
 } = require('./helpers');
 
-const BASE_URL = process.env.APP_URL;
+const BASE_URL = process.env.APP_URL || 'http://localhost:3000';
 const SCREENSHOTS_DIR = path.join(__dirname, '..', '..', 'screenshots');
 
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
