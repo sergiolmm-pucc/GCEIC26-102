@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { calcularFolha } = require("./flpFuncoes");
 
+require("dotenv").config();
+console.log("API_URL do env:", process.env.API_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "https://gceic26-102.onrender.com";
@@ -360,6 +362,8 @@ app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
 });
 
 app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
+  console.log("ENTROU NA API REGRA");
+  console.log("API_URL =", API_URL);
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(`${API_URL}/api/financecar/regra`, {
@@ -367,6 +371,10 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
     });
+
+    console.log("STATUS =", response.status);
+    console.log("URL =", response.url);
+    
     const data = await response.json();
     res.json(data);
   } catch (err) {

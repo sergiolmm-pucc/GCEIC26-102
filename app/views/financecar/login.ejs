@@ -18,7 +18,7 @@
                 <div class="card">
                     <h1>Login</h1>
 
-                    <input type="text" id="email" placeholder="Email" oninput="clearError()" data-testid="email-input"/>
+                    <input type="text" id="username" placeholder="Username" oninput="clearError()" data-testid="user-input"/>
                     <input type="password" id="password" placeholder="Senha" oninput="clearError()" data-testid="password-input" />
 
                     <p class="error" id="errorMsg" style="display: none;"></p>
@@ -38,7 +38,7 @@
             e.preventDefault();
             clearError();
 
-            const username = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             const errorMsg = document.getElementById('errorMsg');
