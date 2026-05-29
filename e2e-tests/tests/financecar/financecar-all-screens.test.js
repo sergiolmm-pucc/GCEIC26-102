@@ -21,8 +21,6 @@ async function main() {
             height: 900
         });
 
-        console.log("🚀 Iniciando suíte de testes Financecar...");
-
         await splashTest(driver);
         await loginTest(driver);
         await dashboardTest(driver);

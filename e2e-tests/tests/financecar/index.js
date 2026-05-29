@@ -12,8 +12,6 @@ const sobre = require("./about.test.js");
 
 async function runFinanceTests() {
 
-  console.log("\n--- Iniciando testes do FinanceCar ---");
-
   const suites = [
     ["splash", splash],
     ["login", login],

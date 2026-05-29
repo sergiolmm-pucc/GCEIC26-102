@@ -1,6 +1,5 @@
 const {
     BASE_URL,
-    buildDriver,
     screenshot,
     By,
     until
@@ -47,79 +46,48 @@ async function isRedirectedToLogin(driver, timeout = 15000) {
 }
 
 // ======================================
-// MAIN TEST
+// TESTE PRINCIPAL
 // ======================================
 
-async function main() {
+async function protectedRoutesTest(driver) {
 
-    let driver;
+    // ======================================
+    // LIMPA SESSÃO
+    // ======================================
+    await openLogin(driver);
 
-    try {
+    await driver.executeScript(`
+        localStorage.clear();
+        sessionStorage.clear();
+    `);
 
-        driver = await buildDriver();
+    // ======================================
+    // TESTE ROTAS PROTEGIDAS
+    // ======================================
+    for (const rota of ROTAS_PROTEGIDAS) {
 
-        await driver.manage().window().setRect({
-            width: 1400,
-            height: 900
-        });
+        const urlTeste = BASE_URL + rota;
 
-        // ======================================
-        // LIMPA SESSÃO
-        // ======================================
-        await openLogin(driver);
+        console.log('\n========================');
+        console.log('Testando rota:', urlTeste);
 
-        await driver.executeScript(`
-            localStorage.clear();
-            sessionStorage.clear();
-        `);
+        await driver.get(urlTeste);
 
-        // ======================================
-        // TESTE ROTAS PROTEGIDAS
-        // ======================================
-        for (const rota of ROTAS_PROTEGIDAS) {
+        const redirecionou = await isRedirectedToLogin(driver);
 
-            const urlTeste = BASE_URL + rota;
+        const nomeScreenshot = `protected-${rota.replace(/\//g, '-')}`;
 
-            console.log('\n========================');
-            console.log('Testando rota:', urlTeste);
+        await screenshot(driver, nomeScreenshot);
 
-            await driver.get(urlTeste);
-
-            const redirecionou = await isRedirectedToLogin(driver);
-
-            const nomeScreenshot = `protected-${rota.replace(/\//g, '-')}`;
-
-            await screenshot(driver, nomeScreenshot);
-
-            if (redirecionou) {
-                console.log(`✓ ${rota} redirecionou para login`);
-            } else {
-                console.log(`❌ ${rota} NÃO redirecionou`);
-                throw new Error(`Rota protegida falhou: ${rota}`);
-            }
-        }
-
-        console.log('\n✓ Todos os testes de rotas protegidas passaram');
-
-    } catch (err) {
-
-        console.error('Erro fatal rotas protegidas', err);
-
-        if (driver) {
-            console.log(await driver.getCurrentUrl());
-        }
-
-        throw err;
-
-    } finally {
-
-        if (driver) {
-            await driver.quit();
+        if (redirecionou) {
+            console.log(`✓ ${rota} redirecionou para login`);
+        } else {
+            console.log(`❌ ${rota} NÃO redirecionou`);
+            throw new Error(`Rota protegida falhou: ${rota}`);
         }
     }
+
+    console.log('\n✓ Todos os testes de rotas protegidas passaram');
 }
 
-main().catch(err => {
-    console.error('Erro fatal rotas protegidas', err);
-    process.exit(1);
-});
+module.exports = { protectedRoutesTest };

@@ -1,78 +1,52 @@
 const {
     BASE_URL,
-    buildDriver,
     screenshot,
     By,
     until
 } = require('./helpers');
 
-async function main() {
+async function splashTest(driver) {
 
-    let driver;
+    // abre aplicação
+    await driver.get(BASE_URL + "/financecar");
 
-    try {
+    // espera splash aparecer
+    const logo = await driver.wait(
+        until.elementLocated(
+            By.css('.logo-splash')
+        ),
+        3000
+    );
 
-        driver = await buildDriver();
+    console.log('✓ Splash apareceu');
 
-        await driver.manage().window().setRect({
-            width: 1400,
-            height: 900
-        });
+    await screenshot(
+        driver,
+        'splash-pagina'
+    );
 
-        // abre aplicação
-        await driver.get(BASE_URL + "/financecar");
+    // espera splash sumir
+    await driver.wait(
+        until.stalenessOf(logo),
+        6000
+    );
 
-        // espera splash aparecer
-        const logo = await driver.wait(
-            until.elementLocated(
-                By.css('.logo-splash')
-            ),
-            3000
-        );
+    console.log('✓ Splash desapareceu');
 
-        console.log('✓ Splash apareceu');
+    // valida login
+    await driver.wait(
+        until.urlContains('/financecar/login'),
+        5000
+    );
 
-        await screenshot(
-            driver,
-            'splash-pagina'
-        );
+    console.log(
+        '✓ Foi para login'
+    );
 
-        // espera splash sumir
-        await driver.wait(
-            until.stalenessOf(logo),
-            6000
-        );
-
-        console.log('✓ Splash desapareceu');
-
-        // valida login
-        await driver.wait(
-            until.urlContains('/financecar/login'),
-            5000
-        );
-
-        console.log(
-            '✓ Foi para login'
-        );
-
-        await screenshot(
-            driver,
-            'login-pagina'
-        );
-
-    } catch (err) {
-
-        console.error(
-            'Erro fatal splash',
-            err
-        );
-
-    } finally {
-
-        if (driver) {
-            await driver.quit();
-        }
-    }
+    await screenshot(
+        driver,
+        'login-pagina'
+    );
 }
 
-main();
+module.exports = { splashTest };
