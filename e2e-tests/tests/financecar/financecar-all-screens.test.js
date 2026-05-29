@@ -70,6 +70,20 @@ async function testeSplash() {
   }
 }
 
+async function esperarErro(timeout = 5000) {
+  const erroEl = await driver.wait(
+    until.elementLocated(By.css('.error')),
+    timeout
+  );
+
+  await driver.wait(async () => {
+    const texto = await erroEl.getText();
+    return texto.trim().length > 0;
+  }, timeout);
+
+  return await erroEl.getText();
+}
+
 async function testeLogin() {
   console.log('\n[LOGIN]');
 
@@ -77,17 +91,16 @@ async function testeLogin() {
     await driver.get(BASE_URL + '/financecar/login');
     await screenshot(driver, 'login-pagina');
 
-    // CASO 1
+    // CASO 1 - campos vazios
     await click(driver, 'button');
-    await driver.sleep(1000);
 
-    let erro = await driver.findElement(By.css('.error')).getText();
+    let erro = await esperarErro();
 
     erro.toLowerCase().includes('preencha')
       ? ok('Campos vazios ok')
       : fail(`Erro inesperado: ${erro}`);
 
-    // CASO 2
+    // CASO 2 - senha inválida
     await driver.get(BASE_URL + '/financecar/login');
 
     await type(driver, '[data-testid="user-input"]', 'adm');
@@ -95,15 +108,17 @@ async function testeLogin() {
 
     await click(driver, '[data-testid="login-button"]');
 
-    erro = await driver.findElement(By.css('.error')).getText();
+    erro = await esperarErro();
 
-    erro.toLowerCase().includes('usuário')
-    || erro.toLowerCase().includes('senha')
-    || erro.toLowerCase().includes('inválid')
+    (
+      erro.toLowerCase().includes('usuário') ||
+      erro.toLowerCase().includes('senha') ||
+      erro.toLowerCase().includes('inválid')
+    )
       ? ok('Credencial inválida ok')
       : fail(`Erro: ${erro}`);
 
-    // CASO 3
+    // CASO 3 - usuário inexistente
     await driver.get(BASE_URL + '/financecar/login');
 
     await type(driver, 'input[type="text"]', 'teste');
@@ -111,15 +126,17 @@ async function testeLogin() {
 
     await click(driver, '[data-testid="login-button"]');
 
-    erro = await driver.findElement(By.css('.error')).getText();
+    erro = await esperarErro();
 
-    erro.toLowerCase().includes('usuário')
-    || erro.toLowerCase().includes('senha')
-    || erro.toLowerCase().includes('inválid')
+    (
+      erro.toLowerCase().includes('usuário') ||
+      erro.toLowerCase().includes('senha') ||
+      erro.toLowerCase().includes('inválid')
+    )
       ? ok('Credenciais inválidas ok')
       : fail(`Erro: ${erro}`);
 
-    // CASO 4 (SUCESSO)
+    // CASO 4 - login válido
     await driver.get(BASE_URL + '/financecar/login');
 
     await type(driver, 'input[type="text"]', 'adm');
@@ -127,7 +144,10 @@ async function testeLogin() {
 
     await click(driver, '[data-testid="login-button"]');
 
-    await driver.wait(until.urlContains('/home'), 15000);
+    await driver.wait(
+      until.urlContains('/home'),
+      15000
+    );
 
     await screenshot(driver, 'login-sucesso');
 
@@ -135,6 +155,7 @@ async function testeLogin() {
 
   } catch (e) {
     fail(`Login: ${e.message}`);
+    console.error(e);
   }
 }
 
