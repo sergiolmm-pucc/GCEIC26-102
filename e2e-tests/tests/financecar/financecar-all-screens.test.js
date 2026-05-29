@@ -15,7 +15,7 @@ const BASE_URL = process.env.APP_URL || 'http://localhost:3000';
 const SCREENSHOTS_DIR = path.join(__dirname, '..', '..', 'screenshots');
 
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
-  fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+  fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true }); 
 }
 
 let driver;

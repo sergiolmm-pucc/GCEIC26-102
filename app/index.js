@@ -25,7 +25,7 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(
+app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
     resave: false,

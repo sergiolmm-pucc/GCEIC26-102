@@ -64,7 +64,7 @@ app.post("/api/calcular", (req, res) => {
 app.use("/api/markup", markup);
 // Rotas EXG
 app.use("/api/exg", exgRouter);
-// Rotas FinanceCar
+// Rotas FinanceCar 
 app.use("/api/financecar", financeRouter);
 // Rotas ETEC1
 app.use("/ETEC1", etec1);
