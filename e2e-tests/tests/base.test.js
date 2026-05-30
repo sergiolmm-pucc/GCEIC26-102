@@ -6,6 +6,7 @@ const runExgTests = require("./exg/exg-all-screens.test.js");
 const runCddTests = require("./cdd/cdd-all-screens.test.js");
 const runCltTests = require("./clt/clt-all-screens.test.js");
 const runFlpTests = require("./flp/flp-all-screens.test.js");
+const runEtec11Tests = require("./Time_11(ETEC)/etec11-all-screens.test.js");
 const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
 const runMkpTests = require("./mkp/mkp-all-screens.test.js");
 
@@ -69,6 +70,8 @@ async function main() {
     await runFinanceTests();
     console.log("\n--- Iniciando testes do FLP ---");
     await runFlpTests();
+    console.log("\n--- Iniciando testes do ETEC11 ---");
+    await runEtec11Tests();
   } finally {
     if (driver) await driver.quit();
   }
