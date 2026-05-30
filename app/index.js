@@ -381,6 +381,7 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
   }
 });
 
+//======================
 // -- Time_10 Piscina --
 function requirePiscinaAuth(req, res, next) {
   if (req.session && req.session.piscinaUser) return next();
@@ -443,6 +444,7 @@ app.get("/piscina/logout", (req, res) => {
   req.session.piscinaUser = null;
   res.redirect("/piscina/login");
 });
+//========================
 
 // -- Rota CDD (React compilado) --
 app.get("/cdd", (req, res) => {
