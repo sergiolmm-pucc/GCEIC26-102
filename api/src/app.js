@@ -16,6 +16,7 @@ const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
+const livroCaixaRoutes17 = require("./Time_17_LivroCaixa/src/routes/livroCaixa");
 
 const app = express();
 
@@ -100,5 +101,7 @@ app.use("/api/Time_10_piscina", piscina1);
 // Rotas CD (compilado TS)
 const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
+// Rotas Time 17 (Livro Caixa Rural)
+app.use("/api/livro-caixa", livroCaixaRoutes17);
 
 module.exports = app;

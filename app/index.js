@@ -51,7 +51,7 @@ const equipes = [
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
   { numero: 15, nome: "Equipe-15", rota: "/equipe-15" },
   { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
-  { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
+  { numero: 17, nome: "Livro Caixa Rural", rota: "/livro-caixa" },
   { numero: 18, nome: "Markup", rota: "/markup" },
   { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
   { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
@@ -347,7 +347,7 @@ app.post(
 
 app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
   try {
-    const fetch = (await import("node-fetch")).default;
+    const fetch = (await (await import("node-fetch")).default);
     const response = await fetch(`${API_URL}/api/financecar/fundo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -453,6 +453,12 @@ app.get("/cdd", (req, res) => {
   res.sendFile(path.join(__dirname, "views/cdd/index.html"));
 });
 
+// -- Time 17 (Livro Caixa Rural) --
+app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
+app.get('/livro-caixa', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
+});
+
 // -- Rotas MKP --
 app.get("/MKP", (req, res) => {
   res.render("mkp/mkp");
@@ -460,6 +466,7 @@ app.get("/MKP", (req, res) => {
 
 async function proxyMkpToApi(path, req, res) {
   try {
+    const fetch = (await import("node-fetch")).default;
     const target = `${API_URL}${path}`;
     const fetchRes = await fetch(target, {
       method: "POST",
@@ -970,6 +977,7 @@ app.post(
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
+  if (i === 17) continue;
   app.get(`/equipe-${i}`, (req, res) => {
     console.log(`/equipe-${i}/equipe`);
     res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
@@ -980,7 +988,7 @@ for (let i = 5; i <= 20; i++) {
 app.get("/ETEC11", (req, res) => {
   res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
 });
-app.get("/ETEC11/*path", (req, res) => {
+app.get("/ETEC11", (req, res) => {
   res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
 });
 
@@ -996,7 +1004,7 @@ ETEC11_ROTAS.forEach(rota => {
       });
       const data = await response.json();
       res.status(response.status).json(data);
-    } catch (err) {
+    } catch (err) { // Corrigido: Removido o '=>'
       res.status(400).json({ success: false, erro: err.message });
     }
   });
