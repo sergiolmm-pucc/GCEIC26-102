@@ -11,6 +11,7 @@ const {
   calcularCustoTotal,
 } = require('./funcoes_piscina');
 
+
 // GET /api/Time_10_piscina/tabelas
 router.get('/tabelas', (req, res) => {
   res.json({ success: true, data: TABELA });

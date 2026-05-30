@@ -426,7 +426,9 @@ app.post("/piscina/calculo", requirePiscinaAuth, async (req, res) => {
         }),
       },
     );
+
     const resultado = await response.json();
+
     res.render("Time_10_Piscina/calculo", { resultado });
   } catch (error) {
     console.log(error);
