@@ -75,8 +75,15 @@ router.get('/manutencao-mensal', (req, res) => {
 router.post('/calcular-total', (req, res) => {
   try {
     const dados = req.body;
-    if (!dados || typeof dados !== 'object') {
-      return res.status(400).json({ success: false, error: 'Corpo da requisição inválido' });
+    if (
+      dados.comprimento === undefined ||
+      dados.largura === undefined ||
+      dados.profundidade === undefined
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: 'Informe comprimento, largura e profundidade'
+      });
     }
     const resultado = calcularCustoTotal(dados);
     return res.status(200).json({ success: true, data: resultado });
