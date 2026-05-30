@@ -4,12 +4,13 @@ require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env")
 });
 
-console.log("BASE_URL:", process.env.API_URL);
-
 const { By, until, Builder } = require("selenium-webdriver");
+
+const chrome = require("selenium-webdriver/chrome");
+
 const fs = require("fs");
 
-const BASE_URL = process.env.API_URL;
+const BASE_URL = process.env.APP_URL;
 if(!BASE_URL){
   console.log("URL não encontrada");
 }
@@ -23,29 +24,39 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
 
 // DRIVER BUILDER
 async function buildDriver() {
-  return await new Builder().forBrowser("chrome").build();
+  return await new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(new chrome.Options())
+    .build();
 }
 
 // clique seguro
 async function click(driver, selector) {
-  await driver.wait(until.elementLocated(By.css(selector)), 10000);
+  const el = await driver.wait(
+    until.elementLocated(By.css(selector)),
+    10000
+  );
 
-  const el = await driver.findElement(By.css(selector));
   await driver.wait(until.elementIsVisible(el), 10000);
+  await driver.wait(until.elementIsEnabled(el), 10000);
 
   await el.click();
 }
 
 // digitar seguro
 async function type(driver, selector, value) {
-  await driver.wait(until.elementLocated(By.css(selector)), 10000);
+  const el = await driver.wait(
+    until.elementLocated(By.css(selector)),
+    10000
+  );
 
-  const el = await driver.findElement(By.css(selector));
   await driver.wait(until.elementIsVisible(el), 10000);
+  await driver.wait(until.elementIsEnabled(el), 10000);
 
   await el.clear();
   await el.sendKeys(value);
 }
+
 // esperar elemento aparecer
 async function waitFor(driver, selector, timeout = 5000) {
   await driver.wait(until.elementLocated(By.css(selector)), timeout);
@@ -126,12 +137,12 @@ async function closeHelp(driver) {
 // autenticação (corrigida e reutilizável)
 async function autenticar(driver) {
 
-  const email = "adm"
+  const username = "adm"
   const password = "adm"
 
   await driver.get(BASE_URL + "/financecar/login");
 
-  await type(driver, 'input[type="text"]', email);
+  await type(driver, 'input[type="text"]', username);
   await type(driver, 'input[type="password"]', password);
 
   await click(driver, 'button[type="submit"]');

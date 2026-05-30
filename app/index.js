@@ -5,7 +5,9 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const path = require("path");
+const { calcularFolha } = require("./flpFuncoes");
 
+console.log("API_URL do env:", process.env.API_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "https://gceic26-102.onrender.com";
@@ -23,7 +25,7 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(
+app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
     resave: false,
@@ -359,6 +361,8 @@ app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
 });
 
 app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
+  console.log("ENTROU NA API REGRA");
+  console.log("API_URL =", API_URL);
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(`${API_URL}/api/financecar/regra`, {
@@ -366,6 +370,10 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
     });
+
+    console.log("STATUS =", response.status);
+    console.log("URL =", response.url);
+    
     const data = await response.json();
     res.json(data);
   } catch (err) {
@@ -373,6 +381,7 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
   }
 });
 
+//======================
 // -- Time_10 Piscina --
 function requirePiscinaAuth(req, res, next) {
   if (req.session && req.session.piscinaUser) return next();
@@ -417,7 +426,9 @@ app.post("/piscina/calculo", requirePiscinaAuth, async (req, res) => {
         }),
       },
     );
+
     const resultado = await response.json();
+
     res.render("Time_10_Piscina/calculo", { resultado });
   } catch (error) {
     console.log(error);
@@ -435,6 +446,7 @@ app.get("/piscina/logout", (req, res) => {
   req.session.piscinaUser = null;
   res.redirect("/piscina/login");
 });
+//========================
 
 // -- Rota CDD (React compilado) --
 app.get("/cdd", (req, res) => {
@@ -570,39 +582,57 @@ app.get("/flp/dashboard", requireFlpAuth, (req, res) => {
   res.render("flp/dashboard", { user: req.session.flpUser });
 });
 
-app.get("/flp/tabelas", requireFlpAuth, async (req, res) => {
-  try {
-    const fetch = (await import("node-fetch")).default;
-    const response = await fetch(`${API_URL}/api/flp/tabelas`);
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(503).json({ erro: "Serviço indisponível" });
-  }
+app.get("/flp/tabelas", requireFlpAuth, (req, res) => {
+  res.json({
+    inss: {
+      faixas: [
+        { ate: 1621.00, aliquota: 0.075 },
+        { ate: 2902.84, aliquota: 0.090 },
+        { ate: 4354.27, aliquota: 0.120 },
+        { ate: 8475.55, aliquota: 0.140 },
+      ],
+      teto: 988.09,
+    },
+    irrf: [
+      { ate: 2428.80, aliquota: 0,     deducao: 0      },
+      { ate: 2826.65, aliquota: 0.075, deducao: 182.16 },
+      { ate: 3751.05, aliquota: 0.150, deducao: 394.16 },
+      { ate: 4664.68, aliquota: 0.225, deducao: 675.49 },
+      { ate: '> R$ 4.664,68', aliquota: 0.275, deducao: 908.73 },
+    ],
+    irrf_redutor_2026: {
+      limite_isencao: 5000.00,
+      limite_reducao: 7350.00,
+      reducao_maxima: 312.89,
+    },
+    salario_minimo:     1621.00,
+    deducao_dependente: 189.59,
+    fgts_aliquota:      0.08,
+  });
 });
 
 app.get("/flp/calculo", requireFlpAuth, (req, res) => {
   res.render("flp/calculo", { user: req.session.flpUser });
 });
 
-app.post("/flp/calcular", requireFlpAuth, async (req, res) => {
+app.post("/flp/calcular", requireFlpAuth, (req, res) => {
   try {
-    const fetch = (await import("node-fetch")).default;
-    const payload = {
-      ...req.body,
-      token: "token-flp-2026",
+    const dados = {
       salarioBase: parseFloat(req.body.salarioBase),
       dependentes: parseInt(req.body.dependentes) || 0,
-      horas50: parseFloat(req.body.horas50) || 0,
-      horas100: parseFloat(req.body.horas100) || 0,
-      horaMes: parseInt(req.body.horaMes) || 220,
+      horas50:     parseFloat(req.body.horas50) || 0,
+      horas100:    parseFloat(req.body.horas100) || 0,
+      horaMes:     parseInt(req.body.horaMes) || 220,
+      custoVT:       parseFloat(req.body.custoVT) || 0,
+      pgtVT:         req.body.pgtVT || "clt",
+      beneficioVA:   parseFloat(req.body.beneficioVA) || 0,
+      pctDescontoVA: parseFloat(req.body.pctDescontoVA) !== undefined ? parseFloat(req.body.pctDescontoVA) : 20,
+      planoSaude:    parseFloat(req.body.planoSaude) || 0,
+      pgtPlanoSaude: req.body.pgtPlanoSaude || "funcionario",
+      diasFalta:     parseFloat(req.body.diasFalta) || 0,
+      horasAtraso:   parseFloat(req.body.horasAtraso) || 0,
     };
-    const response = await fetch(`${API_URL}/api/flp/calcular`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await response.json();
+    const data = calcularFolha(dados);
     res.json(data);
   } catch (err) {
     res.status(400).json({ success: false, erro: err.message });
@@ -733,41 +763,31 @@ app.post("/flp/funcionarios/:id/remover", requireFlpAuth, (req, res) => {
   res.redirect("/flp/funcionarios");
 });
 
-app.get("/flp/folha", requireFlpAuth, async (req, res) => {
+app.get("/flp/folha", requireFlpAuth, (req, res) => {
   if (funcionarios.length === 0)
     return res.render("flp/folha", {
       user: req.session.flpUser,
       resultados: [],
     });
   try {
-    const fetch = (await import("node-fetch")).default;
-    const resultados = await Promise.all(
-      funcionarios.map(async (f) => {
-        const payload = {
-          token: "token-flp-2026",
-          salarioBase: f.salarioBase,
-          dependentes: f.dependentes,
-          horaMes: f.jornadaMensal || 220,
-          horas50: f.horas50,
-          horas100: f.horas100,
-          custoVT: f.custoVT || 0,
-          pgtVT: f.pgtVT || "clt",
-          beneficioVA: f.beneficioVA || 0,
-          pctDescontoVA: f.pctDescontoVA !== undefined ? f.pctDescontoVA : 20,
-          planoSaude: f.planoSaude || 0,
-          pgtPlanoSaude: f.pgtPlanoSaude || "funcionario",
-          diasFalta: f.diasFalta || 0,
-          horasAtraso: f.horasAtraso || 0,
-        };
-        const r = await fetch(`${API_URL}/api/flp/calcular`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const data = await r.json();
-        return { funcionario: f, holerite: data };
-      }),
-    );
+    const resultados = funcionarios.map((f) => {
+      const holerite = calcularFolha({
+        salarioBase:   f.salarioBase,
+        dependentes:   f.dependentes,
+        horaMes:       f.jornadaMensal || 220,
+        horas50:       f.horas50,
+        horas100:      f.horas100,
+        custoVT:       f.custoVT || 0,
+        pgtVT:         f.pgtVT || "clt",
+        beneficioVA:   f.beneficioVA || 0,
+        pctDescontoVA: f.pctDescontoVA !== undefined ? f.pctDescontoVA : 20,
+        planoSaude:    f.planoSaude || 0,
+        pgtPlanoSaude: f.pgtPlanoSaude || "funcionario",
+        diasFalta:     f.diasFalta || 0,
+        horasAtraso:   f.horasAtraso || 0,
+      });
+      return { funcionario: f, holerite };
+    });
     res.render("flp/folha", { user: req.session.flpUser, resultados });
   } catch (err) {
     res.redirect("/flp/funcionarios");
@@ -781,16 +801,14 @@ app.get("/flp/help", requireFlpAuth, (req, res) => {
   res.render("flp/help", { user: req.session.flpUser });
 });
 
-// -- Time_8 DASN-SIMEI --
+// Time_8 DASN-SIMEI 
 function requireAuthDASN(req, res, next) {
   if (req.session && req.session.dasnUser) return next();
   res.redirect("/DASN/login");
 }
 
 app.get("/DASN", (req, res) => res.render("Time_8(DASN)/splash"));
-app.get("/DASN/login", (req, res) =>
-  res.render("Time_8(DASN)/login", { erro: null }),
-);
+app.get("/DASN/login", (req, res) => res.render("Time_8(DASN)/login", { erro: null }));
 app.post("/DASN/login", (req, res) => {
   const { usuario, senha } = req.body;
   if (usuario === "admin" && senha === "1234") {
@@ -799,25 +817,18 @@ app.post("/DASN/login", (req, res) => {
   }
   res.render("Time_8(DASN)/login", { erro: "Usuário ou senha inválidos." });
 });
-app.get("/DASN/calculo", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/calculo"),
-);
-app.get("/DASN/sobre", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/sobre"),
-);
-app.get("/DASN/help", requireAuthDASN, (req, res) =>
-  res.render("Time_8(DASN)/help"),
-);
+
+app.get("/DASN/calculo", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/calculo"));
+app.get("/DASN/sobre", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/sobre"));
+app.get("/DASN/help", requireAuthDASN, (req, res) => res.render("Time_8(DASN)/help"));
 app.get("/DASN/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/DASN/login");
-  });
+  req.session.destroy(() => res.redirect("/DASN/login"));
 });
 
-app.post("/DASN/valida-limite", requireAuthDASN, async (req, res) => {
+app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
   try {
     const fetch = (await import("node-fetch")).default;
-    const response = await fetch(`${API_URL}/DASN/valida-limite`, {
+    const response = await fetch(`${API_URL}/DASN/${req.params.rota}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
@@ -991,6 +1002,8 @@ ETEC11_ROTAS.forEach(rota => {
   });
 });
 
+
+// ajuste 1
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
