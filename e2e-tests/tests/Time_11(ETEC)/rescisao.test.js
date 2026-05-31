@@ -1,4 +1,4 @@
-const { tiraFoto, limparCampo, fazerLogin, By, until, Key } = require('./helpers');
+const { tiraFoto, limparCampo, By, until } = require('./helpers');
 
 async function definirData(driver, input, valor) {
     await driver.executeScript(
@@ -36,8 +36,8 @@ module.exports = async function runRescisaoTest(driver) {
         await submit.click();
     }
 
-    console.log('▶ Teste: Rescisão com salário vazio');
-    await preencher('', 30, '2022-01-10', '2024-05-20', 'semJustaCausa');
+    console.log('▶ Teste: Rescisão com salário inválido');
+    await preencher(-1, 30, '2022-01-10', '2024-05-20', 'semJustaCausa');
     const erroSal = await driver.wait(until.elementLocated(By.css('[data-testid="rescisao-error"]')), 5000);
     if (!(await erroSal.getText()).includes('salário bruto válido')) throw new Error(`Msg inesperada: "${await erroSal.getText()}"`);
     await tiraFoto(driver, 'ETEC11-rescisao-erro-salario');
@@ -57,10 +57,10 @@ module.exports = async function runRescisaoTest(driver) {
     await tiraFoto(driver, 'ETEC11-rescisao-erro-data-rescisao');
     console.log('✓ Data rescisão inválida OK');
 
-    console.log('▶ Teste: Rescisão com dias vazio');
-    await preencher(2000, '', '2022-01-10', '2024-05-20', 'semJustaCausa');
+    console.log('▶ Teste: Rescisão com dias inválido');
+    await preencher(2000, 0, '2022-01-10', '2024-05-20', 'semJustaCausa');
     const erroDias = await driver.wait(until.elementLocated(By.css('[data-testid="rescisao-error"]')), 5000);
-    if (!(await erroDias.getText()).includes('Dias Trabalhados é obrigatório')) throw new Error(`Msg inesperada: "${await erroDias.getText()}"`);
+    if (!(await erroDias.getText()).includes('Dias Trabalhados')) throw new Error(`Msg inesperada: "${await erroDias.getText()}"`);
     await tiraFoto(driver, 'ETEC11-rescisao-erro-dias');
     console.log('✓ Dias inválido OK');
 

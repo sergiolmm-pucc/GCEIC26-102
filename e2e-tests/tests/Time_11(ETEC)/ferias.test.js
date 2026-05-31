@@ -8,12 +8,14 @@ module.exports = async function runFeriasTest(driver) {
         5000
     );
 
-    console.log('▶ Teste: Férias com salário vazio');
+    console.log('▶ Teste: Férias com salário inválido');
     const inputSalario = await driver.findElement(By.css('[data-testid="salario-bruto"]'));
     const inputDias    = await driver.findElement(By.css('[data-testid="dias-de-ferias"]'));
     const submit       = await driver.findElement(By.css('[data-testid="ferias-submit"]'));
 
     await limparCampo(inputSalario);
+    await inputSalario.sendKeys('-1');
+    await limparCampo(inputDias);
     await inputDias.sendKeys('10');
     await submit.click();
     const erroSalario = await driver.wait(
