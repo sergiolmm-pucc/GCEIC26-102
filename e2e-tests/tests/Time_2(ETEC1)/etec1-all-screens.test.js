@@ -20,12 +20,11 @@ async function runEtec1Tests() {
             execSync(`node "${caminhoArquivo}"`, { stdio: 'inherit' });
         } catch (error) {
             console.error(`❌ Falha detectada no subteste: ${arquivo}`);
-            throw new Error(`A suite do ETEC1 falhou no arquivo: ${arquivo} (${numeroAtual}/${totalTestes})`);
+            throw new Error(`A suite do ETEC1 falhou no arquivo: ${arquivo} (${index + 1}/${arquivosDeTeste.length})`);
         }
     });
 
     console.log('\n✅ Todos os testes do Time_2(ETEC1) concluídos!');
 }
 
-// Exporta a função para o arquivo principal conseguir usá-la
 module.exports = runEtec1Tests;

@@ -1,5 +1,4 @@
 const { Builder, By } = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
 const {loginETEC1, tiraFoto, buildDriver, BASE_URL} = require("./helpers");
 
 let driver;
@@ -27,16 +26,16 @@ async function main() {
 
         await tiraFoto(driver, 'ETEC1_botao_calcular_clicado');
 
-        await driver.sleep(1500);
+        await driver.sleep(2000);
 
-        const resultado = await driver.findElement(
-            By.id('res-salario')
-        ).getText();
+        const resultado = await driver.executeScript(
+            "const el = document.getElementById('res-salario'); return el ? el.innerText : '';"
+        );
 
         await tiraFoto(driver, 'ETEC1_resultado_exibido');
 
         if (!resultado.includes('Salário Bruto')) {
-            throw new Error('Resultado não exibido');
+            throw new Error('Resultado não exibido. Recebido: "' + resultado.substring(0, 150) + '"');
         }
     } finally {
 
