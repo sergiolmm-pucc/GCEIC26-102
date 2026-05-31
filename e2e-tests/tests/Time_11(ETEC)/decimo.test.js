@@ -1,7 +1,6 @@
 const { tiraFoto, limparCampo, fazerLogin, By, until } = require('./helpers');
 
 module.exports = async function runDecimoTest(driver) {
-    await fazerLogin(driver);
 
     await driver.findElement(By.css('[data-testid="nav-decimo"]')).click();
     await driver.wait(

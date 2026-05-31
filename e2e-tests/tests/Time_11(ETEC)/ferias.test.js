@@ -1,7 +1,6 @@
 const { tiraFoto, limparCampo, fazerLogin, By, until } = require('./helpers');
 
 module.exports = async function runFeriasTest(driver) {
-    await fazerLogin(driver);
 
     await driver.findElement(By.css('[data-testid="nav-ferias"]')).click();
     await driver.wait(

@@ -12,8 +12,6 @@ async function definirData(driver, input, valor) {
 module.exports = async function runRescisaoTest(driver) {
     const { Select } = require('selenium-webdriver/lib/select');
 
-    await fazerLogin(driver);
-
     await driver.findElement(By.css('[data-testid="nav-rescisao"]')).click();
     await driver.wait(
         until.elementLocated(By.css('[data-testid="rescisao-form"]')),
