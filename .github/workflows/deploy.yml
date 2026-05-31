@@ -179,12 +179,67 @@ jobs:
           echo "dep_api=false" >> $GITHUB_OUTPUT
           echo "💥 Pipeline falhou. Verifique os logs acima."            
 
-        
-  deploy-app:
+  TestApp:
     needs: detect-changes
     if: needs.detect-changes.outputs.app == 'true'
-#    needs: unitTestApi  
+    runs-on: ubuntu-latest
+    permissions: write-all
 
+    steps:
+      - name: Get Code from repository
+        uses: actions/checkout@v6
+      - name: Instala o Node na maquina virtual        
+        uses: actions/setup-node@v6
+      - name: Instala as dependencias do projeto
+        working-directory: api 
+        run: npm ci      
+      - name: Subir a API em background
+        working-directory: api 
+        run: npm run start &
+        env:
+          PORT: 3001
+          NODE_ENV: test
+      - name: Instala as dependencias do projeto
+        working-directory: app 
+        run: npm ci        
+      - name: Subir o site em background
+        working-directory: app
+        run: npm run start &
+        env:
+          PORT: 3000
+
+      - name: Aguardar serviços ficarem prontos
+        run: npx wait-on http://localhost:3001/health http://localhost:3000 --timeout 30000
+
+      - name: Instala as dependencias do projeto
+        working-directory: e2e-tests 
+        run: npm ci    
+      - name: Roda os testes Funcionais
+        if: success() 
+        working-directory: e2e-tests
+        run: npm run test 
+        env:
+          API_URL: http://localhost:3001
+          APP_URL: http://localhost:3000
+        
+      - name: verifica se fez corretamente
+        working-directory: e2e-tests 
+        run:  ls -la          
+      - name: fotos da tela
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fotos dos testes
+          # Path to the release files
+          # Gravar as fotos na raiz do projeto no docker
+
+          # path: /home/runner/work//aula_teste_101/aula_teste_101/e2e-tests/screenshots/**/*.png
+          path: /home/runner/work//GCEIC26-102/GCEIC26-102/e2e-tests/screenshots/*.png
+
+        
+  deploy-app:
+    needs: TestApp
+    if: success()
     runs-on: ubuntu-latest
     outputs:
       dep_app: ${{ steps.set-output-app.outputs.dep_app }}
