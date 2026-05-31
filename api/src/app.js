@@ -16,6 +16,7 @@ const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
+const freteRoutes = require("./Time_14(Frete)/frete.routes");
 
 const app = express();
 
@@ -101,5 +102,7 @@ app.use("/api/Time_10_piscina", piscina1);
 // Rotas CD (compilado TS)
 const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
+// Rotas Frete
+app.use("/api/frete", freteRoutes);
 
 module.exports = app;
