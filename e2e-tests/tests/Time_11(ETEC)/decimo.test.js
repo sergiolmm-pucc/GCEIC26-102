@@ -1,5 +1,5 @@
-const { tiraFoto, limparCampo, fazerLogin, By, until } = require('./helpers');
-
+const { tiraFoto, limparCampo, By, until } = require('./helpers');
+ 
 module.exports = async function runDecimoTest(driver) {
 
     await driver.findElement(By.css('[data-testid="nav-decimo"]')).click();
@@ -7,13 +7,15 @@ module.exports = async function runDecimoTest(driver) {
         until.elementLocated(By.css('[data-testid="decimo-terceiro-form"]')),
         5000
     );
-
+ 
     const inputSalario = await driver.findElement(By.css('[data-testid="salario-bruto"]'));
     const inputMeses   = await driver.findElement(By.css('[data-testid="meses-trabalhados"]'));
     const submit       = await driver.findElement(By.css('[data-testid="decimo-terceiro-submit"]'));
-
-    console.log('▶ Teste: Salário inválido (vazio)');
+ 
+    console.log('▶ Teste: Salário inválido');
     await limparCampo(inputSalario);
+    await inputSalario.sendKeys('-1');
+    await limparCampo(inputMeses);
     await inputMeses.sendKeys('4');
     await submit.click();
     const erroSalario = await driver.wait(
@@ -24,11 +26,12 @@ module.exports = async function runDecimoTest(driver) {
     }
     await tiraFoto(driver, 'ETEC11-decimo-salario-erro');
     console.log('✓ Salário inválido OK');
-
-    console.log('▶ Teste: 13° com meses vazio');
+ 
+    console.log('▶ Teste: 13° com meses inválido');
     await limparCampo(inputSalario);
     await inputSalario.sendKeys('2000');
     await limparCampo(inputMeses);
+    await inputMeses.sendKeys('0');
     await submit.click();
     const erroMeses = await driver.wait(
         until.elementLocated(By.css('[data-testid="decimo-terceiro-error"]')), 5000
@@ -38,7 +41,7 @@ module.exports = async function runDecimoTest(driver) {
     }
     await tiraFoto(driver, 'ETEC11-decimo-erro-meses');
     console.log('✓ Meses inválido OK');
-
+ 
     console.log('▶ Teste: 13° com mês 13');
     await limparCampo(inputMeses);
     await inputMeses.sendKeys('13');
@@ -51,7 +54,7 @@ module.exports = async function runDecimoTest(driver) {
     }
     await tiraFoto(driver, 'ETEC11-decimo-erro-mes-13');
     console.log('✓ Mês 13 inválido OK');
-
+ 
     console.log('▶ Teste: 13° válido');
     await limparCampo(inputMeses);
     await inputMeses.sendKeys('12');

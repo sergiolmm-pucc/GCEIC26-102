@@ -10,7 +10,7 @@ const { calcularFolha } = require("./flpFuncoes");
 console.log("API_URL do env:", process.env.API_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_URL = process.env.API_URL || 'http://localhost:3001';
+const API_URL = process.env.API_URL || "http://localhost:3001";
 
 app.get("/env.js", (req, res) => {
   res.type("application/javascript");
@@ -33,7 +33,7 @@ app.use(
     cookie: { maxAge: 3600000 },
   }),
 );
- 
+
 const equipes = [
   { numero: 1, nome: "ETEC1", rota: "/ETEC1/splash" },
   { numero: 2, nome: "EXCHANGE", rota: "/exg" },
