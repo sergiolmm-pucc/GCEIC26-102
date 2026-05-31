@@ -26,12 +26,29 @@ async function tiraFoto(driver, nome) {
     }
 }
 
-async function buildDriver(driver) {
-    driver = await new Builder()
+async function buildDriver() {
+    const opts = new chrome.Options();
+
+    opts.addArguments(
+        '--headless=new',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--window-size=1280,800',
+        '--disable-background-networking',
+        '--disable-extensions',
+        '--disable-sync',
+        '--disable-default-apps',
+        '--disable-popup-blocking',
+        '--disable-notifications',
+        '--disable-gcm',
+        '--log-level=3',
+    );
+
+    opts.excludeSwitches(['enable-logging']);
+
+    const driver = await new Builder()
         .forBrowser('chrome')
-        .setChromeOptions(
-            new chrome.Options().addArguments('--headless=new')
-        )
+        .setChromeOptions(opts)
         .build();
 
     return driver;
