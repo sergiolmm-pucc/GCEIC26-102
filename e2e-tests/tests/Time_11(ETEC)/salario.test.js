@@ -1,4 +1,13 @@
-const { tiraFoto, limparCampo, fazerLogin, By, until } = require('./helpers');
+const { tiraFoto, fazerLogin, By, until } = require('./helpers');
+
+async function setValor(driver, input, valor) {
+    await driver.executeScript(
+        'const set = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;' +
+        'set.call(arguments[0], arguments[1]);' +
+        'arguments[0].dispatchEvent(new Event("input", { bubbles: true }));',
+        input, String(valor)
+    );
+}
 
 module.exports = async function runSalarioTest(driver) {
     await fazerLogin(driver);
@@ -9,10 +18,11 @@ module.exports = async function runSalarioTest(driver) {
         5000
     );
 
-    console.log('▶ Teste: salário inválido');
     const input = await driver.findElement(By.css('[data-testid="salario-bruto"]'));
     const submit = await driver.findElement(By.css('[data-testid="salario-submit"]'));
-    await limparCampo(input);
+
+    console.log('▶ Teste: Salário inválido');
+    await setValor(driver, input, '');
     await submit.click();
     const erro = await driver.wait(
         until.elementLocated(By.css('[data-testid="salario-error"]')),
@@ -25,9 +35,8 @@ module.exports = async function runSalarioTest(driver) {
     await tiraFoto(driver, 'ETEC11-salario-erro');
     console.log('✓ Salário inválido OK');
 
-    console.log('▶ Teste: salário válido');
-    await limparCampo(input);
-    await input.sendKeys('2000');
+    console.log('▶ Teste: Salário válido');
+    await setValor(driver, input, '2000');
     await submit.click();
     await driver.wait(async () => {
         const erros = await driver.findElements(By.css('[data-testid="salario-error"]'));
