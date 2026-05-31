@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FastFrete | Home</title>
+
+  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/home.css" />
+</head>
+<body class="app-page">
+  <header class="app-header">
+    <div class="brand-area">
+      <div class="brand-icon">🚚</div>
+      <div>
+        <h1>FastFrete</h1>
+        <p>Sistema de cálculo de frete</p>
+      </div>
+    </div>
+
+    <nav class="app-nav">
+      <a href="/frete/home" class="nav-link active">Home</a>
+      <a href="/frete/calcular" class="nav-link">Calcular</a>
+      <a href="/frete/about" class="nav-link">Sobre</a>
+      <a href="/frete/help" class="nav-link">Help</a>
+      <a href="/frete/logout" class="nav-link logout">Sair</a>
+    </nav>
+  </header>
+
+  <main class="home-main">
+    <section class="hero-card hero-card-centered">
+      <div class="hero-content">
+        <p class="hero-label">Bem-vindo, <%= user.nome %></p>
+
+        <h2>Calcule o valor do frete de forma rápida e objetiva.</h2>
+
+        <p>
+          Informe dimensões, peso, distância, tipo de entrega, valor declarado,
+          importação e seguro para obter uma cotação completa.
+        </p>
+
+        <div class="hero-actions hero-actions-featured">
+          <a href="/frete/calcular" class="calculate-button">
+            Calcular frete agora
+          </a>
+
+          <a href="/frete/help" class="secondary-button link-button">
+            Ver ajuda
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-illustration">
+        📦
+      </div>
+    </section>
+  </main>
+</body>
+</html>

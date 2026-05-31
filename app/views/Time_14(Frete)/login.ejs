@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FastFrete | Login</title>
+
+  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/login.css" />
+</head>
+<body class="login-page">
+  <main class="login-container">
+    <section class="login-card">
+      <div class="login-brand">
+        <div class="login-icon">🚚</div>
+        <p class="login-label">Time 14</p>
+        <h1>FastFrete</h1>
+        <p>Acesse o sistema de cálculo de frete.</p>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form class="login-form" method="POST" action="/frete/login">
+        <div class="form-group">
+          <label for="username">Usuário</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Digite o usuário"
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Digite a senha"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="primary-button">
+          Entrar
+        </button>
+      </form>
+
+      <div class="login-hint">
+        <span>Usuário:</span> admin
+        <span>Senha:</span> 1234
+      </div>
+    </section>
+  </main>
+</body>
+</html>

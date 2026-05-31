@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FastFrete | Help</title>
+
+  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/help.css" />
+</head>
+<body class="app-page">
+  <header class="app-header">
+    <div class="brand-area">
+      <div class="brand-icon">🚚</div>
+      <div>
+        <h1>FastFrete</h1>
+        <p>Sistema de cálculo de frete</p>
+      </div>
+    </div>
+
+    <nav class="app-nav">
+      <a href="/frete/home" class="nav-link">Home</a>
+      <a href="/frete/calcular" class="nav-link">Calcular</a>
+      <a href="/frete/about" class="nav-link">Sobre</a>
+      <a href="/frete/help" class="nav-link active">Help</a>
+      <a href="/frete/logout" class="nav-link logout">Sair</a>
+    </nav>
+  </header>
+
+  <main class="help-main">
+    <section class="help-hero">
+      <p class="page-label">Central de ajuda</p>
+      <h2>Como o cálculo do frete funciona?</h2>
+      <p>
+        O FastFrete calcula a cotação usando dimensões da encomenda, peso real,
+        distância, tipo de frete, valor declarado e taxas opcionais.
+      </p>
+    </section>
+
+    <section class="help-grid">
+      <article class="help-card">
+        <span class="step-number">1</span>
+        <h3>Peso cubado</h3>
+        <p>
+          O peso cubado estima o quanto a encomenda ocupa de espaço no transporte.
+          Ele é útil porque um produto pode ser leve, mas muito volumoso.
+        </p>
+
+        <div class="formula-box">
+          pesoCubado = comprimento × largura × altura / 6000
+        </div>
+      </article>
+
+      <article class="help-card">
+        <span class="step-number">2</span>
+        <h3>Peso faturado</h3>
+        <p>
+          Depois de calcular o peso cubado, o sistema compara esse valor com o peso
+          real informado. O maior dos dois é usado como peso faturado.
+        </p>
+
+        <div class="formula-box">
+          pesoFaturado = maior entre pesoReal e pesoCubado
+        </div>
+      </article>
+
+      <article class="help-card">
+        <span class="step-number">3</span>
+        <h3>Valor base</h3>
+        <p>
+          O valor base considera a distância, o peso faturado e a alíquota do tipo
+          de frete escolhido pelo usuário.
+        </p>
+
+        <div class="formula-box">
+          valorBase = distância × pesoFaturado × alíquota
+        </div>
+      </article>
+
+      <article class="help-card">
+        <span class="step-number">4</span>
+        <h3>Tipo de frete</h3>
+        <p>
+          Cada tipo de frete possui uma alíquota diferente. Fretes mais rápidos
+          possuem alíquota maior.
+        </p>
+
+        <ul class="help-list">
+          <li>Econômico: 1,5%</li>
+          <li>Normal: 2,5%</li>
+          <li>Expresso: 4%</li>
+          <li>Urgente: 6%</li>
+        </ul>
+      </article>
+
+      <article class="help-card">
+        <span class="step-number">5</span>
+        <h3>Taxa de importação</h3>
+        <p>
+          Se o produto for marcado como importado, o sistema aplica uma taxa
+          simulada sobre o valor declarado do bem.
+        </p>
+
+        <div class="formula-box">
+          taxaImportação = valorDeclarado × 15%
+        </div>
+      </article>
+
+      <article class="help-card">
+        <span class="step-number">6</span>
+        <h3>Seguro opcional</h3>
+        <p>
+          Se o usuário escolher segurar o bem, o sistema aplica uma taxa adicional
+          sobre o valor declarado.
+        </p>
+
+        <div class="formula-box">
+          taxaSeguro = valorDeclarado × 5%
+        </div>
+      </article>
+    </section>
+
+    <section class="final-formula-card">
+      <h3>Fórmula final</h3>
+      <p>
+        Depois de calcular todas as etapas, o sistema soma o valor base com as
+        taxas adicionais aplicáveis.
+      </p>
+
+      <div class="formula-box formula-box-large">
+        valorFinal = valorBase + taxaImportação + taxaSeguro
+      </div>
+
+      <a href="/frete/calcular" class="calculate-button">
+        Ir para o cálculo de frete
+      </a>
+    </section>
+  </main>
+</body>
+</html>
