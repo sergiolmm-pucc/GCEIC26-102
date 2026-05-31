@@ -1,7 +1,3 @@
-// ============================================================
-// Time_2 (ETEC) — Testes Unitários (Jest)
-// ============================================================
-
 const { calcularSalarioMensal, calcularFerias, calcularRescisao, calcularDecimoTerceiro, calcularINSS } = require('../../src/Time_2(ETEC1)/etec1.function');
 
 describe('calcularINSS', () => {
