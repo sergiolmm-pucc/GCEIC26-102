@@ -2,11 +2,13 @@ const { Builder, By, until, Key } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 const fs = require("fs");
 const path = require("path");
+const runEtec1Tests = require("./Time_2(ETEC1)/etec1-all-screens.test.js");
 const runExgTests = require("./exg/exg-all-screens.test.js");
 const runCddTests = require("./cdd/cdd-all-screens.test.js");
 const runCltTests = require("./clt/clt-all-screens.test.js");
 const runFlpTests = require("./flp/flp-all-screens.test.js");
 const runEtec11Tests = require("./Time_11(ETEC)/etec11-all-screens.test.js");
+const runPiscinaTests = require("./Time_10_piscina/piscina-all-screens.test.js");
 const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
 const runMkpTests = require("./mkp/mkp-all-screens.test.js");
 
@@ -44,6 +46,7 @@ async function main() {
       .build();
     await driver.manage().setTimeouts({ implicit: 5000, pageLoad: 15000 });
     console.log(BASE_URL);
+    /*
     await driver.get(BASE_URL + "/login");
     tiraFoto("Pagina Entrada");
     //preenche os campos
@@ -57,7 +60,9 @@ async function main() {
     const errMsg = await driver.findElement(By.css(".erro")).getText();
     if (!errMsg.includes("inválidos") && !errMsg.includes("invalidos"))
       throw new Error(`Falhou : ${errMsg}`);
-
+    */
+    console.log("\n--- Iniciando testes do ETEC1 ---");
+    await runEtec1Tests();
     console.log("\n--- Iniciando testes do MKP ---");
     await runMkpTests();
     console.log("\n--- Iniciando testes do EXG ---");
@@ -72,6 +77,8 @@ async function main() {
     await runFlpTests();
     console.log("\n--- Iniciando testes do ETEC11 ---");
     await runEtec11Tests();
+    console.log("\n--- Iniciando testes da Piscina ---");
+    await runPiscinaTests();
   } finally {
     if (driver) await driver.quit();
   }

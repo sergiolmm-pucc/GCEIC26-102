@@ -1,75 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Ajuda</title>
-
-    <link rel="stylesheet" href="/piscina.css">
-
+  <meta charset="UTF-8">
+  <title>Ajuda - PiscinaCalc</title>
+  <link rel="stylesheet" href="/piscina.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav>
-        <a href="/piscina/calculo">Cálculo</a>
-        <a href="/piscina/sobre">Sobre</a>
-        <a href="/piscina/help">Help</a>
-        <a href="/piscina/logout">Logout</a>
-    </nav>
+  <nav>
+    <div class="nav-logo">🏊 PiscinaCalc</div>
+    <div class="nav-links">
+      <a href="/piscina/calculo">Cálculo</a>
+      <a href="/piscina/sobre">Sobre</a>
+      <a href="/piscina/help">Help</a>
+      <a href="/piscina/logout" class="nav-logout">Logout</a>
+    </div>
+  </nav>
 
-    <div class="container">
+  <div class="page-bg">
+    <div class="help-container">
 
-        <div class="card">
+      <div class="help-header">
+        <div class="card-icon">❓</div>
+        <h1>Central de Ajuda</h1>
+        <p class="card-subtitle">Tudo que você precisa saber para usar o sistema</p>
+      </div>
 
-            <h1>Ajuda</h1>
+      <div class="help-grid">
 
-            <p>
-                Este projeto foi desenvolvido com o objetivo de auxiliar usuários
-                no cálculo relacionado ao enchimento e capacidade de piscinas.
-            </p>
-
-            <br>
-
-            <p>
-                O sistema permite que o usuário informe os valores necessários,
-                como medidas da piscina, para que os cálculos sejam realizados
-                automaticamente pela aplicação.
-            </p>
-
-            <br>
-
-            <p>
-                Após preencher os campos corretamente e clicar no botão de cálculo,
-                os dados são enviados para a API do sistema, que processa as
-                informações e retorna o resultado diretamente na tela.
-            </p>
-
-            <br>
-
-            <p>
-                O projeto foi criado para facilitar cálculos matemáticos de maneira
-                rápida, prática e organizada, ajudando o usuário a obter informações
-                importantes sobre o volume e utilização da piscina.
-            </p>
-
-            <br>
-
-            <p>
-                Durante o desenvolvimento, foram utilizadas tecnologias como
-                Node.js, Express, HTML, CSS e EJS para construção da interface
-                e integração com a API.
-            </p>
-
-            <br>
-
-            <p>
-                Este trabalho acadêmico também teve como objetivo desenvolver
-                conhecimentos em programação, desenvolvimento web, integração
-                entre front-end e back-end e trabalho em equipe.
-            </p>
-
+        <div class="help-card">
+          <div class="help-card-icon">🎯</div>
+          <h3>Objetivo</h3>
+          <p>Auxiliar usuários no cálculo de enchimento, capacidade e custos de piscinas de forma rápida e prática.</p>
         </div>
 
+        <div class="help-card">
+          <div class="help-card-icon">📏</div>
+          <h3>Como usar</h3>
+          <p>Informe o comprimento, largura e profundidade da piscina. Marque a opção de iluminação se necessário e clique em <strong>Calcular</strong>.</p>
+        </div>
+
+        <div class="help-card">
+          <div class="help-card-icon">⚡</div>
+          <h3>Processamento</h3>
+          <p>Os dados são enviados para a API do sistema, que processa as informações e retorna volume, custos e manutenção automaticamente.</p>
+        </div>
+
+        <div class="help-card">
+          <div class="help-card-icon">📊</div>
+          <h3>Resultados</h3>
+          <p>Você receberá volume em m³, custo da água, custo elétrico, custo hidráulico, total de construção e manutenção mensal.</p>
+        </div>
+
+        <div class="help-card">
+          <div class="help-card-icon">🛠️</div>
+          <h3>Tecnologias</h3>
+          <p>Desenvolvido com Node.js, Express, HTML, CSS e EJS para construção da interface e integração com a API.</p>
+        </div>
+
+        <div class="help-card">
+          <div class="help-card-icon">🎓</div>
+          <h3>Acadêmico</h3>
+          <p>Projeto desenvolvido para aplicar conhecimentos em programação web, integração front-end/back-end e trabalho em equipe.</p>
+        </div>
+
+      </div>
     </div>
+  </div>
 
 </body>
 </html>
