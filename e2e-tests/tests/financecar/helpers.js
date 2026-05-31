@@ -15,7 +15,7 @@ if(!BASE_URL){
   console.log("URL não encontrada");
 }
 
-const SCREENSHOTS_DIR = path.join(__dirname, "..", "screenshots");
+const SCREENSHOTS_DIR = path.join(__dirname, "..", "..", "screenshots");
 
 // garante que a pasta existe
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
