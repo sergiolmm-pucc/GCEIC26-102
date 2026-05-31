@@ -24,9 +24,17 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
 
 // DRIVER BUILDER
 async function buildDriver() {
+  const options = new chrome.Options();
+
+  options.addArguments("--headless=new");
+  options.addArguments("--no-sandbox");
+  options.addArguments("--disable-dev-shm-usage");
+  options.addArguments("--disable-gpu");
+  options.addArguments("--window-size=1920,1080");
+
   return await new Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options())
+    .setChromeOptions(options)
     .build();
 }
 
@@ -68,7 +76,7 @@ async function exists(driver, selector) {
   return els.length > 0;
 }
 
-// screenshot (AGORA NÃO ESCONDE ERRO)
+// screenshot 
 async function screenshot(driver, name) {
   try {
     const img = await driver.takeScreenshot();
