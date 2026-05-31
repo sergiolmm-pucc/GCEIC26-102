@@ -9,13 +9,13 @@ app.use('/livrocaixa', livrocaixaRouter);
 describe('API Livro Caixa', () => {
     // Testes da API 1 (Livro Caixa Rural) 
     it('Calcula corretamente o livro caixa', async () => {
-        const res = await request(app).post('/livrocaixa/livrocaixa').send({
+        const res = await request(app).post('/livrocaixa/calc-livro').send({
             receita: 50000, 
             despesa: 20000, 
             investimento: 5000
         });
         expect(res.statusCode).toBe(200);
-        expect(res.body.resultado).toBe(35000);
+        expect(res.body.resultado).toBe(25000);
     });
 
     // Testes da API 2 (Prejuízo Acumulado)

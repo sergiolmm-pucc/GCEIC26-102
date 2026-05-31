@@ -105,5 +105,4 @@ const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
 
 
-
 module.exports = app;

@@ -35,18 +35,18 @@ async function tiraFoto(driver, name) {
         await tiraFoto(driver, '03-dashboard-calculo-carregado');
 
         // Bloco 1: Livro Caixa Rural
-        await driver.findElement(By.id('lcReceita')).sendKeys('50000');
-        await driver.findElement(By.id('lcDespesa')).sendKeys('20000');
-        await driver.findElement(By.id('lcInvestimento')).sendKeys('5000');
+        await driver.findElement(By.id('lcreceita')).sendKeys('50000');
+        await driver.findElement(By.id('lcdespesa')).sendKeys('20000');
+        await driver.findElement(By.id('lcinvestimento')).sendKeys('5000');
         await driver.findElement(By.css('#livroForm button[type="submit"]')).click();
         
         let resultadoLivroCaixa = await driver.findElement(By.id('resultadoLivroCaixa'));
-        await driver.wait(until.elementTextContains(resultadoLivroCaixa, '35000.00'), 5000);
+        await driver.wait(until.elementTextContains(resultadoLivroCaixa, '25000.00'), 5000);
         await tiraFoto(driver, '04-resultado-livro-caixa');
 
         // Bloco 2: Prejuízo Acumulado
-        await driver.findElement(By.id('paResultadoAno')).sendKeys('40000');
-        await driver.findElement(By.id('paPrejuizo')).sendKeys('15000');
+        await driver.findElement(By.id('ccreceitaAno')).sendKeys('40000');
+        await driver.findElement(By.id('ccprejuizo')).sendKeys('15000');
         await driver.findElement(By.css('#prejuizoForm button[type="submit"]')).click();
         
         let resultadoCompensação = await driver.findElement(By.id('resultadoCompensação'));
@@ -54,7 +54,7 @@ async function tiraFoto(driver, name) {
         await tiraFoto(driver, '05-resultado-prejuizo-acumulado');
 
         // Bloco 3: Limite de Arbitramento
-        await driver.findElement(By.id('laReceita')).sendKeys('100000');
+        await driver.findElement(By.id('lareceita')).sendKeys('100000');
         await driver.findElement(By.css('#limiteForm button[type="submit"]')).click();
         
         let resultadoLimite = await driver.findElement(By.id('resultadoLimite'));
