@@ -4,7 +4,7 @@
     --bg: #0a0a0f;
     --surface: #12121a;
     --border: #1e1e2e;
-    --team-accent: #00e5ff; 
+    --team-accent: #a855f7; /* Cor roxa neon alterada aqui */
     --text: #e8e8f0;
     --muted: #555570;
 }
@@ -25,8 +25,9 @@ body::before {
     position: fixed;
     inset: 0;
     background-image:
-        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+        /* Atualizado o RGB do azul (0, 229, 255) para o roxo (168, 85, 247) */
+        linear-gradient(rgba(168, 85, 247, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.04) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
