@@ -81,6 +81,7 @@ app.use("/api/exg", exgRouter);
 app.use("/api/financecar", financeRouter);
 // Rotas ETEC1
 app.use("/ETEC1", etec1);
+//Rotas ETEC11
 app.use("/ETEC11/health", etec11Health);
 app.use("/ETEC11/salario", etec11Salario);
 app.use("/ETEC11/ferias", etec11Ferias);
