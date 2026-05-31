@@ -38,8 +38,6 @@ async function buildDriver(driver) {
 }
 
 async function loginETEC1(driver) {
-    console.log('🔐 Iniciando fluxo de autenticação...');
-
     await driver.get(BASE_URL + '/ETEC1/login');
 
     const campoUsuario = await driver.findElement(By.name('usuario'));
@@ -52,8 +50,6 @@ async function loginETEC1(driver) {
         const url = await driver.getCurrentUrl();
         return !url.includes('/login');
     }, 5000, 'Erro: O login demorou muito ou falhou.');
-
-    console.log('✅ Autenticado com sucesso.');
 }
 
 module.exports = { loginETEC1, tiraFoto, buildDriver, BASE_URL };
