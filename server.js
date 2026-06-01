@@ -1,6 +1,14 @@
 const express = require('express');
-const cors = require('cors');
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Permite apenas o seu próprio frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],                  // Restringe os métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'],          // Cabeçalhos aceitos
+  optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions));
 const path = require('path');
+const crypto = require('crypto');
 require('dotenv').config();
 
 // Mapeamento correto para a sua estrutura de pastas
@@ -37,13 +45,15 @@ app.post('/api/login', (req, res) => {
     const usuario = USUARIOS_CADASTRADOS.find(u => u.email === email && u.senha === senha);
     if (!usuario) return res.status(401).json({ erro: "E-mail ou senha inválidos." });
     
-    const tokenSimulado = `token_${Math.random().toString(36).substr(2)}`;
-    sessoesAtivas.add(tokenSimulado);
+    // CÓDIGO CORRIGIDO E SEGURO:
+    // Gera 16 bytes aleatórios seguros e os transforma em uma string hexadecimal
+    const tokenSeguro = `token_${crypto.randomBytes(16).toString('hex')}`;
+    sessoesAtivas.add(tokenSeguro);
 
     return res.json({
         mensagem: "Login efetuado com sucesso!",
         usuario: { nome: usuario.nome, email: usuario.email },
-        token: tokenSimulado
+        token: tokenSeguro
     });
 });
 
