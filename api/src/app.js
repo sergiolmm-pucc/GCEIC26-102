@@ -14,9 +14,10 @@ const cltRouter = require("./clt/cltApp");
 const flpRouter = require('./flp/flpApp');
 const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
+const oclRouter = require("./ocl/oclApp");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
-const livroCaixaRoutes17 = require("./Time_17_LivroCaixa/src/routes/livroCaixa");
+const livrocaixa = require("./Time_17_LivroCaixa/livrocaixa")
 
 const app = express();
 
@@ -82,6 +83,7 @@ app.use("/api/exg", exgRouter);
 app.use("/api/financecar", financeRouter);
 // Rotas ETEC1
 app.use("/ETEC1", etec1);
+//Rotas ETEC11
 app.use("/ETEC11/health", etec11Health);
 app.use("/ETEC11/salario", etec11Salario);
 app.use("/ETEC11/ferias", etec11Ferias);
@@ -98,10 +100,13 @@ app.use("/DASN", dasn);
 app.use("/MKP", mkpRouter);
 // Rotas Piscina
 app.use("/api/Time_10_piscina", piscina1);
+// Rotas Livro Caixa Rural
+app.use("/livrocaixa", livrocaixa);
 // Rotas CD (compilado TS)
 const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
-// Rotas Time 17 (Livro Caixa Rural)
-app.use("/api/livro-caixa", livroCaixaRoutes17);
+
+// Rotas OCL (Time 5)
+app.use("/api/ocl", oclRouter);
 
 module.exports = app;

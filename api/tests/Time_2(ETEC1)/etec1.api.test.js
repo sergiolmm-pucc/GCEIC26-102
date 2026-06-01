@@ -1,10 +1,6 @@
 const request = require('supertest');
 const app = require('../../src/app');
 
-// ============================================================
-// Time_2 (ETEC) — Testes de API das rotas /ETEC1
-// ============================================================
-
 describe('GET /ETEC1 — health check da equipe', () => {
 
     test('deve retornar identificação do Time_2', async () => {
@@ -233,5 +229,4 @@ describe('POST /ETEC1/decimoterceiro', () => {
         expect(res.statusCode).toBe(400);
         expect(res.body).toHaveProperty('erro');
     });
-
 });

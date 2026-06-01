@@ -1,1 +1,0 @@
-Esta é uma pasta temporária para a integração do projeto Livro Caixa Rural. Por favor, copie as pastas 'backend' e 'frontend' do seu projeto para cá.

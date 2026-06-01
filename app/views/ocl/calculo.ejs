@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCL — Calculadora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ocl.css">
+</head>
+<body>
+  <%- include('nav') %>
+
+  <main class="ocl-shell">
+    <div class="ocl-page-head">
+      <div class="ocl-tag">Custo de Fabricação</div>
+      <h1>Calculadora de produção de óculos</h1>
+      <p>Preencha as variáveis de materiais, mão de obra, overhead e embalagem para obter o custo unitário consolidado.</p>
+    </div>
+
+    <div class="ocl-calc">
+      <div class="ocl-form-card">
+        <form id="ocl-form">
+
+          <div class="ocl-form-section">
+            <h3>Materiais diretos</h3>
+            <div class="ocl-grid-2">
+              <div class="ocl-field">
+                <label for="armacao">Armação</label>
+                <select id="armacao" name="armacao">
+                  <option value="acetato">Acetato (R$ 18,00)</option>
+                  <option value="injecao">Injeção / TR90 (R$ 6,00)</option>
+                  <option value="metal">Metal / Titânio (R$ 24,00)</option>
+                </select>
+              </div>
+              <div class="ocl-field">
+                <label for="lente">Lente</label>
+                <select id="lente" name="lente">
+                  <option value="sol_poli">Sol — Policarbonato (R$ 9,00)</option>
+                  <option value="sol_cr39">Sol — CR-39 (R$ 12,00)</option>
+                  <option value="grau_semi">Grau — Semi-acabada (R$ 22,00)</option>
+                  <option value="grau_acabada">Grau — Acabada (R$ 38,00)</option>
+                </select>
+              </div>
+              <div class="ocl-field">
+                <label for="componentes">Componentes (R$/un)</label>
+                <input type="number" id="componentes" name="componentes" step="0.01" min="0" value="1.50">
+              </div>
+              <div class="ocl-field">
+                <label for="insumos">Insumos de consumo (R$/un)</label>
+                <input type="number" id="insumos" name="insumos" step="0.01" min="0" value="0.80">
+              </div>
+            </div>
+          </div>
+
+          <div class="ocl-form-section">
+            <h3>Mão de obra direta</h3>
+            <div class="ocl-grid-2">
+              <div class="ocl-field">
+                <label for="tempoMin">Tempo por peça (min)</label>
+                <input type="number" id="tempoMin" name="tempoMin" step="1" min="0" value="25">
+              </div>
+              <div class="ocl-field">
+                <label for="custoHora">Custo da hora (R$/h)</label>
+                <input type="number" id="custoHora" name="custoHora" step="0.01" min="0" value="22.00">
+              </div>
+              <div class="ocl-field">
+                <label for="complexidade">Complexidade do design</label>
+                <select id="complexidade" name="complexidade">
+                  <option value="baixa">Baixa (1.0x)</option>
+                  <option value="media" selected>Média (1.25x)</option>
+                  <option value="alta">Alta (1.6x)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="ocl-form-section">
+            <h3>Overhead / indiretos</h3>
+            <div class="ocl-grid-2">
+              <div class="ocl-field">
+                <label for="custoFixoMensal">Custo fixo mensal (R$)</label>
+                <input type="number" id="custoFixoMensal" name="custoFixoMensal" step="0.01" min="0" value="15000">
+              </div>
+              <div class="ocl-field">
+                <label for="capacidadeMensal">Capacidade produtiva (un/mês)</label>
+                <input type="number" id="capacidadeMensal" name="capacidadeMensal" step="1" min="1" value="3000">
+              </div>
+            </div>
+          </div>
+
+          <div class="ocl-form-section">
+            <h3>Embalagem comercial</h3>
+            <div class="ocl-grid-2">
+              <div class="ocl-field">
+                <label for="estojo">Estojo (R$)</label>
+                <input type="number" id="estojo" name="estojo" step="0.01" min="0" value="4.50">
+              </div>
+              <div class="ocl-field">
+                <label for="flanela">Flanela (R$)</label>
+                <input type="number" id="flanela" name="flanela" step="0.01" min="0" value="1.20">
+              </div>
+              <div class="ocl-field">
+                <label for="caixa">Caixa externa (R$)</label>
+                <input type="number" id="caixa" name="caixa" step="0.01" min="0" value="1.80">
+              </div>
+              <div class="ocl-field">
+                <label for="certificado">Certificado (R$)</label>
+                <input type="number" id="certificado" name="certificado" step="0.01" min="0" value="0.50">
+              </div>
+            </div>
+          </div>
+
+          <div class="ocl-form-section">
+            <h3>Lote</h3>
+            <div class="ocl-grid-2">
+              <div class="ocl-field">
+                <label for="volumeLote">Volume do lote (un)</label>
+                <input type="number" id="volumeLote" name="volumeLote" step="1" min="1" value="1000">
+              </div>
+              <div class="ocl-field">
+                <label for="taxaPerda">Taxa de perda (%)</label>
+                <input type="number" id="taxaPerda" name="taxaPerda" step="0.1" min="0" max="50" value="8">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="ocl-btn ocl-btn--accent">Calcular custo unitário</button>
+        </form>
+      </div>
+
+      <aside class="ocl-result-card">
+        <h3>Resultado</h3>
+        <div id="ocl-result">
+          <div class="ocl-result-empty">Preencha o formulário e clique em calcular para ver o resultado.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('ocl-form');
+    const result = document.getElementById('ocl-result');
+
+    function brl(n) {
+      return Number(n).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function renderError(msg) {
+      result.innerHTML = '<div class="ocl-result-empty" style="color:#b91c1c;border-color:#fecaca">' + msg + '</div>';
+    }
+
+    function renderResult(data) {
+      result.innerHTML = `
+        <div class="ocl-result-line"><span class="label">Materiais (c/ perda)</span><span class="value">${brl(data.materiais)}</span></div>
+        <div class="ocl-result-line"><span class="label">Mão de obra direta</span><span class="value">${brl(data.maoDeObra)}</span></div>
+        <div class="ocl-result-line"><span class="label">Overhead rateado</span><span class="value">${brl(data.overhead)}</span></div>
+        <div class="ocl-result-line"><span class="label">Embalagem</span><span class="value">${brl(data.embalagem)}</span></div>
+        <div class="ocl-result-total">
+          <span class="label">Custo unitário</span>
+          <span class="value">${brl(data.custoUnitario)}</span>
+        </div>
+        <div style="margin-top:14px;font-size:11px;color:var(--text-soft);text-align:right">Lote: ${data.volumeLote} un · Custo total do lote: ${brl(data.custoTotalLote)}</div>
+      `;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = {};
+      formData.forEach((v, k) => { payload[k] = v; });
+
+      try {
+        const res = await fetch('/ocl/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json();
+        if (json.success) {
+          renderResult(json.data);
+        } else {
+          renderError(json.error || 'Não foi possível calcular.');
+        }
+      } catch (err) {
+        renderError(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
