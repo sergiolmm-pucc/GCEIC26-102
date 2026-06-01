@@ -1,4 +1,6 @@
 const express = require('express');
+
+// IDPJ route marker for deployment validation; no runtime behavior changes.
 const {
   calcularFatorR,
   calcularSimples,

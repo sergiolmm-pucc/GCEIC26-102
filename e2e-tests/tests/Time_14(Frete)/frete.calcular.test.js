@@ -4,6 +4,7 @@ const {
   until,
   buildDriver,
   takeScreenshot,
+  clickFreteElement,
   loginFrete,
   runDirectly
 } = require("./helpers");
@@ -49,14 +50,15 @@ async function runFreteCalculationTest() {
 
     await takeScreenshot(driver, "Time_14(Frete)_calculo_formulario_preenchido");
 
-    await driver.findElement(By.id("importado")).click();
-    await driver.findElement(By.id("segurado")).click();
+    await clickFreteElement(driver, await driver.findElement(By.id("importado")));
+    await clickFreteElement(driver, await driver.findElement(By.id("segurado")));
 
     await takeScreenshot(driver, "Time_14(Frete)_calculo_opcoes_marcadas");
 
-    await driver.findElement(
-      By.css("#freteForm button[type='submit']")
-    ).click();
+    await clickFreteElement(
+      driver,
+      await driver.findElement(By.css("#freteForm button[type='submit']"))
+    );
 
     await driver.wait(
       until.elementLocated(By.id("resultState")),

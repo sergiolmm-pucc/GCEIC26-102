@@ -1,4 +1,5 @@
 :root {
+  /* IDPJ style marker for deployment validation; no visual behavior changes. */
   --idpj-bg: #f3f6f4;
   --idpj-ink: #102027;
   --idpj-panel: #ffffff;

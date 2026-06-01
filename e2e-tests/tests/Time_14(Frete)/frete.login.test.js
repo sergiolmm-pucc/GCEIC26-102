@@ -4,6 +4,7 @@ const {
   until,
   buildDriver,
   takeScreenshot,
+  clickFreteSubmit,
   runDirectly
 } = require("./helpers");
 
@@ -26,9 +27,7 @@ async function runFreteLoginTest() {
     await driver.findElement(By.id("username")).sendKeys("usuario_errado");
     await driver.findElement(By.id("password")).sendKeys("senha_errada");
 
-    await driver.findElement(
-      By.css('button[type="submit"]')
-    ).click();
+    await clickFreteSubmit(driver);
 
     await driver.wait(
       until.elementLocated(By.css(".alert-error")),
@@ -57,9 +56,7 @@ async function runFreteLoginTest() {
 
     await takeScreenshot(driver, "Time_14(Frete)_login_credenciais_validas");
 
-    await driver.findElement(
-      By.css('button[type="submit"]')
-    ).click();
+    await clickFreteSubmit(driver);
 
     await driver.wait(
       until.urlContains("/frete/splash"),

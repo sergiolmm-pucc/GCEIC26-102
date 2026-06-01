@@ -41,9 +41,24 @@ async function submitFreteLogin(driver) {
   await driver.findElement(By.id("username")).sendKeys("admin");
   await driver.findElement(By.id("password")).sendKeys("1234");
 
-  await driver.findElement(By.css('button[type="submit"]')).click();
+  await clickFreteSubmit(driver);
 
   await driver.wait(until.urlContains("/frete/splash"), 5000);
+}
+
+async function clickFreteSubmit(driver) {
+  const submitButton = await driver.findElement(By.css('button[type="submit"]'));
+
+  await clickFreteElement(driver, submitButton);
+}
+
+async function clickFreteElement(driver, element) {
+  await driver.executeScript(
+    'arguments[0].scrollIntoView({ block: "center", inline: "nearest" });',
+    element
+  );
+
+  await driver.executeScript("arguments[0].click();", element);
 }
 
 async function waitFreteSplashToHome(driver) {
@@ -79,6 +94,8 @@ module.exports = {
   until,
   buildDriver,
   takeScreenshot,
+  clickFreteElement,
+  clickFreteSubmit,
   submitFreteLogin,
   waitFreteSplashToHome,
   loginFrete,
