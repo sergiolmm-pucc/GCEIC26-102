@@ -17,52 +17,53 @@
 
     <main>
         <div class="big-number">17</div>
+  
         <div class="content">
-            <div class="tag">Painel Livro Caixa</div>
-            <h1>Espaco de Cálculos</h1>
+            <div class="tag">Painel Financeiro</div>
+            <h1>Espaço de <em>Cálculos</em></h1>
             
             <div class="box">
-                <h2>1. Calculo Livro Caixa</h2>
+                <h2>📊 1. Cálculo Livro Caixa</h2>
                 <form id="livroForm">
                     <div class="input-group">
                         <label>Receita</label>
-                        <input type="number" id="lcreceita" required>
+                        <input type="number" id="lcreceita" placeholder="R$ 0,00" required>
                     </div>
                     <div class="input-group">
                         <label>Despesas</label>
-                        <input type="number" id="lcdespesa" required>
+                        <input type="number" id="lcdespesa" placeholder="R$ 0,00" required>
                     </div>
                     <div class="input-group">
                         <label>Investimento</label>
-                        <input type="number" id="lcinvestimento" required>
+                        <input type="number" id="lcinvestimento" placeholder="R$ 0,00" required>
                     </div>
-                    <button type="submit">Calcular Limite</button>
+                    <button type="submit">Calcular Livro Caixa</button>
                 </form>
                 <div id="resultadoLivroCaixa"></div>
             </div>
 
-            <div class="box" style="margin-top: 30px;">
-                <h2>2. Calculo Compensação de prejuizo acumulado</h2>
+            <div class="box">
+                <h2>📉 2. Compensação de Prejuízo</h2>
                 <form id="prejuizoForm">
                     <div class="input-group">
                         <label>Receita do Ano</label>
-                        <input type="number" id="ccreceitaAno" required>
+                        <input type="number" id="ccreceitaAno" placeholder="R$ 0,00" required>
                     </div>
                     <div class="input-group">
-                        <label>Prejuizo Acumulado</label>
-                        <input type="number" id="ccprejuizo" required>
+                        <label>Prejuízo Acumulado</label>
+                        <input type="number" id="ccprejuizo" placeholder="R$ 0,00" required>
                     </div>
                     <button type="submit">Calcular Compensação</button>
                 </form>
                 <div id="resultadoCompensação"></div>
             </div>
 
-            <div class="box" style="margin-top: 30px;">
-                <h2>3. Limite de Arbitramento</h2>
+            <div class="box">
+                <h2>⚖️ 3. Limite de Arbitramento</h2>
                 <form id="limiteForm">
                     <div class="input-group">
-                        <label>Receita</label>
-                        <input type="number" id="lareceita" required>
+                        <label>Receita Anual</label>
+                        <input type="number" id="lareceita" placeholder="R$ 0,00" required>
                     </div>
                     <button type="submit">Calcular Limite</button>
                 </form>
@@ -85,7 +86,7 @@
             });
             const data = await response.json();
             document.getElementById('resultadoLivroCaixa').innerHTML = `
-                <div id="resultado" style="margin-top:15px;">
+                <div id="resultado">
                     <p>Resultado Livro Caixa Rural: <strong>R$ ${data.resultado.toFixed(2)}</strong></p>
                 </div>
             `;
@@ -103,7 +104,7 @@
             });
             const data = await response.json();
             document.getElementById('resultadoCompensação').innerHTML = `
-                <div id="resultado" style="margin-top:15px;">
+                <div id="resultado">
                     <p>Resultado da Compensação: <strong>R$ ${data.novoResultado.toFixed(2)}</strong></p>
                 </div>
             `;
@@ -120,7 +121,7 @@
             });
             const data = await response.json();
             document.getElementById('resultadoLimite').innerHTML = `
-                <div id="resultado" style="margin-top:15px;">
+                <div id="resultado">
                     <p>Limite de Arbitramento (20%): <strong>R$ ${data.limite.toFixed(2)}</strong></p>
                 </div>
             `;
