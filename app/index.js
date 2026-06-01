@@ -1,6 +1,8 @@
 console.log("Iniciando...");
 console.log("Deu certo");
 
+// funcionando
+
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -56,6 +58,7 @@ app.use('/api/v1/trip', async (req, res) => {
     return res.status(502).json({ error: 'Erro ao conectar com o backend Trip.' });
   }
 });
+app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
 app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
@@ -77,14 +80,14 @@ const equipes = [
   { numero: 9, nome: "Equipe-9", rota: "/equipe-9" },
   { numero: 10, nome: "CalcPiscina", rota: "/piscina" },
   { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
-  { numero: 12, nome: "Equipe-1(TRIP)", rota: "/equipe-1" },
+  { numero: 12, nome: "IDPJ", rota: "/IDPJ" },
   { numero: 13, nome: "FLP", rota: "/flp" },
-  { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
+  { numero: 14, nome: "Frete", rota: "/frete" },
   { numero: 15, nome: "MKP", rota: "/MKP" },
-  { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
-  { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
+  { numero: 16, nome: "Sustentabilidade", rota: "/sus" },
+  { numero: 17, nome: "Livro-Caixa-Rural", rota: "/livrocaixa" },
   { numero: 18, nome: "Markup", rota: "/markup" },
-  { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
+  { numero: 19, nome: "Equipe-1(TRIP)", rota: "/equipe-1" },
   { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
 ];
 
@@ -489,6 +492,11 @@ app.get("/MKP", (req, res) => {
   res.render("mkp/mkp");
 });
 
+// -- Time 17 (Livro Caixa Rural) --
+app.get('/livro-caixa', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
+});
+
 async function proxyMkpToApi(path, req, res) {
   try {
     const target = `${API_URL}${path}`;
@@ -871,6 +879,53 @@ app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
   }
 });
 
+// -- Time_12 IDPJ --
+function requireAuthIDPJ(req, res, next) {
+  if (req.session && req.session.idpjUser) return next();
+  res.redirect("/IDPJ/login");
+}
+
+app.get("/IDPJ", (req, res) => res.render("Time_12(IDPJ)/splash"));
+app.get("/IDPJ/login", (req, res) => {
+  if (req.session.idpjUser) return res.redirect("/IDPJ/calculo");
+  res.render("Time_12(IDPJ)/login", { erro: null });
+});
+app.post("/IDPJ/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "1234") {
+    req.session.idpjUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/IDPJ/calculo");
+  }
+  res.render("Time_12(IDPJ)/login", { erro: "Usuario ou senha invalidos." });
+});
+app.get("/IDPJ/calculo", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/calculo", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/sobre", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/sobre", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/help", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/help", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/logout", (req, res) => {
+  req.session.idpjUser = null;
+  res.redirect("/IDPJ/login");
+});
+app.post("/IDPJ/:rota", requireAuthIDPJ, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/IDPJ/${req.params.rota}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, erro: err.message });
+  }
+});
+
 // -- Rotas Markup --
 function requireMarkupAuth(req, res, next) {
   if (req.session && req.session.markupUser) return next();
@@ -1001,6 +1056,161 @@ app.post(
 app.get("/equipe-1", (req, res) => {
   res.render("Time_1(trip)/trip");
 });
+
+// Time 17 Livro Caixa
+function requireAuthLivroCaixa(req, res, next) {
+  if (req.session && req.session.livroCaixaUser) return next();
+  res.redirect("/livrocaixa/login");
+}
+
+app.get("/livrocaixa", (req, res) => res.render("Time_17_LivroCaixa/splash"));
+app.get("/livrocaixa/login", (req, res) => res.render("Time_17_LivroCaixa/login", { erro: null }));
+app.post("/livrocaixa/login", (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === "admin" && senha === "1234") {
+    req.session.livroCaixaUser = { username: usuario };
+    return res.redirect("/livrocaixa/calculo");
+  }
+  res.render("Time_17_LivroCaixa/login", { erro: "Usuário ou senha inválidos." });
+});
+
+app.get("/livrocaixa/calculo", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/calculo"));
+app.get("/livrocaixa/sobre", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/sobre"));
+app.get("/livrocaixa/help", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/help"));
+app.get("/livrocaixa/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/livrocaixa/login"));
+});
+
+app.post("/livrocaixa/:rota", requireAuthLivroCaixa, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/livrocaixa/${req.params.rota}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// -- Time_16 SUS - Calculadora de Sustentabilidade --
+function requireSusAuth(req, res, next) {
+  if (req.session && req.session.susUser) return next();
+  res.redirect("/sus/login");
+}
+
+async function chamarApiSus(rota, body) {
+  const fetch = (await import("node-fetch")).default;
+  const r = await fetch(`${API_URL}/SUS/${rota}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return r.json();
+}
+
+app.get("/sus", (req, res) => res.render("Time_16(SUS)/splash"));
+
+app.get("/sus/login", (req, res) => {
+  if (req.session.susUser) return res.redirect("/sus/dashboard");
+  res.render("Time_16(SUS)/login", { erro: null });
+});
+
+app.post("/sus/login", (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === "admin" && senha === "admin") {
+    req.session.susUser = { username: usuario };
+    return res.redirect("/sus/dashboard");
+  }
+  res.render("Time_16(SUS)/login", { erro: "Usuario ou senha invalidos." });
+});
+
+app.get("/sus/logout", (req, res) => {
+  req.session.susUser = null;
+  res.redirect("/sus/login");
+});
+
+app.get("/sus/dashboard", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/dashboard");
+});
+
+app.get("/sus/transporte", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/transporte", { resultado: null });
+});
+
+app.post("/sus/transporte", requireSusAuth, async (req, res) => {
+  try {
+    const data = await chamarApiSus("emissao-transporte", {
+      transporte: req.body.transporte,
+      km: Number(req.body.km),
+    });
+    res.render("Time_16(SUS)/transporte", { resultado: data });
+  } catch (err) {
+    res.render("Time_16(SUS)/transporte", {
+      resultado: { success: false, error: err.message },
+    });
+  }
+});
+
+app.get("/sus/pegada", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/pegada", { resultado: null });
+});
+
+app.post("/sus/pegada", requireSusAuth, async (req, res) => {
+  try {
+    const kmPorTransporte = {
+      carro_gasolina: Number(req.body.km_carro_gasolina) || 0,
+      onibus:         Number(req.body.km_onibus) || 0,
+      metro:          Number(req.body.km_metro) || 0,
+      moto:           Number(req.body.km_moto) || 0,
+      aviao:          Number(req.body.km_aviao) || 0,
+    };
+    const data = await chamarApiSus("pegada-mensal", {
+      kmPorTransporte,
+      energiaKwh:  Number(req.body.energiaKwh) || 0,
+      pessoasCasa: Number(req.body.pessoasCasa) || 1,
+      dieta:       req.body.dieta || "mista",
+    });
+    res.render("Time_16(SUS)/pegada", { resultado: data });
+  } catch (err) {
+    res.render("Time_16(SUS)/pegada", {
+      resultado: { success: false, error: err.message },
+    });
+  }
+});
+
+app.get("/sus/arvores", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/arvores", {
+    resultado: null,
+    kgPre: req.query.kg || "",
+  });
+});
+
+app.post("/sus/arvores", requireSusAuth, async (req, res) => {
+  try {
+    const data = await chamarApiSus("compensacao-arvores", {
+      kg_co2: Number(req.body.kg_co2),
+    });
+    res.render("Time_16(SUS)/arvores", { resultado: data, kgPre: req.body.kg_co2 });
+  } catch (err) {
+    res.render("Time_16(SUS)/arvores", {
+      resultado: { success: false, error: err.message },
+      kgPre: req.body.kg_co2,
+    });
+  }
+});
+
+app.get("/sus/sobre", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/sobre");
+});
+
+app.get("/sus/help", requireSusAuth, (req, res) => {
+  res.render("Time_16(SUS)/help");
+});
+
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
   if (i === 12) continue;
@@ -1034,6 +1244,148 @@ ETEC11_ROTAS.forEach(rota => {
       res.status(400).json({ success: false, erro: err.message });
     }
   });
+});
+
+// ------------------ Rotas Time 14 - Frete ------------------------
+
+function requireFreteAuth(req, res, next) {
+  if (req.session && req.session.freteUser) {
+    return next();
+  }
+
+  return res.redirect("/frete/login");
+}
+
+// Rota de entrada
+app.get("/frete", (req, res) => {
+  if (req.session && req.session.freteUser) {
+    return res.redirect("/frete/home");
+  }
+
+  return res.redirect("/frete/login");
+});
+
+app.get("/frete/splash", requireFreteAuth, (req, res) => {
+  res.render("Time_14(Frete)/splash");
+});
+
+// Rota de Login
+app.get("/frete/login", (req, res) => {
+  if (req.session.freteUser) {
+    return res.redirect("/frete/home");
+  }
+
+  return res.render("Time_14(Frete)/login", {
+    error: null,
+  });
+});
+
+app.post("/frete/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.render("Time_14(Frete)/login", {
+      error: "Preencha usuário e senha.",
+    });
+  }
+
+  if (username === "admin" && password === "1234") {
+    req.session.freteUser = {
+      username: "admin",
+      nome: "Administrador Frete",
+    };
+
+    return res.redirect("/frete/splash");
+  }
+
+  return res.render("Time_14(Frete)/login", {
+    error: "Usuário ou senha inválidos.",
+  });
+});
+
+app.get("/frete/home", requireFreteAuth, (req, res) => {
+  res.render("Time_14(Frete)/home", {
+    user: req.session.freteUser,
+  });
+});
+
+app.get("/frete/logout", (req, res) => {
+  req.session.freteUser = null;
+  return res.redirect("/frete/login");
+});
+
+app.get("/frete/help", requireFreteAuth, (req, res) => {
+  res.render("Time_14(Frete)/help", {
+    user: req.session.freteUser,
+  });
+});
+
+app.get("/frete/about", requireFreteAuth, (req, res) => {
+  res.render("Time_14(Frete)/about", {
+    user: req.session.freteUser,
+  });
+});
+
+app.get("/frete/calcular", requireFreteAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+
+    const response = await fetch(`${API_URL}/api/frete/tipos`);
+    const data = await response.json();
+
+    res.render("Time_14(Frete)/calcular", {
+      user: req.session.freteUser,
+      tiposFrete: data.data || [],
+      resultado: null,
+      error: null,
+    });
+  } catch (err) {
+    res.render("Time_14(Frete)/calcular", {
+      user: req.session.freteUser,
+      tiposFrete: [],
+      resultado: null,
+      error: "Não foi possível carregar os tipos de frete.",
+    });
+  }
+});
+
+app.post("/frete/calcular", requireFreteAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+
+    const payload = {
+      comprimento: Number.parseFloat(req.body.comprimento),
+      largura: Number.parseFloat(req.body.largura),
+      altura: Number.parseFloat(req.body.altura),
+      pesoReal: Number.parseFloat(req.body.pesoReal),
+      distanciaKm: Number.parseFloat(req.body.distanciaKm),
+      tipoFrete: req.body.tipoFrete,
+      valorDeclarado: Number.parseFloat(req.body.valorDeclarado),
+      importado: req.body.importado === true || req.body.importado === "on",
+      segurado: req.body.segurado === true || req.body.segurado === "on",
+    };
+
+    const response = await fetch(`${API_URL}/api/frete/calcular`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      return res.status(400).json(data);
+    }
+
+    return res.status(200).json(data);
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
 });
 
 

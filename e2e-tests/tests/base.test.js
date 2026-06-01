@@ -12,6 +12,9 @@ const runPiscinaTests = require("./Time_10_piscina/piscina-all-screens.test.js")
 const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
 const runMkpTests = require("./mkp/mkp-all-screens.test.js");
 const runTripTests = require("./trip/trip-all-screens.test.js");
+const runFreteTests = require("./Time_14(Frete)/frete-all-screens.test.js");
+const runSusTests = require("./sus/sus-all-screens.test.js");
+const runIdpjTests = require("./Time_12(IDPJ)/idpj-all-screens.test.js");
 
 const BASE_URL = process.env.APP_URL || "http://localhost:3000";
 const SCREENSHOTS_DIR = path.join(__dirname, "..", "screenshots");
@@ -82,6 +85,12 @@ async function main() {
     await runPiscinaTests();
     console.log("\n--- Iniciando testes do Trip ---");
     await runTripTests(driver, tiraFoto);
+    console.log("\n--- Iniciando testes do Time_14(Frete) ---");
+    await runFreteTests();
+    console.log("\n--- Iniciando testes do SUS ---");
+    await runSusTests(driver);
+    console.log("\n--- Iniciando testes do IDPJ ---");
+    await runIdpjTests();
   } finally {
     if (driver) await driver.quit();
   }

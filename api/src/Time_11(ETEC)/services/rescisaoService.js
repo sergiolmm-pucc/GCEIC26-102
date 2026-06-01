@@ -1,9 +1,15 @@
 const { calcularINSSProgressivo } = require('./inssService');
 
+
+function parseLocalDate(dateStr) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 // Tipos: 'semJustaCausa' | 'comJustaCausa' | 'pedidoDemissao' | 'acordoComum'
 function calcularRescisao(salarioBruto, dataAdmissao, dataRescisao, tipoRescisao, diasTrabalhados) {
-  const admissao = new Date(dataAdmissao);
-  const rescisao = new Date(dataRescisao);
+  const admissao = parseLocalDate(dataAdmissao);
+  const rescisao = parseLocalDate(dataRescisao);
 
   // Anos completos trabalhados (para aviso prévio proporcional)
   const anosCompletos = Math.floor(
@@ -74,4 +80,4 @@ function calcularRescisao(salarioBruto, dataAdmissao, dataRescisao, tipoRescisao
   return resultado;
 }
 
-module.exports = { calcularRescisao };
+module.exports = { calcularRescisao, parseLocalDate };

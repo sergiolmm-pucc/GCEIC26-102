@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDPJ | Login</title>
+  <link rel="stylesheet" href="/idpj.css">
+</head>
+<body class="idpj">
+  <main class="idpj-login-wrap">
+    <section class="idpj-panel idpj-login-card">
+      <a class="idpj-brand" href="/IDPJ">
+        <span class="idpj-mark">12</span>
+        <span>
+          <strong>IDPJ</strong>
+          <span>Desenvolvedor PJ</span>
+        </span>
+      </a>
+
+      <form class="idpj-form" action="/IDPJ/login" method="POST" style="margin-top: 24px;">
+        <div>
+          <label for="username">Usuario</label>
+          <input id="username" name="username" type="text" autocomplete="username" required>
+        </div>
+        <div>
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit">Entrar</button>
+        <% if (locals.erro) { %>
+          <p class="erro"><%= erro %></p>
+        <% } %>
+      </form>
+
+      <p class="idpj-note" style="margin-top: 18px;">
+        Acesso de teste: <strong>admin</strong> / <strong>1234</strong>
+      </p>
+    </section>
+  </main>
+</body>
+</html>

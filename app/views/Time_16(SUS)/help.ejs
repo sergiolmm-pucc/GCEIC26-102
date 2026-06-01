@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajuda - SUS</title>
+  <link rel="stylesheet" href="/sus.css">
+</head>
+<body>
+  <%- include('_nav', { ativo: 'help' }) %>
+
+  <div class="container">
+    <div class="card wide">
+      <h1>Como usar o app</h1>
+
+      <div class="help-section">
+        <h3>Login</h3>
+        <p>Use o usuario <b>admin</b> e a senha <b>admin</b>. E uma autenticacao simulada,
+           apenas para fins academicos.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>🚗 Emissao por transporte</h3>
+        <p>Escolha o tipo de transporte (carro, moto, onibus, aviao, bicicleta, etc) e
+           informe a distancia percorrida em km. O resultado mostra quantos kg de CO2
+           aquela viagem liberou.</p>
+        <ul>
+          <li>Bicicleta e a pe = 0 kg CO2</li>
+          <li>Aviao tem o maior fator de emissao</li>
+          <li>Os fatores seguem a tabela do MCTIC / IPCC</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>📅 Pegada de carbono mensal</h3>
+        <p>Soma 3 fontes principais de emissao do mes inteiro:</p>
+        <ul>
+          <li><b>Transporte:</b> quantos km voce fez em cada tipo de transporte</li>
+          <li><b>Energia eletrica:</b> consumo da conta de luz (kWh), rateado por morador</li>
+          <li><b>Alimentacao:</b> depende do tipo de dieta (carnivora, mista, vegetariana, vegana)</li>
+        </ul>
+        <p>O total e mostrado em kg de CO2 por mes. Quanto menor, melhor.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>🌳 Compensacao por arvores</h3>
+        <p>Informe quantos kg de CO2 voce quer compensar. O sistema mostra quantas arvores
+           precisam ser plantadas para absorver isso em 1 ano (considera 22 kg/arvore/ano)
+           e estima o custo aproximado se voce contratar uma ONG.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>Duvidas tecnicas</h3>
+        <p>Os calculos sao feitos por uma API REST em Node.js. Voce pode ver a documentacao
+           dos endpoints em <code>/SUS/tabelas</code> e <code>/SUS/health</code>.</p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

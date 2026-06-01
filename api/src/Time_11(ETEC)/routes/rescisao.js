@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { calcularRescisao } = require('../services/rescisaoService');
+const { calcularRescisao, parseLocalDate } = require('../services/rescisaoService');
 
 const tiposValidos = ['semJustaCausa', 'comJustaCausa', 'pedidoDemissao', 'acordoComum'];
 
@@ -45,8 +45,8 @@ router.post('/', (req, res) => {
       });
     }
 
-    const admissao = new Date(dataAdmissao);
-    const rescisao = new Date(dataRescisao);
+    const admissao = parseLocalDate(dataAdmissao);
+    const rescisao = parseLocalDate(dataRescisao);
 
     if (Number.isNaN(admissao.getTime())) {
       return res.status(400).json({ erro: 'Data de Admissão inválida. Use o formato AAAA-MM-DD' });
