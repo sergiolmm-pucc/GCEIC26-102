@@ -26,13 +26,13 @@ app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
-app.use( 
-  session({
-    secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 3600000 },
-  }),
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 3600000 },
+    }),
 );
 
 const equipes = [
@@ -119,7 +119,7 @@ function requireAuthETEC1(req, res, next) {
 
 app.get("/ETEC1/splash", (req, res) => res.render("Time_2(ETEC1)/splash"));
 app.get("/ETEC1/login", (req, res) =>
-  res.render("Time_2(ETEC1)/login", { erro: null }),
+    res.render("Time_2(ETEC1)/login", { erro: null }),
 );
 app.post("/ETEC1/login", (req, res) => {
   const { usuario, senha } = req.body;
@@ -130,13 +130,13 @@ app.post("/ETEC1/login", (req, res) => {
   res.render("Time_2(ETEC1)/login", { erro: "Usuário ou senha inválidos." });
 });
 app.get("/ETEC1/calculo", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/calculo"),
+    res.render("Time_2(ETEC1)/calculo"),
 );
 app.get("/ETEC1/sobre", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/sobre"),
+    res.render("Time_2(ETEC1)/sobre"),
 );
 app.get("/ETEC1/help", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/help"),
+    res.render("Time_2(ETEC1)/help"),
 );
 app.get("/ETEC1/logout", (req, res) => {
   req.session.destroy(() => {
@@ -328,22 +328,22 @@ app.post("/api/financecar/juros", requireFinanceAuth, async (req, res) => {
 });
 
 app.post(
-  "/api/financecar/financiamento",
-  requireFinanceAuth,
-  async (req, res) => {
-    try {
-      const fetch = (await import("node-fetch")).default;
-      const response = await fetch(`${API_URL}/api/financecar/financiamento`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(req.body),
-      });
-      const data = await response.json();
-      res.json(data);
-    } catch (err) {
-      res.status(400).json({ success: false, error: err.message });
-    }
-  },
+    "/api/financecar/financiamento",
+    requireFinanceAuth,
+    async (req, res) => {
+      try {
+        const fetch = (await import("node-fetch")).default;
+        const response = await fetch(`${API_URL}/api/financecar/financiamento`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(req.body),
+        });
+        const data = await response.json();
+        res.json(data);
+      } catch (err) {
+        res.status(400).json({ success: false, error: err.message });
+      }
+    },
 );
 
 app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
@@ -374,7 +374,7 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
 
     console.log("STATUS =", response.status);
     console.log("URL =", response.url);
-    
+
     const data = await response.json();
     res.json(data);
   } catch (err) {
@@ -415,17 +415,17 @@ app.post("/piscina/calculo", requirePiscinaAuth, async (req, res) => {
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(
-      `${API_URL}/api/Time_10_piscina/calcular-total`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          comprimento: Number(req.body.comprimento),
-          largura: Number(req.body.largura),
-          profundidade: Number(req.body.profundidade),
-          temIluminacao: req.body.temIluminacao === "on",
-        }),
-      },
+        `${API_URL}/api/Time_10_piscina/calcular-total`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            comprimento: Number(req.body.comprimento),
+            largura: Number(req.body.largura),
+            profundidade: Number(req.body.profundidade),
+            temIluminacao: req.body.temIluminacao === "on",
+          }),
+        },
     );
 
     const resultado = await response.json();
@@ -478,15 +478,15 @@ async function proxyMkpToApi(path, req, res) {
   } catch (err) {
     console.error("Proxy error", err);
     res
-      .status(500)
-      .json({ error: "Erro ao encaminhar a requisição para a API." });
+        .status(500)
+        .json({ error: "Erro ao encaminhar a requisição para a API." });
   }
 }
 
 app.post("/MKP/markup", (req, res) => proxyMkpToApi("/MKP/markup", req, res));
 app.post("/MKP/custos", (req, res) => proxyMkpToApi("/MKP/custos", req, res));
 app.post("/MKP/preco-venda", (req, res) =>
-  proxyMkpToApi("/MKP/preco-venda", req, res),
+    proxyMkpToApi("/MKP/preco-venda", req, res),
 );
 
 // -- Rotas CLT --
@@ -808,7 +808,7 @@ app.get("/flp/help", requireFlpAuth, (req, res) => {
   res.render("flp/help", { user: req.session.flpUser });
 });
 
-// Time_8 DASN-SIMEI 
+// Time_8 DASN-SIMEI
 function requireAuthDASN(req, res, next) {
   if (req.session && req.session.dasnUser) return next();
   res.redirect("/DASN/login");
@@ -995,25 +995,25 @@ app.post("/markup/calcularDesconto", requireMarkupAuth, async (req, res) => {
 });
 
 app.post(
-  "/markup/calcularMarkupMultiplicador",
-  requireMarkupAuth,
-  async (req, res) => {
-    try {
-      const fetch = (await import("node-fetch")).default;
-      const response = await fetch(
-        `${API_URL}/api/markup/calcularMarkupMultiplicador`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(req.body),
-        },
-      );
-      const data = await response.json();
-      res.json(data);
-    } catch (err) {
-      res.status(400).json({ success: false, error: err.message });
-    }
-  },
+    "/markup/calcularMarkupMultiplicador",
+    requireMarkupAuth,
+    async (req, res) => {
+      try {
+        const fetch = (await import("node-fetch")).default;
+        const response = await fetch(
+            `${API_URL}/api/markup/calcularMarkupMultiplicador`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(req.body),
+            },
+        );
+        const data = await response.json();
+        res.json(data);
+      } catch (err) {
+        res.status(400).json({ success: false, error: err.message });
+      }
+    },
 );
 
 
@@ -1082,7 +1082,7 @@ app.post("/ocl/calcular", requireOclAuth, async (req, res) => {
   }
 });
 
-  
+
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
   app.get(`/equipe-${i}`, (req, res) => {
@@ -1090,14 +1090,7 @@ for (let i = 5; i <= 20; i++) {
     res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
   });
 }
-// EQUIPE 17
-for (let i = 5; i <= 20; i++) {
-  if (i === 17) continue;
-  app.get(`/equipe-${i}`, (req, res) => {
-    console.log(`/equipe-${i}/equipe`);
-    res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
-  });
-  
+
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
