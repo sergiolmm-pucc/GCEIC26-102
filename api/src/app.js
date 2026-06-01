@@ -16,6 +16,7 @@ const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
+const tripRoutes = require('./Time_1(trip)/routes/tripRoutes');
 
 const app = express();
 
@@ -45,6 +46,8 @@ app.get("/api/tabelas", (req, res) => {
   });
 });
 
+// Rotas TRIP
+app.use('/api/v1/trip', tripRoutes);
 // POST /api/calcular
 app.post("/api/calcular", (req, res) => {
   try {
