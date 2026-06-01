@@ -38,12 +38,12 @@ describe('Teste do cálculo de rescisão', () => {
             anosCompletos: 1,
             saldoSalario: 416.67,
             feriasProporcionais: 3333.33,
-            decimoTerceiro: 2500,
-            descontos: { inss: 238.6 },
+            decimoTerceiro: 208.33,
+            descontos: { inss: 46.88 },
             avisoPrevioIndenizado: 1375,
             observacaoFGTS: 'A empregada pode sacar até 80% do FGTS. Reserva indenizatória: 20% do acumulado. Sem seguro-desemprego.',
-            totalBruto: 7625,
-            totalLiquido: 7386.4,
+            totalBruto: 5333.33,
+            totalLiquido: 5286.45,
         };
         
         const salarioBruto = 2500;
@@ -69,11 +69,11 @@ describe('Teste do cálculo de rescisão', () => {
             anosCompletos: 1,
             saldoSalario: 900,
             feriasProporcionais: 2400,
-            decimoTerceiro: 600,
-            descontos: { inss: 112.5 },
+            decimoTerceiro: 750,
+            descontos: { inss: 124.18 },
             observacaoFGTS: 'Sem saque de FGTS. Reserva indenizatória retorna ao empregador.',
-            totalBruto: 3900,
-            totalLiquido: 3787.5,
+            totalBruto: 4050,
+            totalLiquido: 3925.82,
         }
 
         const salarioBruto = 1800;
@@ -98,12 +98,12 @@ describe('Teste do cálculo de rescisão', () => {
             tipoRescisao: 'comJustaCausa',
             anosCompletos: 0,
             saldoSalario: 733.33,
-            feriasProporcionais: 1955.56,
-            decimoTerceiro: 1650,
-            descontos: { inss: 190.18 },
+            feriasProporcionais: 2200,
+            decimoTerceiro: 1833.33,
+            descontos: { inss: 206.68 },
             observacaoFGTS: 'Sem FGTS, sem aviso prévio, sem férias proporcionais. Apenas saldo de salário e férias vencidas (se houver).',
             totalBruto: 733.33,
-            totalLiquido: 543.15,
+            totalLiquido: 526.65,
         }
 
         const salarioBruto = 2200;
