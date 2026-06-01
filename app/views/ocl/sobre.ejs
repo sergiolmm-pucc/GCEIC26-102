@@ -8,43 +8,406 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/ocl.css">
+  <style>
+    .ocl-sobre-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 60px 24px;
+      text-align: center;
+      color: white;
+      margin-bottom: 50px;
+    }
+
+    .ocl-sobre-hero h1 {
+      font-size: 2.5rem;
+      margin: 0 0 16px 0;
+      font-weight: 800;
+    }
+
+    .ocl-sobre-hero p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .ocl-team-section {
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .ocl-team-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .ocl-team-title h2 {
+      font-size: 2rem;
+      margin: 0 0 8px 0;
+      color: #1a202c;
+    }
+
+    .ocl-team-title p {
+      color: #718096;
+      font-size: 1rem;
+    }
+
+    .ocl-team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .ocl-team-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .ocl-team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .ocl-team-photo {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .ocl-team-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ocl-team-info {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .ocl-team-info h4 {
+      font-size: 1.25rem;
+      margin: 0 0 8px 0;
+      color: #1a202c;
+    }
+
+    .ocl-team-info .ra {
+      color: #667eea;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .ocl-team-info .role {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .ocl-features {
+      background: #f7fafc;
+      padding: 60px 24px;
+      margin: 50px 0;
+    }
+
+    .ocl-features-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .ocl-features h2 {
+      font-size: 2rem;
+      margin: 0 0 40px 0;
+      text-align: center;
+      color: #1a202c;
+    }
+
+    .ocl-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .ocl-feature-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .ocl-feature-card h3 {
+      color: #667eea;
+      margin-top: 0;
+    }
+
+    .ocl-feature-card p {
+      color: #718096;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .ocl-timeline {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .ocl-timeline h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: #1a202c;
+    }
+
+    .timeline-item {
+      display: flex;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 50px;
+      width: 2px;
+      height: calc(100% + 30px);
+      background: #cbd5e0;
+    }
+
+    .timeline-item:last-child::before {
+      display: none;
+    }
+
+    .timeline-dot {
+      width: 44px;
+      height: 44px;
+      background: #667eea;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      margin-left: 30px;
+      padding-top: 5px;
+    }
+
+    .timeline-content h3 {
+      margin: 0 0 8px 0;
+      color: #1a202c;
+    }
+
+    .timeline-content p {
+      margin: 0;
+      color: #718096;
+    }
+
+    .ocl-tech-stack {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 24px 60px;
+    }
+
+    .ocl-tech-stack h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: #1a202c;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .tech-item {
+      background: white;
+      border: 2px solid #e2e8f0;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .tech-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .tech-item p {
+      margin: 0;
+      color: #1a202c;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  </style>
 </head>
 <body>
   <%- include('nav') %>
 
+  <div class="ocl-sobre-hero">
+    <h1>OCL — Calculadora de Custo de Óculos</h1>
+    <p>Solução integrada para cálculo de custos de produção de óculos, desenvolvida no contexto do projeto final de GCEIC, turma 102.</p>
+  </div>
+
   <main class="ocl-shell">
-    <div class="ocl-page-head">
-      <div class="ocl-tag">Time 5</div>
-      <h1>Sobre o projeto</h1>
-      <p>OCL é a calculadora de custo de fabricação de óculos desenvolvida no projeto final de GCEIC — turma 102. O modelo segmenta custos diretos, mão de obra, overhead e embalagem, retornando o custo unitário consolidado por lote.</p>
+    <div class="ocl-team-section">
+      <div class="ocl-team-title">
+        <h2>Time 5</h2>
+        <p>Conheça a equipe responsável pelo projeto</p>
+      </div>
+
+      <div class="ocl-team">
+        <div class="ocl-team-card">
+          <div class="ocl-team-photo">
+            <picture>
+              <source srcset="/ocl/assets/time5-grupo.jpg" type="image/jpeg">
+              <source srcset="/ocl/assets/time5-grupo.png" type="image/png">
+              <img src="/ocl/assets/time5-grupo.svg" alt="Time 5">
+            </picture>
+          </div>
+          <div class="ocl-team-info">
+            <h4>Vitor Hugo</h4>
+            <div class="ra">RA 24018852</div>
+            <div class="role">Backend & API</div>
+          </div>
+        </div>
+
+        <div class="ocl-team-card">
+          <div class="ocl-team-photo">
+            <picture>
+              <source srcset="/ocl/assets/time5-grupo.jpg" type="image/jpeg">
+              <source srcset="/ocl/assets/time5-grupo.png" type="image/png">
+              <img src="/ocl/assets/time5-grupo.svg" alt="Time 5">
+            </picture>
+          </div>
+          <div class="ocl-team-info">
+            <h4>Guilherme Bars</h4>
+            <div class="ra">RA 24014122</div>
+            <div class="role">Frontend & UX</div>
+          </div>
+        </div>
+
+        <div class="ocl-team-card">
+          <div class="ocl-team-photo">
+            <picture>
+              <source srcset="/ocl/assets/time5-grupo.jpg" type="image/jpeg">
+              <source srcset="/ocl/assets/time5-grupo.png" type="image/png">
+              <img src="/ocl/assets/time5-grupo.svg" alt="Time 5">
+            </picture>
+          </div>
+          <div class="ocl-team-info">
+            <h4>Henrique Gambin</h4>
+            <div class="ra">RA 24013762</div>
+            <div class="role">Testes & QA</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="ocl-team">
-      <div class="ocl-team-card">
-        <div class="ocl-team-photo">Foto</div>
-        <h4>Vitor Hugo</h4>
-        <div class="ra">RA 24018852</div>
-        <div class="role">Time 5</div>
+    <div class="ocl-features">
+      <div class="ocl-features-content">
+        <h2>Funcionalidades Principais</h2>
+        <div class="ocl-features-grid">
+          <div class="ocl-feature-card">
+            <h3>🔧 Cálculo de Materiais</h3>
+            <p>Armação, lente, componentes e insumos com análise de taxa de perda.</p>
+          </div>
+          <div class="ocl-feature-card">
+            <h3>👷 Mão de Obra</h3>
+            <p>Cálculo dinâmico baseado em tempo, custo horário e nível de complexidade.</p>
+          </div>
+          <div class="ocl-feature-card">
+            <h3>📦 Overhead & Embalagem</h3>
+            <p>Custos fixos mensais distribuídos por capacidade produtiva.</p>
+          </div>
+          <div class="ocl-feature-card">
+            <h3>📊 Análise por Lote</h3>
+            <p>Resultado consolidado por unidade e por volume de lote.</p>
+          </div>
+          <div class="ocl-feature-card">
+            <h3>🔒 Autenticação</h3>
+            <p>Sistema de login seguro com sessão persistente.</p>
+          </div>
+          <div class="ocl-feature-card">
+            <h3>💾 API REST</h3>
+            <p>Endpoints documentados para integração com outros sistemas.</p>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="ocl-team-card">
-        <div class="ocl-team-photo">Foto</div>
-        <h4>Guilherme Bars</h4>
-        <div class="ra">RA 24014122</div>
-        <div class="role">Time 5</div>
+    <div class="ocl-timeline">
+      <h2>Timeline do Projeto</h2>
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <h3>25/05/2026 — Entrega Parcial (30%)</h3>
+          <p>API completa com endpoints de cálculo, app frontend, testes unitários e testes e2e.</p>
+        </div>
       </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-content">
+          <h3>01/06/2026 — Entrega Final (40%)</h3>
+          <p>Testes funcionais, apresentação ao professor, refinamentos de UX/UI e documentação.</p>
+        </div>
+      </div>
+    </div>
 
-      <div class="ocl-team-card">
-        <div class="ocl-team-photo">Foto</div>
-        <h4>Henrique Gambin</h4>
-        <div class="ra">RA 24013762</div>
-        <div class="role">Time 5</div>
+    <div class="ocl-tech-stack">
+      <h2>Stack Tecnológico</h2>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <p>Node.js</p>
+        </div>
+        <div class="tech-item">
+          <p>Express</p>
+        </div>
+        <div class="tech-item">
+          <p>EJS</p>
+        </div>
+        <div class="tech-item">
+          <p>Jest</p>
+        </div>
+        <div class="tech-item">
+          <p>Supertest</p>
+        </div>
+        <div class="tech-item">
+          <p>CORS/Helmet</p>
+        </div>
+        <div class="tech-item">
+          <p>CSS3</p>
+        </div>
+        <div class="tech-item">
+          <p>Git/GitHub</p>
+        </div>
       </div>
     </div>
   </main>
 
   <footer class="ocl-footer">
-    OCL · GCEIC 102 · Time 5
+    OCL · GCEIC 102 · Time 5 · Cálculo de Custo de Óculos
   </footer>
 </body>
 </html>
