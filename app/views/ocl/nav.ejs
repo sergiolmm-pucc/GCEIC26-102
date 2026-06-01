@@ -1,0 +1,17 @@
+<nav class="ocl-nav">
+  <a href="/ocl/calculo" class="ocl-nav__brand">OCL<span class="dot"></span></a>
+  <div class="ocl-nav__links">
+    <a href="/ocl/calculo" class="ocl-nav__link" data-path="/ocl/calculo">Calculadora</a>
+    <a href="/ocl/sobre" class="ocl-nav__link" data-path="/ocl/sobre">Sobre</a>
+    <a href="/ocl/help" class="ocl-nav__link" data-path="/ocl/help">Ajuda</a>
+    <a href="/ocl/logout" class="ocl-nav__logout">Sair</a>
+  </div>
+</nav>
+<script>
+  (function() {
+    var path = window.location.pathname;
+    document.querySelectorAll('.ocl-nav__link[data-path]').forEach(function(link) {
+      if (link.getAttribute('data-path') === path) link.classList.add('active');
+    });
+  })();
+</script>
