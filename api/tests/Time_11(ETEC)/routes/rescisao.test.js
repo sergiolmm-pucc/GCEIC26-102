@@ -118,7 +118,9 @@ describe('Teste do endpoint de cálculo da rescisão', () => {
         const mensagemErro = 'Falha inesperada no cálculo';
         let appComServiceQueLanca;
         jest.isolateModules(() => {
+            const actual = jest.requireActual('../../../src/Time_11(ETEC)/services/rescisaoService');
             jest.doMock('../../../src/Time_11(ETEC)/services/rescisaoService', () => ({
+                ...actual,
                 calcularRescisao: () => { throw new Error(mensagemErro); },
             }));
             appComServiceQueLanca = require('../../../src/app');
