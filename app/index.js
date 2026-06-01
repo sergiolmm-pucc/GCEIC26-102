@@ -48,7 +48,7 @@ const equipes = [
   { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
   { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
   { numero: 13, nome: "FLP", rota: "/flp" },
-  { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
+  { numero: 14, nome: "Frete", rota: "/frete" },
   { numero: 15, nome: "MKP", rota: "/MKP" },
   { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
   { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
