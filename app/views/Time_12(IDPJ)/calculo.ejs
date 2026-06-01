@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDPJ | Calculo</title>
+  <link rel="stylesheet" href="/idpj.css">
+</head>
+<body class="idpj">
+  <div class="idpj-shell">
+    <header class="idpj-header">
+      <a class="idpj-brand" href="/IDPJ/calculo">
+        <span class="idpj-mark">12</span>
+        <span>
+          <strong>IDPJ</strong>
+          <span>Simples Nacional e Fator R</span>
+        </span>
+      </a>
+      <nav class="idpj-nav" aria-label="Navegacao IDPJ">
+        <a href="/IDPJ/sobre">Sobre</a>
+        <a href="/IDPJ/help">Ajuda</a>
+        <a href="/IDPJ/logout">Sair</a>
+      </nav>
+    </header>
+
+    <main class="idpj-main">
+      <section class="idpj-grid">
+        <div class="idpj-panel">
+          <p class="idpj-kicker">Calculadora</p>
+          <h1>Imposto mensal para Desenvolvedor PJ</h1>
+          <p>Simulacao educacional com Anexos III/V e regra de Fator R de 28%.</p>
+
+          <form class="idpj-form" id="simplesForm">
+            <div class="idpj-form-row">
+              <div>
+                <label for="receitaMensal">Receita mensal (R$)</label>
+                <input id="receitaMensal" name="receitaMensal" type="number" min="0.01" step="0.01" value="10000" required>
+              </div>
+              <div>
+                <label for="receita12Meses">Receita 12 meses (R$)</label>
+                <input id="receita12Meses" name="receita12Meses" type="number" min="0.01" step="0.01" value="120000" required>
+              </div>
+              <div>
+                <label for="folha12Meses">Folha 12 meses (R$)</label>
+                <input id="folha12Meses" name="folha12Meses" type="number" min="0" step="0.01" value="36000" required>
+              </div>
+            </div>
+            <div class="idpj-actions">
+              <button id="submitBtn" type="submit">Calcular DAS</button>
+              <button id="proLaboreBtn" type="button" class="idpj-secondary">Ver Fator R</button>
+            </div>
+          </form>
+
+          <div class="idpj-result" id="resultadoSimples" aria-live="polite"></div>
+          <div class="idpj-result" id="resultadoProLabore" aria-live="polite"></div>
+        </div>
+
+        <aside>
+          <section class="idpj-card">
+            <h2>Referencia usada</h2>
+            <p>O enquadramento troca para Anexo III quando a folha dos ultimos 12 meses representa pelo menos 28% da receita do mesmo periodo.</p>
+            <p class="idpj-note">Resultado aproximado. Validacao final deve ser feita com contador.</p>
+          </section>
+          <section class="idpj-card">
+            <h2>Exemplo rapido</h2>
+            <div class="idpj-line"><span>Receita mensal</span><strong>R$ 10.000,00</strong></div>
+            <div class="idpj-line"><span>RBT12</span><strong>R$ 120.000,00</strong></div>
+            <div class="idpj-line"><span>Folha 12 meses</span><strong>R$ 36.000,00</strong></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const percentual = (valor) => Number(valor).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + '%';
+
+    function payloadBase() {
+      return {
+        receitaMensal: document.getElementById('receitaMensal').value,
+        receita12Meses: document.getElementById('receita12Meses').value,
+        folha12Meses: document.getElementById('folha12Meses').value,
+      };
+    }
+
+    function linha(label, value) {
+      return '<div class="idpj-line"><span>' + label + '</span><strong>' + value + '</strong></div>';
+    }
+
+    function erroHtml(message) {
+      return '<div class="idpj-result-header"><strong>Erro</strong></div><div class="idpj-result-body"><p class="idpj-error">' + message + '</p></div>';
+    }
+
+    async function postJson(url, body) {
+      const resposta = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      return resposta.json();
+    }
+
+    document.getElementById('simplesForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const alvo = document.getElementById('resultadoSimples');
+      alvo.classList.add('active');
+      alvo.innerHTML = '<div class="idpj-result-header"><strong>Calculando...</strong></div>';
+
+      try {
+        const resposta = await postJson('/IDPJ/calcular-simples', payloadBase());
+        if (!resposta.success) {
+          alvo.innerHTML = erroHtml(resposta.erro || 'Nao foi possivel calcular.');
+          return;
+        }
+
+        const data = resposta.data;
+        alvo.innerHTML =
+          '<div class="idpj-result-header"><strong>Resultado do DAS</strong><span class="idpj-pill">Anexo ' + data.anexo + '</span></div>' +
+          '<div class="idpj-result-body">' +
+          linha('Fator R', percentual(data.fatorRPercentual)) +
+          linha('Faixa', String(data.faixa)) +
+          linha('Aliquota nominal', percentual(data.aliquotaNominalPercentual)) +
+          linha('Aliquota efetiva', percentual(data.aliquotaEfetivaPercentual)) +
+          linha('DAS estimado', moeda.format(data.das)) +
+          linha('Receita apos DAS', moeda.format(data.receitaAposDas)) +
+          '</div>';
+      } catch (err) {
+        alvo.innerHTML = erroHtml(err.message);
+      }
+    });
+
+    document.getElementById('proLaboreBtn').addEventListener('click', async function () {
+      const alvo = document.getElementById('resultadoProLabore');
+      alvo.classList.add('active');
+      alvo.innerHTML = '<div class="idpj-result-header"><strong>Calculando...</strong></div>';
+
+      try {
+        const base = payloadBase();
+        const resposta = await postJson('/IDPJ/pro-labore-minimo', {
+          receita12Meses: base.receita12Meses,
+          folha12Meses: base.folha12Meses,
+        });
+
+        if (!resposta.success) {
+          alvo.innerHTML = erroHtml(resposta.erro || 'Nao foi possivel calcular.');
+          return;
+        }
+
+        const data = resposta.data;
+        alvo.innerHTML =
+          '<div class="idpj-result-header"><strong>Fator R e folha minima</strong><span class="idpj-pill">Atual: Anexo ' + data.anexoAtual + '</span></div>' +
+          '<div class="idpj-result-body">' +
+          linha('Fator R atual', percentual(data.fatorRPercentual)) +
+          linha('Folha minima para 28%', moeda.format(data.folhaMinima)) +
+          linha('Diferenca restante', moeda.format(data.diferenca)) +
+          linha('Sugestao mensal', moeda.format(data.sugestaoMensal)) +
+          '</div>';
+      } catch (err) {
+        alvo.innerHTML = erroHtml(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

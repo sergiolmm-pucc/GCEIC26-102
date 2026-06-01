@@ -14,6 +14,7 @@ const cltRouter = require("./clt/cltApp");
 const flpRouter = require('./flp/flpApp');
 const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
+const idpj = require("./Time_12(IDPJ)/idpj.route");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
 const freteRoutes = require("./Time_14(Frete)/frete.routes");
@@ -96,6 +97,8 @@ app.use("/api/clt", cltRouter);
 app.use("/api/flp", flpRouter);
 // Rotas DASN
 app.use("/DASN", dasn);
+// Rotas IDPJ
+app.use("/IDPJ", idpj);
 // Rotas MKP
 app.use("/MKP", mkpRouter);
 // Rotas Piscina
