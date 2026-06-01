@@ -692,12 +692,76 @@ textarea {
   display: none;
 }
 
-.auth-shell,
-.splash-shell {
+.auth-shell {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 1.25rem;
+}
+
+body.splash-transition-body {
+  overflow: hidden;
+  min-height: 100vh;
+  background: var(--outer-space-deep);
+}
+
+.splash-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(233, 143, 55, 0.24), transparent 42%),
+    radial-gradient(circle at 82% 88%, rgba(198, 88, 54, 0.2), transparent 38%),
+    linear-gradient(165deg, var(--outer-space-deep) 0%, var(--outer-space) 52%, #1a2e32 100%);
+  color: #fff8f5;
+  opacity: 0;
+  animation: splash-transition-in 0.5s ease forwards;
+}
+
+.splash-transition.is-exiting {
+  animation: splash-transition-out 0.5s ease forwards;
+}
+
+.splash-transition__content {
+  width: min(100%, 28rem);
+  align-items: center;
+  text-align: center;
+  animation: splash-content-in 0.65s ease 0.1s both;
+}
+
+.splash-transition.is-exiting .splash-transition__content {
+  animation: splash-content-out 0.45s ease forwards;
+}
+
+.splash-transition__logo {
+  width: 4.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.splash-transition .eyebrow {
+  color: rgba(255, 248, 245, 0.62);
+}
+
+.splash-transition .splash-wordmark {
+  color: #fffdfa;
+}
+
+.splash-transition__message {
+  color: rgba(255, 248, 245, 0.78);
+  font-size: 1rem;
+}
+
+.splash-transition__loader {
+  width: min(100%, 18rem);
+}
+
+.splash-transition .loading-track {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .auth-grid,
@@ -837,6 +901,50 @@ textarea {
 
   to {
     width: 100%;
+  }
+}
+
+@keyframes splash-transition-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes splash-transition-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splash-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes splash-content-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-0.75rem) scale(0.98);
   }
 }
 

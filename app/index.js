@@ -1012,12 +1012,16 @@ function requireFreteAuth(req, res, next) {
   return res.redirect("/frete/login");
 }
 
-// Rota de Entrada. Redirecionamento ao Splash Screen.
-app.get('/frete', (req, res) => {
-    res.redirect("/frete/splash");
+// Rota de entrada
+app.get("/frete", (req, res) => {
+  if (req.session && req.session.freteUser) {
+    return res.redirect("/frete/home");
+  }
+
+  return res.redirect("/frete/login");
 });
 
-app.get("/frete/splash", (req, res) => {
+app.get("/frete/splash", requireFreteAuth, (req, res) => {
   res.render("Time_14(Frete)/splash");
 });
 
@@ -1047,7 +1051,7 @@ app.post("/frete/login", (req, res) => {
       nome: "Administrador Frete",
     };
 
-    return res.redirect("/frete/home");
+    return res.redirect("/frete/splash");
   }
 
   return res.render("Time_14(Frete)/login", {

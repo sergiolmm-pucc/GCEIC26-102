@@ -62,8 +62,15 @@ async function runFreteLoginTest() {
     ).click();
 
     await driver.wait(
-      until.urlContains("/frete/home"),
+      until.urlContains("/frete/splash"),
       5000
+    );
+
+    await takeScreenshot(driver, "Time_14(Frete)_login_sucesso_splash");
+
+    await driver.wait(
+      until.urlContains("/frete/home"),
+      8000
     );
 
     await takeScreenshot(driver, "Time_14(Frete)_login_sucesso_home");

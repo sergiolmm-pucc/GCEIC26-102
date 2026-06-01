@@ -33,7 +33,7 @@ async function takeScreenshot(driver, name) {
   }
 }
 
-async function loginFrete(driver) {
+async function submitFreteLogin(driver) {
   await driver.get(`${APP_URL}/frete/login`);
 
   await driver.wait(until.elementLocated(By.id("username")), 5000);
@@ -43,7 +43,16 @@ async function loginFrete(driver) {
 
   await driver.findElement(By.css('button[type="submit"]')).click();
 
-  await driver.wait(until.urlContains("/frete/home"), 5000);
+  await driver.wait(until.urlContains("/frete/splash"), 5000);
+}
+
+async function waitFreteSplashToHome(driver) {
+  await driver.wait(until.urlContains("/frete/home"), 8000);
+}
+
+async function loginFrete(driver) {
+  await submitFreteLogin(driver);
+  await waitFreteSplashToHome(driver);
 }
 
 async function expectBodyText(driver, expectedText, errorMessage) {
@@ -70,6 +79,8 @@ module.exports = {
   until,
   buildDriver,
   takeScreenshot,
+  submitFreteLogin,
+  waitFreteSplashToHome,
   loginFrete,
   expectBodyText,
   runDirectly

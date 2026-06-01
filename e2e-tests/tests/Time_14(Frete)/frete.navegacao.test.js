@@ -4,7 +4,8 @@ const {
   until,
   buildDriver,
   takeScreenshot,
-  loginFrete,
+  submitFreteLogin,
+  waitFreteSplashToHome,
   expectBodyText,
   runDirectly
 } = require("./helpers");
@@ -15,21 +16,20 @@ async function runFreteNavigationTest() {
   try {
     driver = await buildDriver();
 
-    // 1. Splash
+    // 1. Entrada redireciona para login
     await driver.get(`${APP_URL}/frete`);
-    await takeScreenshot(driver, "Time_14(Frete)_splash");
 
-    // 2. Redirecionamento para login
     await driver.wait(
       until.urlContains("/frete/login"),
-      6000
+      5000
     );
 
-    await takeScreenshot(driver, "Time_14(Frete)_login_pos_splash");
+    await takeScreenshot(driver, "Time_14(Frete)_login_aberto");
 
-    // 3. Login
-    await loginFrete(driver);
-
+    // 2. Login e splash pós-autenticação
+    await submitFreteLogin(driver);
+    await takeScreenshot(driver, "Time_14(Frete)_splash_pos_login");
+    await waitFreteSplashToHome(driver);
     await takeScreenshot(driver, "Time_14(Frete)_home");
 
     // 4. Valida Home
