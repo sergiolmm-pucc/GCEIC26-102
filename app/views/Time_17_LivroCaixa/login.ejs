@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Livro Caixa</title>
+    <link rel="stylesheet" href="/livro_caixa.css">
+</head>
+<body>
+<div class="top-bar">
+    <a href="/" class="link">← Voltar para Home</a>
+    <span class="breadcrumb">/ <span>login</span></span>
+</div>
+
+<main>
+    <div class="big-number">17</div>
+    <div class="content">
+        <div class="tag">Acesso Restrito</div>
+        <h1>Sistema <em>Livro Caixa</em></h1>
+
+        <div class="box">
+            <% if (typeof erro !== 'undefined' && erro) { %>
+                <div class="error">⚠️ <%= erro %></div>
+            <% } %>
+
+            <form action="/livrocaixa/login" method="POST">
+                <div class="input-group">
+                    <label>Usuário</label>
+                    <input type="text" name="usuario" placeholder="Insira seu usuário" required>
+                </div>
+                <div class="input-group">
+                    <label>Senha</label>
+                    <input type="password" name="senha" placeholder="Insira sua senha" required>
+                </div>
+                <button type="submit">Acessar Sistema</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

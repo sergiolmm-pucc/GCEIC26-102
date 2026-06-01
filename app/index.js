@@ -25,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
+app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use( 
@@ -53,7 +54,7 @@ const equipes = [
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
   { numero: 15, nome: "MKP", rota: "/MKP" },
   { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
-  { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
+  { numero: 17, nome: "Livro-Caixa-Rural", rota: "/livrocaixa" },
   { numero: 18, nome: "Markup", rota: "/markup" },
   { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
   { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
@@ -831,6 +832,45 @@ app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(`${API_URL}/DASN/${req.params.rota}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// Time 17 Livro Caixa
+function requireAuthLivroCaixa(req, res, next) {
+  if (req.session && req.session.livroCaixaUser) return next();
+  res.redirect("/livrocaixa/login");
+}
+
+app.get("/livrocaixa", (req, res) => res.render("Time_17_LivroCaixa/splash"));
+app.get("/livrocaixa/login", (req, res) => res.render("Time_17_LivroCaixa/login", { erro: null }));
+app.post("/livrocaixa/login", (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === "admin" && senha === "1234") {
+    req.session.livroCaixaUser = { username: usuario };
+    return res.redirect("/livrocaixa/calculo");
+  }
+  res.render("Time_17_LivroCaixa/login", { erro: "Usuário ou senha inválidos." });
+});
+
+app.get("/livrocaixa/calculo", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/calculo"));
+app.get("/livrocaixa/sobre", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/sobre"));
+app.get("/livrocaixa/help", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/help"));
+app.get("/livrocaixa/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/livrocaixa/login"));
+});
+
+app.post("/livrocaixa/:rota", requireAuthLivroCaixa, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/livrocaixa/${req.params.rota}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
