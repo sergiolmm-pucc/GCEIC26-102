@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FastFrete | Login</title>
+
+  <link rel="icon" type="image/x-icon" href="/Time_14(Frete)/img/favicon.ico" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-grid">
+      <article class="auth-panel panel panel-strong pad-xl stack-lg">
+        <div class="brand-mark">
+          <img src="/Time_14(Frete)/img/favicon.png" alt="Logotipo do FastFrete" />
+        </div>
+        <div class="stack-md">
+          <p class="eyebrow">Time 14</p>
+          <h1 class="auth-title">FastFrete</h1>
+          <p class="panel-copy">
+            Acesse a operação de cálculo de frete com uma interface direta, legível
+            e preparada para decisões rápidas.
+          </p>
+        </div>
+
+        <div class="kicker-row">
+          <span class="kicker-tag">Cálculo completo</span>
+          <span class="kicker-tag">Leitura rápida</span>
+          <span class="kicker-tag">Taxas transparentes</span>
+        </div>
+
+        <div class="login-side-card stack-md">
+          <p class="metric-label">O que você encontra</p>
+          <ul class="list-clean">
+            <li><span>Calculadora</span><strong>Peso e valor final</strong></li>
+            <li><span>Ajuda</span><strong>Etapas da fórmula</strong></li>
+            <li><span>Projeto</span><strong>Contexto do time</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="auth-panel panel panel-raised pad-xl stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Login</p>
+          <h2 class="panel-title">Entrar no sistema</h2>
+          <p class="panel-copy">Use as credenciais de demonstração para acessar o app.</p>
+        </div>
+
+        <% if (error) { %>
+          <div class="alert">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form class="auth-form" method="POST" action="/frete/login">
+          <div class="field">
+            <label for="username">Usuário</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Digite o usuário"
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="field">
+            <label for="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Digite a senha"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+
+        <div class="hint-box stack-sm">
+          <p><strong>Usuário:</strong> admin</p>
+          <p><strong>Senha:</strong> 1234</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

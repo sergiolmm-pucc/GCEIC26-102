@@ -11,6 +11,7 @@ const runEtec11Tests = require("./Time_11(ETEC)/etec11-all-screens.test.js");
 const runPiscinaTests = require("./Time_10_piscina/piscina-all-screens.test.js");
 const runFinanceTests = require("./financecar/financecar-all-screens.test.js");
 const runMkpTests = require("./mkp/mkp-all-screens.test.js");
+const runFreteTests = require("./Time_14(Frete)/frete-all-screens.test.js");
 const runSusTests = require("./sus/sus-all-screens.test.js");
 
 const BASE_URL = process.env.APP_URL || "http://localhost:3000";
@@ -80,6 +81,8 @@ async function main() {
     await runEtec11Tests();
     console.log("\n--- Iniciando testes da Piscina ---");
     await runPiscinaTests();
+    console.log("\n--- Iniciando testes do Time_14(Frete) ---");
+    await runFreteTests();
     console.log("\n--- Iniciando testes do SUS ---");
     await runSusTests(driver);
   } finally {
