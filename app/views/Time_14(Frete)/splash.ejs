@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FastFrete | Carregando</title>
+
+  <link rel="icon" type="image/x-icon" href="/Time_14(Frete)/img/favicon.ico" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
+</head>
+<body class="splash-transition-body">
+  <div
+    class="splash-transition"
+    id="splashTransition"
+    role="status"
+    aria-live="polite"
+    aria-label="Transição para a home"
+  >
+    <div class="splash-transition__content stack-lg">
+      <div class="brand-mark splash-transition__logo">
+        <img src="/Time_14(Frete)/img/favicon.png" alt="Logotipo do FastFrete" />
+      </div>
+
+      <div class="stack-sm splash-transition__copy">
+        <p class="eyebrow">Time 14</p>
+        <h1 class="splash-wordmark">FastFrete</h1>
+        <p class="splash-transition__message">Entrando no sistema...</p>
+      </div>
+
+      <div class="splash-transition__loader" aria-hidden="true">
+        <div class="loading-track">
+          <div class="loading-progress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const HOLD_MS = 2000;
+      const EXIT_MS = 500;
+      const splash = document.getElementById("splashTransition");
+
+      window.setTimeout(function () {
+        splash.classList.add("is-exiting");
+        document.body.classList.add("splash-transition-body--exit");
+
+        window.setTimeout(function () {
+          window.location.href = "/frete/home";
+        }, EXIT_MS);
+      }, HOLD_MS);
+    })();
+  </script>
+</body>
+</html>
