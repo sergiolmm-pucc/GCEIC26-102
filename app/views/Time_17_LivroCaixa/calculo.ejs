@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cálculo | Livro Caixa</title>
+    <link rel="stylesheet" href="/livro_caixa.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="nav-links">
+            <a href="/livrocaixa/sobre" class="link">Sobre</a>
+            <a href="/livrocaixa/help" class="link">Ajuda</a>
+            <a href="/livrocaixa/logout" class="link">Sair</a>
+        </div>
+        <span class="breadcrumb">/ <span>cálculo</span></span>
+    </div>
+
+    <main>
+        <div class="big-number">17</div>
+  
+        <div class="content">
+            <div class="tag">Painel Financeiro</div>
+            <h1>Espaço de <em>Cálculos</em></h1>
+            
+            <div class="box">
+                <h2>📊 1. Cálculo Livro Caixa</h2>
+                <form id="livroForm">
+                    <div class="input-group">
+                        <label>Receita</label>
+                        <input type="number" id="lcreceita" placeholder="R$ 0,00" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Despesas</label>
+                        <input type="number" id="lcdespesa" placeholder="R$ 0,00" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Investimento</label>
+                        <input type="number" id="lcinvestimento" placeholder="R$ 0,00" required>
+                    </div>
+                    <button type="submit">Calcular Livro Caixa</button>
+                </form>
+                <div id="resultadoLivroCaixa"></div>
+            </div>
+
+            <div class="box">
+                <h2>📉 2. Compensação de Prejuízo</h2>
+                <form id="prejuizoForm">
+                    <div class="input-group">
+                        <label>Receita do Ano</label>
+                        <input type="number" id="ccreceitaAno" placeholder="R$ 0,00" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Prejuízo Acumulado</label>
+                        <input type="number" id="ccprejuizo" placeholder="R$ 0,00" required>
+                    </div>
+                    <button type="submit">Calcular Compensação</button>
+                </form>
+                <div id="resultadoCompensação"></div>
+            </div>
+
+            <div class="box">
+                <h2>⚖️ 3. Limite de Arbitramento</h2>
+                <form id="limiteForm">
+                    <div class="input-group">
+                        <label>Receita Anual</label>
+                        <input type="number" id="lareceita" placeholder="R$ 0,00" required>
+                    </div>
+                    <button type="submit">Calcular Limite</button>
+                </form>
+                <div id="resultadoLimite"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('livroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const response = await fetch('/livrocaixa/calc-livro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    receita: document.getElementById('lcreceita').value,
+                    despesa: document.getElementById('lcdespesa').value,
+                    investimento: document.getElementById('lcinvestimento').value
+                })
+            });
+            const data = await response.json();
+            document.getElementById('resultadoLivroCaixa').innerHTML = `
+                <div id="resultado">
+                    <p>Resultado Livro Caixa Rural: <strong>R$ ${data.resultado.toFixed(2)}</strong></p>
+                </div>
+            `;
+        });
+
+        document.getElementById('prejuizoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const response = await fetch('/livrocaixa/calc-preju', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    resultadoAno: document.getElementById('ccreceitaAno').value,
+                    prejuizoAcumulado: document.getElementById('ccprejuizo').value
+                })
+            });
+            const data = await response.json();
+            document.getElementById('resultadoCompensação').innerHTML = `
+                <div id="resultado">
+                    <p>Resultado da Compensação: <strong>R$ ${data.novoResultado.toFixed(2)}</strong></p>
+                </div>
+            `;
+        });
+
+        document.getElementById('limiteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const response = await fetch('/livrocaixa/calc-arbitramento', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    receita: document.getElementById('lareceita').value
+                })
+            });
+            const data = await response.json();
+            document.getElementById('resultadoLimite').innerHTML = `
+                <div id="resultado">
+                    <p>Limite de Arbitramento (20%): <strong>R$ ${data.limite.toFixed(2)}</strong></p>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

@@ -17,6 +17,7 @@ const dasn = require("./Time_8(DASN)/dasn");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
 const susRoutes = require('./Time_16(SUS)/susRoutes');
+const livrocaixa = require("./Time_17_LivroCaixa/livrocaixa");
 
 const app = express();
 
@@ -104,5 +105,7 @@ const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
 // Rotas SUS - Calculadora de Sustentabilidade (Time 16)
 app.use("/SUS", susRoutes);
+// Rotas Livro Caixa Rural
+app.use("/livrocaixa", livrocaixa);
 
 module.exports = app;
