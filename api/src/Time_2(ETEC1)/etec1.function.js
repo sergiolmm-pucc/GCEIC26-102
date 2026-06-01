@@ -1,7 +1,3 @@
-// ============================================================
-// Time_2 (ETEC) — Funções de Encargos trabalhistas
-// ============================================================
-
 const INSS_EMPREGADOR = 0.08;
 const FGTS            = 0.08;
 const INSS_TABLE = [
@@ -49,7 +45,7 @@ function calcularRescisao(salario, mesesTrabalhados, motivoDemissao) {
   const feriasProp      = +(salario * (mesesTrabalhados % 12) / 12).toFixed(2);
   const tercoFerias     = +(feriasProp / 3).toFixed(2);
 
-  // Multa FGTS (40% sem justa causa, 20% pedido demissão)
+  // Multa FGTS (40% sem justa causa e 20% pedido demissão)
   const saldoFGTS       = +(salario * FGTS * mesesTrabalhados).toFixed(2);
   const multaFGTS       = semJustaCausa
     ? +(saldoFGTS * 0.40).toFixed(2)
@@ -86,7 +82,6 @@ function calcularINSS(salario) {
   return +(7786.02 * 0.14).toFixed(2); // teto
 }
 
-// corrigindo typo interno
 const INSS_EMPLOYER = INSS_EMPREGADOR;
 
 module.exports = { calcularSalarioMensal, calcularFerias, calcularRescisao, calcularDecimoTerceiro, calcularINSS };

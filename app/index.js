@@ -1,15 +1,18 @@
 console.log("Iniciando...");
 console.log("Deu certo");
 
+// funcionando
+
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { calcularFolha } = require("./flpFuncoes");
 
+console.log("API_URL do env:", process.env.API_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_URL = process.env.API_URL || "https://gceic26-102.onrender.com";
+const API_URL = process.env.API_URL || "http://localhost:3001";
 
 app.get("/env.js", (req, res) => {
   res.type("application/javascript");
@@ -24,7 +27,7 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(
+app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
     resave: false,
@@ -38,7 +41,7 @@ const equipes = [
   { numero: 2, nome: "EXCHANGE", rota: "/exg" },
   { numero: 3, nome: "CDD", rota: "/cdd" },
   { numero: 4, nome: "CLT", rota: "/clt" },
-  { numero: 5, nome: "MKP", rota: "/MKP" },
+  { numero: 5, nome: "Equipe-5", rota: "/equipe-5" },
   { numero: 6, nome: "FinanceCar", rota: "/financecar" },
   { numero: 7, nome: "Equipe-7", rota: "/equipe-7" },
   { numero: 8, nome: "DASN-SIMEI", rota: "/DASN" },
@@ -48,7 +51,7 @@ const equipes = [
   { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
   { numero: 13, nome: "FLP", rota: "/flp" },
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
-  { numero: 15, nome: "Equipe-15", rota: "/equipe-15" },
+  { numero: 15, nome: "MKP", rota: "/MKP" },
   { numero: 16, nome: "Sustentabilidade", rota: "/sus" },
   { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
   { numero: 18, nome: "Markup", rota: "/markup" },
@@ -360,6 +363,8 @@ app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
 });
 
 app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
+  console.log("ENTROU NA API REGRA");
+  console.log("API_URL =", API_URL);
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(`${API_URL}/api/financecar/regra`, {
@@ -367,6 +372,10 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
     });
+
+    console.log("STATUS =", response.status);
+    console.log("URL =", response.url);
+    
     const data = await response.json();
     res.json(data);
   } catch (err) {
@@ -374,6 +383,7 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
   }
 });
 
+//======================
 // -- Time_10 Piscina --
 function requirePiscinaAuth(req, res, next) {
   if (req.session && req.session.piscinaUser) return next();
@@ -418,7 +428,9 @@ app.post("/piscina/calculo", requirePiscinaAuth, async (req, res) => {
         }),
       },
     );
+
     const resultado = await response.json();
+
     res.render("Time_10_Piscina/calculo", { resultado });
   } catch (error) {
     console.log(error);
@@ -436,6 +448,7 @@ app.get("/piscina/logout", (req, res) => {
   req.session.piscinaUser = null;
   res.redirect("/piscina/login");
 });
+//========================
 
 // -- Rota CDD (React compilado) --
 app.get("/cdd", (req, res) => {

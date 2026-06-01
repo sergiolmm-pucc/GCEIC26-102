@@ -1,46 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Sobre Nós</title>
-
-    <link rel="stylesheet" href="/piscina.css">
+  <meta charset="UTF-8">
+  <title>Sobre - PiscinaCalc</title>
+  <link rel="stylesheet" href="/piscina.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-    <nav>
-        <a href="/piscina/calculo">Cálculo</a>
-        <a href="/piscina/sobre">Sobre</a>
-        <a href="/piscina/help">Help</a>
-        <a href="/piscina/logout">Logout</a>
-    </nav>
+  <nav>
+    <div class="nav-logo">🏊 PiscinaCalc</div>
+    <div class="nav-links">
+      <a href="/piscina/calculo">Cálculo</a>
+      <a href="/piscina/sobre">Sobre</a>
+      <a href="/piscina/help">Help</a>
+      <a href="/piscina/logout" class="nav-logout">Logout</a>
+    </div>
+  </nav>
 
-    <div class="sobre-container">
+  <div class="page-bg">
+    <div class="sobre-wrapper">
 
+      <div class="help-header">
+        <div class="card-icon">👥</div>
         <h1>Sobre Nós</h1>
+        <p class="card-subtitle">Conheça a equipe por trás do PiscinaCalc</p>
+      </div>
+
+      <div class="sobre-foto-card">
         <img src="/img/Time_10_Piscina.jpg" alt="Integrantes do grupo" class="foto-grupo">
-
-        <p>
-            Somos estudantes do 5º período do curso de Engenharia de Software
-            e desenvolvemos este projeto acadêmico com o objetivo de aplicar
-            nossos conhecimentos em programação, desenvolvimento web e integração
-            entre front-end e back-end.
+        <p class="sobre-desc">
+          Somos estudantes do 5º período do curso de <strong>Engenharia de Software</strong> e desenvolvemos este projeto acadêmico para aplicar conhecimentos em programação, desenvolvimento web e integração entre front-end e back-end.
         </p>
+      </div>
 
-        <br>
+      <div class="integrantes-grid">
 
-        <div class="nomes">
-            <h2>Integrantes do Grupo</h2>
-
-            <p>
-                Anna Clara Olbi - 24015392<br>
-                Larissa Furlan - 24021876<br>
-                Maria Gabriella - 24002540
-            </p>
+        <div class="integrante-card">
+          <div class="integrante-avatar">AC</div>
+          <div class="integrante-info">
+            <strong>Anna Clara Olbi</strong>
+            <span>RA: 24015392</span>
+          </div>
         </div>
 
+        <div class="integrante-card">
+          <div class="integrante-avatar">LF</div>
+          <div class="integrante-info">
+            <strong>Larissa Furlan</strong>
+            <span>RA: 24021876</span>
+          </div>
+        </div>
+
+        <div class="integrante-card">
+          <div class="integrante-avatar">MG</div>
+          <div class="integrante-info">
+            <strong>Maria Gabriella</strong>
+            <span>RA: 24002540</span>
+          </div>
+        </div>
+
+      </div>
+
     </div>
+  </div>
 
 </body>
 </html>
