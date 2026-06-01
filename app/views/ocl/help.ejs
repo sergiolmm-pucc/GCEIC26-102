@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCL — Ajuda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ocl.css">
+</head>
+<body>
+  <%- include('nav') %>
+
+  <main class="ocl-shell">
+    <div class="ocl-page-head">
+      <div class="ocl-tag">Documentação</div>
+      <h1>Como o cálculo é feito</h1>
+      <p>O custo total de fabricação é a soma de quatro pilares: materiais diretos, mão de obra direta, overhead indireto e embalagem comercial. Cada etapa abaixo descreve a fórmula aplicada pela API.</p>
+    </div>
+
+    <div class="ocl-help-grid">
+      <div class="ocl-help-card">
+        <h4><span class="num">01</span> Materiais diretos</h4>
+        <p>Soma do custo da armação, lente, componentes (parafusos, charneiras, plaquetas) e insumos de consumo direto. O total é corrigido pela taxa de perda no corte e no QA.</p>
+        <div class="ocl-help-formula">custoReal = nominal / (1 - taxaPerda)</div>
+      </div>
+
+      <div class="ocl-help-card">
+        <h4><span class="num">02</span> Mão de obra direta</h4>
+        <p>Calculada pelo tempo gasto por peça (em horas) multiplicado pelo custo da hora de trabalho, ajustada pelo multiplicador de complexidade do design.</p>
+        <div class="ocl-help-formula">MOD = (tempoMin / 60) × custoHora × complexidade</div>
+      </div>
+
+      <div class="ocl-help-card">
+        <h4><span class="num">03</span> Overhead rateado</h4>
+        <p>Custos fixos mensais da fábrica (depreciação de máquinas, energia, aluguel) divididos pela capacidade produtiva do mês para obter o rateio por unidade.</p>
+        <div class="ocl-help-formula">overhead = custoFixoMensal / capacidadeMensal</div>
+      </div>
+
+      <div class="ocl-help-card">
+        <h4><span class="num">04</span> Embalagem</h4>
+        <p>Soma direta do kit de entrega: estojo, flanela microfibra, caixa externa e certificado de garantia.</p>
+        <div class="ocl-help-formula">embalagem = estojo + flanela + caixa + certificado</div>
+      </div>
+
+      <div class="ocl-help-card">
+        <h4><span class="num">05</span> Consolidação</h4>
+        <p>O custo unitário é a soma dos quatro pilares. O custo total do lote multiplica esse valor pelo volume informado.</p>
+        <div class="ocl-help-formula">unitario = materiais + MOD + overhead + embalagem</div>
+      </div>
+
+      <div class="ocl-help-card">
+        <h4><span class="num">⚠</span> Escopo</h4>
+        <p>Este cálculo representa estritamente o custo de fabricação (COGS). Não inclui impostos sobre venda, custos de marketing (CAC), frete de distribuição ou margem de lucro do varejo.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="ocl-footer">
+    OCL · GCEIC 102 · Time 5
+  </footer>
+</body>
+</html>

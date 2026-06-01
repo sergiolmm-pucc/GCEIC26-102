@@ -32,7 +32,7 @@ router.post("/auth", (req, res) => {
 
   return res.status(401).json({ erro: "Token inválido" });
 });
-
+ 
 
 // =======================
 // JUROS COMPOSTOS
