@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCL — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ocl.css">
+</head>
+<body>
+  <main class="ocl-login">
+    <div class="ocl-login__card">
+      <div class="ocl-login__brand">OCL<span class="dot"></span></div>
+      <div class="ocl-login__subtitle">Acesso restrito</div>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="ocl-login__error"><%= error %></div>
+      <% } %>
+
+      <form action="/ocl/login" method="POST">
+        <div class="ocl-field">
+          <label for="username">Usuário</label>
+          <input type="text" id="username" name="username" autocomplete="username" required>
+        </div>
+
+        <div class="ocl-field">
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="ocl-btn">Entrar</button>
+      </form>
+
+      <p class="ocl-login__hint">admin / admin</p>
+    </div>
+  </main>
+</body>
+</html>

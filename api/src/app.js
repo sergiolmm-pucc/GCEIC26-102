@@ -14,6 +14,7 @@ const cltRouter = require("./clt/cltApp");
 const flpRouter = require('./flp/flpApp');
 const markup = require("./markup/markup.app");
 const dasn = require("./Time_8(DASN)/dasn");
+const oclRouter = require("./ocl/oclApp");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
 const livrocaixa = require("./Time_17_LivroCaixa/livrocaixa")
@@ -82,6 +83,7 @@ app.use("/api/exg", exgRouter);
 app.use("/api/financecar", financeRouter);
 // Rotas ETEC1
 app.use("/ETEC1", etec1);
+//Rotas ETEC11
 app.use("/ETEC11/health", etec11Health);
 app.use("/ETEC11/salario", etec11Salario);
 app.use("/ETEC11/ferias", etec11Ferias);
@@ -104,5 +106,7 @@ app.use("/livrocaixa", livrocaixa);
 const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);
 
+// Rotas OCL (Time 5)
+app.use("/api/ocl", oclRouter);
 
 module.exports = app;

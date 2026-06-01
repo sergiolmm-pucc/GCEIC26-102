@@ -5,6 +5,8 @@ let respostaEsperada;
 let payload;
 let res;
 
+//testes passando
+
 describe('Teste do endpoint de cálculo de férias', () => {
     test('Deve retornar 400 quando salário bruto for nulo', async () => {
          respostaEsperada = {
