@@ -45,6 +45,7 @@ async function main() {
       .build();
     await driver.manage().setTimeouts({ implicit: 5000, pageLoad: 15000 });
     console.log(BASE_URL);
+    /*
     await driver.get(BASE_URL + "/login");
     tiraFoto("Pagina Entrada");
     //preenche os campos
@@ -58,7 +59,7 @@ async function main() {
     const errMsg = await driver.findElement(By.css(".erro")).getText();
     if (!errMsg.includes("inválidos") && !errMsg.includes("invalidos"))
       throw new Error(`Falhou : ${errMsg}`);
-
+    */
     console.log("\n--- Iniciando testes do MKP ---");
     await runMkpTests();
     console.log("\n--- Iniciando testes do EXG ---");

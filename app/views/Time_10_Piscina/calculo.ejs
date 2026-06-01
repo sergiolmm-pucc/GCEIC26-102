@@ -1,126 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-
   <meta charset="UTF-8">
-
   <title>Calculadora de Piscina</title>
-
   <link rel="stylesheet" href="/piscina.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
   <nav>
-
-    <a href="/piscina/calculo">Cálculo</a>
-    <a href="/piscina/sobre">Sobre</a>
-    <a href="/piscina/help">Help</a>
-    <a href="/piscina/logout">Logout</a>
-
+    <div class="nav-logo">🏊 PiscinaCalc</div>
+    <div class="nav-links">
+      <a href="/piscina/calculo">Cálculo</a>
+      <a href="/piscina/sobre">Sobre</a>
+      <a href="/piscina/help">Help</a>
+      <a href="/piscina/logout" class="nav-logout">Logout</a>
+    </div>
   </nav>
 
-  <div class="container">
+  <div class="page-bg">
+    <div class="container">
+      <div class="card">
 
-    <div class="card">
-
-      <h1>Calculadora de Piscina</h1>
-
-      <form method="POST" action="/piscina/calculo">
-
-        <input
-          type="number"
-          step="0.1"
-          name="comprimento"
-          placeholder="Comprimento (m)"
-          required
-        >
-
-        <input
-          type="number"
-          step="0.1"
-          name="largura"
-          placeholder="Largura (m)"
-          required
-        >
-
-        <input
-          type="number"
-          step="0.1"
-          name="profundidade"
-          placeholder="Profundidade (m)"
-          required
-        >
-        
-        <div class="checkbox-group">
-
-          <input
-            type="checkbox"
-            name="temIluminacao"
-          >
-
-          <label>
-            Piscina com iluminação
-          </label>
-
+        <div class="card-header">
+          <div class="card-icon">🏊</div>
+          <h1>Calculadora de Piscina</h1>
+          <p class="card-subtitle">Preencha as dimensões para calcular os custos</p>
         </div>
 
-        <br><br>
+        <form method="POST" action="/piscina/calculo">
 
-        <button type="submit">
+          <div class="input-group">
+            <label>Comprimento</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📏</span>
+              <input type="number" step="0.1" name="comprimento" placeholder="Ex: 8.5" required>
+              <span class="input-unit">m</span>
+            </div>
+          </div>
 
-          Calcular
+          <div class="input-group">
+            <label>Largura</label>
+            <div class="input-wrapper">
+              <span class="input-icon">↔️</span>
+              <input type="number" step="0.1" name="largura" placeholder="Ex: 4.0" required>
+              <span class="input-unit">m</span>
+            </div>
+          </div>
 
-        </button>
+          <div class="input-group">
+            <label>Profundidade</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🌊</span>
+              <input type="number" step="0.1" name="profundidade" placeholder="Ex: 1.5" required>
+              <span class="input-unit">m</span>
+            </div>
+          </div>
 
-      </form>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="temIluminacao">
+              <span class="checkbox-custom"></span>
+              💡 Piscina com iluminação
+            </label>
+          </div>
 
-      <% if (resultado && resultado.success) { %>
+          <button type="submit">Calcular Custos</button>
 
-        <div class="resultado">
-
-          <h2>Resultado</h2>
-
-          <p>
-            <strong>Volume:</strong>
-            <%= resultado.data.volume_m3 %> m³
-          </p>
-
-          <p>
-            <strong>Custo da Água:</strong>
-            R$ <%= resultado.data.custo_agua %>
-          </p>
-
-          <p>
-            <strong>Custo Elétrico:</strong>
-            R$ <%= resultado.data.custo_eletrico %>
-          </p>
-
-          <p>
-            <strong>Custo Hidráulico:</strong>
-            R$ <%= resultado.data.custo_hidraulico %>
-          </p>
-
-          <p>
-            <strong>Total Construção:</strong>
-            R$ <%= resultado.data.total_construcao %>
-          </p>
-
-          <p>
-            <strong>Manutenção Mensal:</strong>
-            R$ <%= resultado.data.manutencao_mensal %>
-          </p>
-
-        </div>
-
-      <% } %>
-
+        </form>
+      </div>
     </div>
-
   </div>
 
-</body>
+  <% if (resultado && resultado.success) { %>
+  <div id="modalResultado" class="modal show">
+    <div class="modal-content">
+      <button class="close" onclick="document.getElementById('modalResultado').classList.remove('show')">&times;</button>
+      <h2>🏊 Resultado do Cálculo</h2>
+      <div class="modal-grid">
+        <div class="modal-item">
+          <span class="modal-label">Volume</span>
+          <span class="modal-valor"><%= resultado.data.volume_m3 %> m³</span>
+        </div>
+        <div class="modal-item">
+          <span class="modal-label">Custo da Água</span>
+          <span class="modal-valor">R$ <%= resultado.data.custo_agua %></span>
+        </div>
+        <div class="modal-item">
+          <span class="modal-label">Custo Elétrico</span>
+          <span class="modal-valor">R$ <%= resultado.data.custo_eletrico %></span>
+        </div>
+        <div class="modal-item">
+          <span class="modal-label">Custo Hidráulico</span>
+          <span class="modal-valor">R$ <%= resultado.data.custo_hidraulico %></span>
+        </div>
+        <div class="modal-item destaque">
+          <span class="modal-label">Total Construção</span>
+          <span class="modal-valor">R$ <%= resultado.data.total_construcao %></span>
+        </div>
+        <div class="modal-item">
+          <span class="modal-label">Manutenção Mensal</span>
+          <span class="modal-valor">R$ <%= resultado.data.manutencao_mensal %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } %>
 
+</body>
 </html>
