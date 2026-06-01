@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
   <meta charset="UTF-8">
-
-  <title>Splash</title>
-
+  <title>PiscinaCalc</title>
   <link rel="stylesheet" href="/piscina.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="center">
+<body class="splash-bg">
 
-  <div class="card">
+  <div class="splash-card">
+    <div class="splash-icon">🏊</div>
+    <h1 class="splash-title">PiscinaCalc</h1>
+    <p class="splash-subtitle">Calculadora inteligente de piscinas</p>
 
-    <h1>Sistema de Cálculos</h1>
+    <div class="splash-loader">
+      <div class="splash-bar"></div>
+    </div>
 
-    <p>Carregando...</p>
-
+    <p class="splash-loading">Carregando...</p>
   </div>
 
   <script>
-
     setTimeout(() => {
-
       window.location.href = '/piscina/login';
-
     }, 2000);
-
   </script>
 
 </body>

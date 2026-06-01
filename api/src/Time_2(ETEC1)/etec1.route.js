@@ -1,7 +1,3 @@
-// ============================================================
-// Time_2 (ETEC) — Rotas /ETEC1
-// ============================================================
-
 const express = require('express');
 const router  = express.Router();
 const {
@@ -17,7 +13,6 @@ router.get('/', (req, res) => {
 });
 
 // POST /ETEC1/salario
-// body: { salario: number }
 router.post('/salario', (req, res) => {
   const { salario } = req.body;
   if (!salario || isNaN(salario) || salario <= 0)
@@ -26,7 +21,6 @@ router.post('/salario', (req, res) => {
 });
 
 // POST /ETEC1/ferias
-// body: { salario: number }
 router.post('/ferias', (req, res) => {
   const { salario } = req.body;
   if (!salario || isNaN(salario) || salario <= 0)
@@ -35,7 +29,6 @@ router.post('/ferias', (req, res) => {
 });
 
 // POST /ETEC1/rescisao
-// body: { salario: number, mesesTrabalhados: number, motivoDemissao: string }
 router.post('/rescisao', (req, res) => {
   const { salario, mesesTrabalhados, motivoDemissao } = req.body;
   const motivos = ['sem_justa_causa', 'justa_causa', 'pedido_demissao'];
@@ -50,7 +43,6 @@ router.post('/rescisao', (req, res) => {
 });
 
 // POST /ETEC1/decimoterceiro
-// body: { salario: number, mesesTrabalhados: number }
 router.post('/decimoterceiro', (req, res) => {
   const { salario, mesesTrabalhados } = req.body;
   if (!salario || isNaN(salario) || salario <= 0)
