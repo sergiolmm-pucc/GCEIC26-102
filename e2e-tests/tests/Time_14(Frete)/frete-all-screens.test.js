@@ -1,22 +1,25 @@
-const { execSync } = require("child_process");
+const runFreteLoginTest = require("./frete.login.test.js");
+const runFreteNavigationTest = require("./frete.navegacao.test.js");
+const runFreteCalculationTest = require("./frete.calcular.test.js");
 
 async function runFreteTests() {
   console.log("\n--- Iniciando testes do Time_14(Frete) - Login ---");
-  execSync('node "tests/Time_14(Frete)/frete.login.test.js"', {
-    stdio: "inherit",
-  });
+  await runFreteLoginTest();
 
   console.log("\n--- Iniciando testes do Time_14(Frete) - Navegação ---");
-  execSync('node "tests/Time_14(Frete)/frete.navegacao.test.js"', {
-    stdio: "inherit",
-  });
+  await runFreteNavigationTest();
 
   console.log("\n--- Iniciando testes do Time_14(Frete) - Cálculo ---");
-  execSync('node "tests/Time_14(Frete)/frete.calcular.test.js"', {
-    stdio: "inherit",
-  });
+  await runFreteCalculationTest();
 
   console.log("\n--- Testes do Time_14(Frete) finalizados ---");
 }
 
 module.exports = runFreteTests;
+
+if (require.main === module) {
+  runFreteTests().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

@@ -13,6 +13,44 @@ const {
 const {
     TIPOS_FRETE
 } = require('../../src/Time_14(Frete)/frete.functions.js');
+const {
+    freteCompletoEsperado
+} = require('./frete.fixtures');
+
+function criarParametrosFrete(overrides = {}) {
+    const parametrosBase = {
+        comprimento: 40,
+        largura: 30,
+        altura: 20,
+        pesoReal: 8,
+        distanciaKm: 250,
+        tipoFrete: TIPOS_FRETE.NORMAL,
+        valorDeclarado: 1000,
+        importado: true,
+        segurado: true
+    };
+
+    return {
+        ...parametrosBase,
+        ...overrides
+    };
+}
+
+function calcularFreteCom(overrides = {}) {
+    const parametros = criarParametrosFrete(overrides);
+
+    return calcularFreteCompleto(
+        parametros.comprimento,
+        parametros.largura,
+        parametros.altura,
+        parametros.pesoReal,
+        parametros.distanciaKm,
+        parametros.tipoFrete,
+        parametros.valorDeclarado,
+        parametros.importado,
+        parametros.segurado
+    );
+}
 
 
 // Teste das funções componentes
@@ -162,40 +200,16 @@ describe('Teste do cálculo da taxa de seguro', () => {
 
 describe('Teste de calcularFreteCompleto', () => {
     test('deve calcular o frete completo com importação e seguro', () => {
-        const resultado = calcularFreteCompleto(
-            40, // comprimento
-            30, // largura
-            20, // altura
-            8,  // pesoReal
-            250, // distanciaKm
-            TIPOS_FRETE.NORMAL,
-            1000, // valorDeclarado
-            true, // importado
-            true  // segurado
-        );
+        const resultado = calcularFreteCom();
 
-        expect(resultado).toEqual({
-            pesoCubado: 2,
-            pesoFaturado: 8,
-            valorBase: 50,
-            taxaImportacao: 150,
-            taxaSeguro: 50,
-            valorFinal: 250
-        });
+        expect(resultado).toEqual(freteCompletoEsperado);
     });
 
     test('deve calcular o frete completo sem importação e sem seguro', () => {
-        const resultado = calcularFreteCompleto(
-            40,
-            30,
-            20,
-            8,
-            250,
-            TIPOS_FRETE.NORMAL,
-            1000,
-            false,
-            false
-        );
+        const resultado = calcularFreteCom({
+            importado: false,
+            segurado: false
+        });
 
         expect(resultado).toEqual({
             pesoCubado: 2,
@@ -208,17 +222,7 @@ describe('Teste de calcularFreteCompleto', () => {
     });
 
     test('deve aplicar apenas taxa de importação quando importado for true', () => {
-        const resultado = calcularFreteCompleto(
-            40,
-            30,
-            20,
-            8,
-            250,
-            TIPOS_FRETE.NORMAL,
-            1000,
-            true,
-            false
-        );
+        const resultado = calcularFreteCom({ segurado: false });
 
         expect(resultado.valorBase).toBe(50);
         expect(resultado.taxaImportacao).toBe(150);
@@ -227,17 +231,7 @@ describe('Teste de calcularFreteCompleto', () => {
     });
 
     test('deve aplicar apenas taxa de seguro quando segurado for true', () => {
-        const resultado = calcularFreteCompleto(
-            40,
-            30,
-            20,
-            8,
-            250,
-            TIPOS_FRETE.NORMAL,
-            1000,
-            false,
-            true
-        );
+        const resultado = calcularFreteCom({ importado: false });
 
         expect(resultado.valorBase).toBe(50);
         expect(resultado.taxaImportacao).toBe(0);
@@ -247,65 +241,31 @@ describe('Teste de calcularFreteCompleto', () => {
 
     test('deve lançar erro quando tipo de frete for inválido', () => {
         expect(() => {
-            calcularFreteCompleto(
-                40,
-                30,
-                20,
-                8,
-                250,
-                'turbo-master',
-                1000,
-                true,
-                true
-            );
+            calcularFreteCom({ tipoFrete: 'turbo-master' });
         }).toThrow('Tipo de frete inválido!');
     });
 
     test('deve lançar erro quando algum valor numérico obrigatório for inválido', () => {
         expect(() => {
-            calcularFreteCompleto(
-                -40,
-                30,
-                20,
-                8,
-                250,
-                TIPOS_FRETE.NORMAL,
-                1000,
-                true,
-                true
-            );
+            calcularFreteCom({ comprimento: -40 });
         }).toThrow('Comprimento deve ser um valor positivo!');
     });
 
     test('deve lançar erro quando valorDeclarado for inválido e importado for true', () => {
         expect(() => {
-            calcularFreteCompleto(
-                40,
-                30,
-                20,
-                8,
-                250,
-                TIPOS_FRETE.NORMAL,
-                0,
-                true,
-                false
-            );
+            calcularFreteCom({
+                valorDeclarado: 0,
+                segurado: false
+            });
         }).toThrow('Valor Declarado deve ser um valor positivo!');
     });
 
     test('deve lançar erro quando valorDeclarado for inválido e segurado for true', () => {
         expect(() => {
-            calcularFreteCompleto(
-                40,
-                30,
-                20,
-                8,
-                250,
-                TIPOS_FRETE.NORMAL,
-                0,
-                false,
-                true
-            );
+            calcularFreteCom({
+                valorDeclarado: 0,
+                importado: false
+            });
         }).toThrow('Valor Declarado deve ser um valor positivo!');
     });
 });

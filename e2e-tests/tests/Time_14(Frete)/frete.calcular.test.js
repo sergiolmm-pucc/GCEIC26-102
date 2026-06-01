@@ -1,82 +1,33 @@
-const { Builder, By, until } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
-const fs = require("fs");
-const path = require("path");
+const {
+  APP_URL,
+  By,
+  until,
+  buildDriver,
+  takeScreenshot,
+  loginFrete,
+  runDirectly
+} = require("./helpers");
 
-const APP_URL = process.env.APP_URL || "http://localhost:3000";
-
-const SCREENSHOTS_DIR = path.join(
-  __dirname,
-  "..",
-  "..",
-  "screenshots"
-);
-
-if (!fs.existsSync(SCREENSHOTS_DIR)) {
-  fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
-}
-
-let driver;
-
-async function tiraFoto(nome) {
-  try {
-    const imagem = await driver.takeScreenshot();
-
-    fs.writeFileSync(
-      path.join(SCREENSHOTS_DIR, `${nome}.png`),
-      imagem,
-      "base64"
-    );
-
-    console.log(`Foto tirada: ${nome}.png`);
-  } catch (e) {
-    console.warn("Erro ao tirar foto:", e.message);
-  }
-};
-
-async function loginFrete() {
-  await driver.get(`${APP_URL}/frete/login`);
-
-  await driver.wait(
-    until.elementLocated(By.id("username")),
-    5000
-  );
-
-  await driver.findElement(By.id("username")).sendKeys("admin");
-  await driver.findElement(By.id("password")).sendKeys("1234");
-
-  await driver.findElement(
-    By.css('button[type="submit"]')
-  ).click();
-
-  await driver.wait(
-    until.urlContains("/frete/home"),
-    5000
-  );
-}
-
-async function selecionarTipoFrete(valor) {
+async function selecionarTipoFrete(driver, valor) {
   await driver.executeScript(
-    `
-      const select = document.getElementById("tipoFrete");
-      select.value = arguments[0];
-      select.dispatchEvent(new Event("change", { bubbles: true }));
-    `,
+    [
+      'const select = document.getElementById("tipoFrete");',
+      'select.value = arguments[0];',
+      'select.dispatchEvent(new Event("change", { bubbles: true }));'
+    ].join("\n"),
     valor
   );
 }
 
-async function main() {
+async function runFreteCalculationTest() {
+  let driver;
+
   try {
-    driver = await new Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(
-        new chrome.Options().addArguments("--headless=new"))
-    .build();
+    driver = await buildDriver();
 
-    await loginFrete();
+    await loginFrete(driver);
 
-    await tiraFoto("Time_14(Frete)_calculo_login_realizado");
+    await takeScreenshot(driver, "Time_14(Frete)_calculo_login_realizado");
 
     await driver.get(`${APP_URL}/frete/calcular`);
 
@@ -85,7 +36,7 @@ async function main() {
       5000
     );
 
-    await tiraFoto("Time_14(Frete)_calculo_aberto");
+    await takeScreenshot(driver, "Time_14(Frete)_calculo_aberto");
 
     await driver.findElement(By.id("comprimento")).sendKeys("40");
     await driver.findElement(By.id("largura")).sendKeys("30");
@@ -94,14 +45,14 @@ async function main() {
     await driver.findElement(By.id("distanciaKm")).sendKeys("250");
     await driver.findElement(By.id("valorDeclarado")).sendKeys("1000");
 
-    await selecionarTipoFrete("normal");
+    await selecionarTipoFrete(driver, "normal");
 
-    await tiraFoto("Time_14(Frete)_calculo_formulario_preenchido");
+    await takeScreenshot(driver, "Time_14(Frete)_calculo_formulario_preenchido");
 
     await driver.findElement(By.id("importado")).click();
     await driver.findElement(By.id("segurado")).click();
 
-    await tiraFoto("Time_14(Frete)_calculo_opcoes_marcadas");
+    await takeScreenshot(driver, "Time_14(Frete)_calculo_opcoes_marcadas");
 
     await driver.findElement(
       By.css("#freteForm button[type='submit']")
@@ -117,7 +68,7 @@ async function main() {
       return !classes.includes("hidden");
     }, 5000);
 
-    await tiraFoto("Time_14(Frete)_calculo_resultado_exibido");
+    await takeScreenshot(driver, "Time_14(Frete)_calculo_resultado_exibido");
 
     const pesoCubado = await driver.findElement(By.id("pesoCubado")).getText();
     const pesoFaturado = await driver.findElement(By.id("pesoFaturado")).getText();
@@ -167,9 +118,8 @@ async function main() {
   }
 }
 
-main()
-  .then(() => console.log("(Time_14) Teste de cálculo concluído"))
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+module.exports = runFreteCalculationTest;
+
+if (require.main === module) {
+  runDirectly(runFreteCalculationTest, "(Time_14) Teste de cálculo concluído");
+}

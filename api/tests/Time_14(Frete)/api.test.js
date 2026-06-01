@@ -1,5 +1,9 @@
 const request = require('supertest');
 const app = require('../../src/app');
+const {
+    criarPayloadFrete,
+    freteCompletoEsperado
+} = require('./frete.fixtures');
 
 
 describe('API - Health Check', () => {
@@ -49,45 +53,21 @@ describe('API - Frete', () => {
         test('deve calcular frete com importação e seguro', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: 40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'normal',
-                    valorDeclarado: 1000,
-                    importado: true,
-                    segurado: true
-                });
+                .send(criarPayloadFrete());
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
 
-            expect(response.body.data).toEqual({
-                pesoCubado: 2,
-                pesoFaturado: 8,
-                valorBase: 50,
-                taxaImportacao: 150,
-                taxaSeguro: 50,
-                valorFinal: 250
-            });
+            expect(response.body.data).toEqual(freteCompletoEsperado);
         });
 
         test('deve calcular frete sem importação e sem seguro', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: 40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'normal',
-                    valorDeclarado: 1000,
+                .send(criarPayloadFrete({
                     importado: false,
                     segurado: false
-                });
+                }));
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -101,17 +81,7 @@ describe('API - Frete', () => {
         test('deve retornar erro 400 quando o tipo de frete for inválido', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: 40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'turbo',
-                    valorDeclarado: 1000,
-                    importado: true,
-                    segurado: true
-                });
+                .send(criarPayloadFrete({ tipoFrete: 'turbo' }));
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -121,17 +91,7 @@ describe('API - Frete', () => {
         test('deve retornar erro 400 quando algum campo numérico obrigatório for inválido', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: -40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'normal',
-                    valorDeclarado: 1000,
-                    importado: true,
-                    segurado: true
-                });
+                .send(criarPayloadFrete({ comprimento: -40 }));
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -141,17 +101,10 @@ describe('API - Frete', () => {
         test('deve retornar erro 400 quando valorDeclarado for inválido e produto for importado', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: 40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'normal',
+                .send(criarPayloadFrete({
                     valorDeclarado: 0,
-                    importado: true,
                     segurado: false
-                });
+                }));
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -161,17 +114,10 @@ describe('API - Frete', () => {
         test('deve retornar erro 400 quando valorDeclarado for inválido e produto for segurado', async () => {
             const response = await request(app)
                 .post('/api/frete/calcular')
-                .send({
-                    comprimento: 40,
-                    largura: 30,
-                    altura: 20,
-                    pesoReal: 8,
-                    distanciaKm: 250,
-                    tipoFrete: 'normal',
+                .send(criarPayloadFrete({
                     valorDeclarado: 0,
-                    importado: false,
-                    segurado: true
-                });
+                    importado: false
+                }));
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
