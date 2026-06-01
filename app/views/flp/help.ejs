@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Ajuda</title>
+  <link rel="stylesheet" href="/flp.css">
+  <style>
+    .hlp-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .hlp-step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hlp-step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .hlp-step-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .hlp-step-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    .hlp-faq-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hlp-faq-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .hlp-faq-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 680px) { .hlp-faq-cols { grid-template-columns: 1fr; } }
+
+    .hlp-notice {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cta);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-top: 28px;
+    }
+    .hlp-notice-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .hlp-notice-body  { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+    .hlp-section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hlp-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <%- include('nav') %>
+    <main class="page-content">
+
+      <!-- Como usar: grid de cards -->
+      <div class="hlp-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/></svg>
+        Como usar o FLP
+      </div>
+
+      <div class="hlp-steps-grid">
+        <div class="hlp-step-card">
+          <div class="hlp-step-badge">1</div>
+          <div>
+            <div class="hlp-step-title">Faça login</div>
+            <div class="hlp-step-desc">Acesse com as credenciais do Depto. de Pessoal.</div>
+          </div>
+        </div>
+        <div class="hlp-step-card">
+          <div class="hlp-step-badge">2</div>
+          <div>
+            <div class="hlp-step-title">Consulte as tabelas</div>
+            <div class="hlp-step-desc">Em Início veja as faixas de INSS e IRRF vigentes.</div>
+          </div>
+        </div>
+        <div class="hlp-step-card">
+          <div class="hlp-step-badge">3</div>
+          <div>
+            <div class="hlp-step-title">Informe o salário</div>
+            <div class="hlp-step-desc">Em Avulso, insira o salário bruto e os dados adicionais.</div>
+          </div>
+        </div>
+        <div class="hlp-step-card">
+          <div class="hlp-step-badge">4</div>
+          <div>
+            <div class="hlp-step-title">Horas extras e faltas</div>
+            <div class="hlp-step-desc">Informe horas a 50%/100%, dias de falta e atrasos.</div>
+          </div>
+        </div>
+        <div class="hlp-step-card">
+          <div class="hlp-step-badge">5</div>
+          <div>
+            <div class="hlp-step-title">Confira o contracheque</div>
+            <div class="hlp-step-desc">O sistema exibe proventos, descontos e salário líquido.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="hlp-faq-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        Perguntas Frequentes
+      </div>
+
+      <div class="hlp-faq-cols" id="faqList">
+        <div>
+          <div class="faq-item">
+            <div class="faq-question">
+              O que é o INSS e como é calculado?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              O INSS é a contribuição previdenciária descontada do salário. O cálculo é progressivo: cada faixa (7,5%, 9%, 12% e 14%) incide somente sobre a parcela do salário dentro daquela faixa, com teto de R$ 908,86.
+            </div>
+          </div>
+          <div class="faq-item" style="margin-top:8px">
+            <div class="faq-question">
+              O que é o IRRF e como é calculado?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              O IRRF é descontado com base na renda tributável (salário bruto menos INSS). Com a Reforma da Renda 2026 (Lei nº 15.270/2025), quem recebe até R$ 5.000,00 está totalmente isento. Entre R$ 5.000,01 e R$ 7.350,00 há redução progressiva. Acima disso, aplicam-se normalmente as alíquotas de 7,5% a 27,5%.
+            </div>
+          </div>
+          <div class="faq-item" style="margin-top:8px">
+            <div class="faq-question">
+              O que é o FGTS?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              O FGTS é uma obrigação patronal de 8% sobre o salário bruto, depositada em conta vinculada ao trabalhador. Não é descontado do salário — é pago pelo empregador.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="faq-item">
+            <div class="faq-question">
+              Como são calculadas as horas extras?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              O valor da hora normal é o salário ÷ 220. Extras a 50% valem 1,5× a hora; a 100% (feriados) valem 2×. O total é somado ao salário base para compor o bruto.
+            </div>
+          </div>
+          <div class="faq-item" style="margin-top:8px">
+            <div class="faq-question">
+              O cálculo do INSS é simples ou progressivo?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              Desde 2020 é progressivo (por faixas), igual ao imposto de renda. Cada porção do salário na faixa recebe a alíquota correspondente — mais justo para os trabalhadores.
+            </div>
+          </div>
+          <div class="faq-item" style="margin-top:8px">
+            <div class="faq-question">
+              Os valores são atualizados automaticamente?
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="faq-answer">
+              As tabelas são da legislação vigente em 2026 (INSS: Portaria MPS; IRRF: Lei nº 15.270/2025) e servem para fins educacionais.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aviso legal -->
+      <div class="hlp-notice">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        <div>
+          <div class="hlp-notice-title">Aviso Legal</div>
+          <div class="hlp-notice-body">
+            O FLP é uma ferramenta educacional. Os valores calculados são estimativas baseadas em tabelas de referência e não substituem a assessoria de um contador ou sistema oficial de folha de pagamento.
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll('.faq-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

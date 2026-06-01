@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLP — Cálculo Avulso</title>
+  <link rel="stylesheet" href="/flp.css">
+</head>
+<body>
+  <div class="layout">
+    <%- include('nav') %>
+    <main class="page-content">
+
+      <div class="folha-wrapper">
+
+        <!-- Formulário -->
+        <section class="folha-form-section">
+          <h2 class="section-heading">Cálculo Avulso</h2>
+
+          <div id="erroBox" class="erro" style="display:none"></div>
+
+          <form id="calcForm">
+            <div style="display:flex;flex-direction:column;gap:14px">
+
+              <div class="field">
+                <label for="salario">Salário Base (R$)</label>
+                <input id="salario" type="number" placeholder="0,00" min="0.01" step="0.01">
+              </div>
+
+              <fieldset class="fieldset-extras">
+                <legend>Horas Extras</legend>
+                <div class="extras-grid">
+                  <div class="field">
+                    <label for="horas50">50% — normais</label>
+                    <input id="horas50" type="number" placeholder="0" min="0" step="0.5" value="0">
+                  </div>
+                  <div class="field">
+                    <label for="horas100">100% — feriados</label>
+                    <input id="horas100" type="number" placeholder="0" min="0" step="0.5" value="0">
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="field">
+                <label for="jornadaMensal">Jornada Mensal</label>
+                <select id="jornadaMensal">
+                  <option value="220">220h/mês — CLT 44h/semana</option>
+                  <option value="200">200h/mês — CLT 40h/semana</option>
+                  <option value="180">180h/mês — CLT 36h/semana</option>
+                </select>
+              </div>
+
+              <fieldset class="fieldset-extras">
+                <legend>Faltas e Atrasos</legend>
+                <div class="extras-grid">
+                  <div class="field">
+                    <label for="diasFalta">Dias de falta</label>
+                    <input id="diasFalta" type="number" placeholder="0" min="0" step="1" value="0">
+                    <span class="field-hint">1 dia = salário ÷ 30</span>
+                  </div>
+                  <div class="field">
+                    <label for="horasAtraso">Horas de atraso</label>
+                    <input id="horasAtraso" type="number" placeholder="0" min="0" step="0.5" value="0">
+                    <span class="field-hint" id="hintAtraso">1h = salário ÷ 220</span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Vale-Transporte</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="custoVT">Custo mensal total (R$)</label>
+                    <input id="custoVT" type="number" placeholder="0,00" min="0" step="0.01" value="0">
+                    <span class="field-hint" id="hintVT">Se o custo for maior que 6% do salário, a empresa arca com o excedente</span>
+                  </div>
+                  <div class="field">
+                    <label style="margin-bottom:5px;display:block">Quem paga o VT?</label>
+                    <div class="radio-seg" id="segPgtVT">
+                      <label class="active"><input type="radio" name="pgtVT" value="clt" checked><span>Funcionário</span></label>
+                      <label><input type="radio" name="pgtVT" value="empresa"><span>Empresa</span></label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Vale-Alimentação / Refeição</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="beneficioVA">Valor do benefício (R$)</label>
+                    <input id="beneficioVA" type="number" placeholder="0,00" min="0" step="0.01" value="0">
+                  </div>
+                  <div class="field">
+                    <label>Desconto do funcionário: <strong id="pctVALabel">20%</strong> <span style="font-size:11px;color:var(--text-secondary);font-weight:400">(desconto máximo de 20%)</span></label>
+                    <input type="range" id="pctDescontoVA" min="0" max="20" value="20" step="1" style="width:100%;accent-color:var(--accent);margin-top:6px">
+                    <span class="field-hint" id="hintVA">Desconto: R$ 0,00 | Empresa arca: R$ 0,00</span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset-extras">
+                <legend>Plano de Saúde</legend>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div class="field">
+                    <label for="planoSaude">Mensalidade (R$)</label>
+                    <input id="planoSaude" type="number" placeholder="0,00" min="0" step="0.01" value="0">
+                  </div>
+                  <div class="field">
+                    <label style="margin-bottom:5px;display:block">Quem paga o plano?</label>
+                    <div class="radio-seg" id="segPgtPS">
+                      <label class="active"><input type="radio" name="pgtPlanoSaude" value="funcionario" checked><span>Funcionário</span></label>
+                      <label><input type="radio" name="pgtPlanoSaude" value="empresa"><span>Empresa</span></label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <button class="btn btn-primary btn-full" type="submit" id="submitBtn">
+                Gerar Contracheque
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Contracheque -->
+        <section class="contracheque-section">
+          <div class="contracheque-vazio" id="ctVazio">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="22" x="3" y="1" rx="2"/><path d="M7 6h6"/><path d="M7 10h8"/><path d="M7 14h4"/></svg>
+            <p>Preencha os dados ao lado e clique em <strong>Gerar Contracheque</strong>.</p>
+          </div>
+
+          <div class="contracheque-doc" id="ctDoc" style="display:none">
+            <div class="ct-header">
+              <div class="ct-empresa">Sistema FLP</div>
+              <div class="ct-titulo">Demonstrativo de Pagamento</div>
+              <div class="ct-periodo" id="ctPeriodo"></div>
+            </div>
+
+            <div class="ct-secao-titulo">Proventos</div>
+            <table class="ct-table">
+              <tbody id="ctProventos"></tbody>
+              <tfoot>
+                <tr class="ct-subtotal"><td>Total Proventos</td><td id="ctTotalProv"></td></tr>
+              </tfoot>
+            </table>
+
+            <div class="ct-secao-titulo">Descontos</div>
+            <table class="ct-table">
+              <tbody id="ctDescontos"></tbody>
+              <tfoot>
+                <tr class="ct-subtotal ct-subtotal-red"><td>Total Descontos</td><td id="ctTotalDesc"></td></tr>
+              </tfoot>
+            </table>
+
+            <div class="ct-secao-titulo">Encargo Patronal (não desconta do funcionário)</div>
+            <table class="ct-table">
+              <tbody>
+                <tr><td>FGTS (8%)</td><td id="ctFgts"></td></tr>
+                <tr id="ctVtEmpresaRow" style="display:none"><td>Vale-Transporte — parte empresa</td><td id="ctVtEmpresa"></td></tr>
+                <tr id="ctVaEmpresaRow" style="display:none"><td>Vale-Alimentação — parte empresa</td><td id="ctVaEmpresa"></td></tr>
+                <tr id="ctPsEmpresaRow" style="display:none"><td>Plano de Saúde — empresa paga</td><td id="ctPsEmpresa"></td></tr>
+              </tbody>
+            </table>
+
+            <div class="ct-liquido">
+              <span class="ct-liquido-label">Salário Líquido</span>
+              <span class="ct-liquido-valor" id="ctLiquido"></span>
+            </div>
+
+            <div class="ct-rodape">
+              Base IRRF: <span id="ctBaseIrrf"></span> &nbsp;|&nbsp;
+              Alíquota IRRF: <span id="ctIrrfAliquota"></span> &nbsp;|&nbsp;
+              Jornada: <span id="ctJornada">220h/mês (44h/sem.)</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    var JORNADA_DESC = { '220': '220h/mês (44h/sem.)', '200': '200h/mês (40h/sem.)', '180': '180h/mês (36h/sem.)' };
+
+    // Pré-preenche via query string ao vir de /flp/funcionarios
+    (function() {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('salario')) document.getElementById('salario').value = p.get('salario');
+      if (p.get('jornada')) {
+        var sel = document.getElementById('jornadaMensal');
+        if (sel.querySelector('option[value="' + p.get('jornada') + '"]')) sel.value = p.get('jornada');
+      }
+    })();
+
+    document.getElementById('jornadaMensal').addEventListener('change', function() {
+      document.getElementById('hintAtraso').textContent = '1h = salário ÷ ' + this.value;
+    });
+
+    function brl(n) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+    }
+
+    function atualizarHintVT() {
+      var sal = parseFloat(document.getElementById('salario').value) || 0;
+      var vt  = parseFloat(document.getElementById('custoVT').value) || 0;
+      var pgt = document.querySelector('input[name="pgtVT"]:checked').value;
+      var hintVT = document.getElementById('hintVT');
+      if (pgt === 'empresa') {
+        hintVT.textContent = vt > 0 ? 'Empresa arca com todo o custo: ' + brl(vt) : 'Empresa arca com todo o custo';
+      } else if (sal > 0) {
+        var limite = sal * 0.06;
+        if (vt > 0) {
+          var funcPaga = Math.min(vt, limite);
+          var empPaga  = Math.max(0, vt - limite);
+          var txt = '6% do salário = ' + brl(limite) + ' | Funcionário paga: ' + brl(funcPaga);
+          if (empPaga > 0) txt += ' | Empresa arca: ' + brl(empPaga);
+          hintVT.textContent = txt;
+        } else {
+          hintVT.textContent = '6% do salário = ' + brl(limite) + ' (limite de desconto — excedente a empresa arca)';
+        }
+      } else {
+        hintVT.textContent = 'Se o custo for maior que 6% do salário, a empresa arca com o excedente';
+      }
+    }
+
+    function atualizarHintVA() {
+      var benef = parseFloat(document.getElementById('beneficioVA').value) || 0;
+      var pct   = parseInt(document.getElementById('pctDescontoVA').value) || 0;
+      document.getElementById('pctVALabel').textContent = pct + '%';
+      var hintVA = document.getElementById('hintVA');
+      if (benef > 0) {
+        var desc  = benef * pct / 100;
+        var emp   = benef - desc;
+        hintVA.textContent = 'Desconto: ' + brl(desc) + ' | Empresa arca: ' + brl(emp);
+      } else {
+        hintVA.textContent = 'Desconto: R$ 0,00 | Empresa arca: R$ 0,00';
+      }
+    }
+
+    function setupRadioSeg(segId) {
+      document.getElementById(segId).querySelectorAll('label').forEach(function(lbl) {
+        lbl.querySelector('input').addEventListener('change', function() {
+          document.getElementById(segId).querySelectorAll('label').forEach(function(l) { l.classList.remove('active'); });
+          lbl.classList.add('active');
+          atualizarHintVT();
+        });
+      });
+    }
+
+    setupRadioSeg('segPgtVT');
+    setupRadioSeg('segPgtPS');
+
+    document.getElementById('salario').addEventListener('input', atualizarHintVT);
+    document.getElementById('custoVT').addEventListener('input', atualizarHintVT);
+    document.getElementById('beneficioVA').addEventListener('input', atualizarHintVA);
+    document.getElementById('pctDescontoVA').addEventListener('input', atualizarHintVA);
+
+    function addRow(tbodyId, desc, valor, cls) {
+      var tr = document.createElement('tr');
+      if (cls) tr.className = cls;
+      tr.innerHTML = '<td>' + desc + '</td><td>' + valor + '</td>';
+      document.getElementById(tbodyId).appendChild(tr);
+    }
+
+    function val(id, parse) {
+      return (parse === 'int' ? parseInt : parseFloat)(document.getElementById(id).value) || 0;
+    }
+
+    document.getElementById('calcForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var erroBox   = document.getElementById('erroBox');
+      var submitBtn = document.getElementById('submitBtn');
+
+      var salario = parseFloat(document.getElementById('salario').value.replace(',', '.'));
+      erroBox.style.display = 'none';
+
+      if (isNaN(salario) || salario <= 0) {
+        erroBox.textContent = 'Informe um salário base válido e positivo.';
+        erroBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Calculando…';
+
+      try {
+        var res = await fetch('/flp/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            salarioBase:   salario,
+            horaMes:       parseInt(document.getElementById('jornadaMensal').value) || 220,
+            horas50:       val('horas50'),
+            horas100:      val('horas100'),
+            diasFalta:     val('diasFalta'),
+            horasAtraso:   val('horasAtraso'),
+            custoVT:       val('custoVT'),
+            pgtVT:         document.querySelector('input[name="pgtVT"]:checked').value,
+            beneficioVA:   val('beneficioVA'),
+            pctDescontoVA: parseInt(document.getElementById('pctDescontoVA').value) || 0,
+            planoSaude:    val('planoSaude'),
+            pgtPlanoSaude: document.querySelector('input[name="pgtPlanoSaude"]:checked').value,
+          }),
+        });
+        var d = await res.json();
+
+        if (!res.ok) { erroBox.textContent = d.erro || 'Erro ao calcular'; erroBox.style.display = 'block'; return; }
+
+        var hoje = new Date();
+        document.getElementById('ctPeriodo').textContent =
+          hoje.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+        // Proventos
+        document.getElementById('ctProventos').innerHTML = '';
+        addRow('ctProventos', 'Salário Base', brl(d.salario_base));
+        if (d.horas_extras.extras_50  > 0) addRow('ctProventos', 'H. Extras 50%',  brl(d.horas_extras.extras_50));
+        if (d.horas_extras.extras_100 > 0) addRow('ctProventos', 'H. Extras 100%', brl(d.horas_extras.extras_100));
+        document.getElementById('ctTotalProv').textContent = brl(d.salario_bruto);
+
+        // Descontos
+        document.getElementById('ctDescontos').innerHTML = '';
+        addRow('ctDescontos', 'INSS', brl(d.descontos.inss), 'ct-red');
+        addRow('ctDescontos', 'IRRF (' + d.descontos.irrf_aliquota + ')', brl(d.descontos.irrf), 'ct-red');
+
+        var b = d.descontos.beneficios;
+        if (b) {
+          if (b.faltas         > 0) addRow('ctDescontos', 'Faltas (' + val('diasFalta')   + ' dias)', brl(b.faltas),          'ct-red');
+          if (b.atrasos        > 0) addRow('ctDescontos', 'Atrasos (' + val('horasAtraso') + 'h)',    brl(b.atrasos),         'ct-red');
+          if (b.vale_transporte > 0) addRow('ctDescontos', 'Vale-Transporte',    brl(b.vale_transporte),  'ct-red');
+          if (b.vale_alimentacao > 0) addRow('ctDescontos', 'Vale-Alimentação',  brl(b.vale_alimentacao), 'ct-red');
+          if (b.plano_saude    > 0) addRow('ctDescontos', 'Plano de Saúde',     brl(b.plano_saude),      'ct-red');
+        }
+
+        document.getElementById('ctTotalDesc').textContent   = brl(d.descontos.total);
+        document.getElementById('ctFgts').textContent = brl(d.fgts);
+        var b2 = d.descontos.beneficios || {};
+        var vtEmp = b2.vt_empresa > 0;
+        var vaEmp = b2.va_empresa > 0;
+        var psEmp = b2.ps_empresa > 0;
+        document.getElementById('ctVtEmpresaRow').style.display = vtEmp ? '' : 'none';
+        if (vtEmp) document.getElementById('ctVtEmpresa').textContent = brl(b2.vt_empresa);
+        document.getElementById('ctVaEmpresaRow').style.display = vaEmp ? '' : 'none';
+        if (vaEmp) document.getElementById('ctVaEmpresa').textContent = brl(b2.va_empresa);
+        document.getElementById('ctPsEmpresaRow').style.display = psEmp ? '' : 'none';
+        if (psEmp) document.getElementById('ctPsEmpresa').textContent = brl(b2.ps_empresa);
+        document.getElementById('ctLiquido').textContent     = brl(d.salario_liquido);
+        document.getElementById('ctBaseIrrf').textContent    = brl(d.base_irrf);
+        document.getElementById('ctIrrfAliquota').textContent = d.descontos.irrf_aliquota;
+
+        var jVal = document.getElementById('jornadaMensal').value;
+        document.getElementById('ctJornada').textContent = JORNADA_DESC[jVal] || jVal + 'h/mês';
+
+        document.getElementById('ctVazio').style.display = 'none';
+        document.getElementById('ctDoc').style.display   = 'block';
+
+      } catch (err) {
+        erroBox.textContent = 'Erro ao comunicar com o servidor.';
+        erroBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gerar Contracheque';
+      }
+    });
+  </script>
+</body>
+</html>
