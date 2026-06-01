@@ -25,36 +25,37 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use( 
-  session({
-    secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 3600000 },
-  }),
+app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 3600000 },
+    }),
 );
 
 const equipes = [
-  { numero: 1, nome: "ETEC1", rota: "/ETEC1/splash" },
-  { numero: 2, nome: "EXCHANGE", rota: "/exg" },
-  { numero: 3, nome: "CDD", rota: "/cdd" },
-  { numero: 4, nome: "CLT", rota: "/clt" },
-  { numero: 5, nome: "Equipe-5", rota: "/equipe-5" },
-  { numero: 6, nome: "FinanceCar", rota: "/financecar" },
-  { numero: 7, nome: "Equipe-7", rota: "/equipe-7" },
-  { numero: 8, nome: "DASN-SIMEI", rota: "/DASN" },
-  { numero: 9, nome: "Equipe-9", rota: "/equipe-9" },
-  { numero: 10, nome: "CalcPiscina", rota: "/piscina" },
-  { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
-  { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
-  { numero: 13, nome: "FLP", rota: "/flp" },
-  { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
-  { numero: 15, nome: "MKP", rota: "/MKP" },
-  { numero: 16, nome: "Equipe-16", rota: "/equipe-16" },
-  { numero: 17, nome: "Equipe-17", rota: "/equipe-17" },
-  { numero: 18, nome: "Markup", rota: "/markup" },
-  { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
-  { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
+  { numero: 1,  nome: 'ETEC1',       rota: '/ETEC1/splash' },
+  { numero: 2,  nome: 'EXCHANGE',    rota: '/exg' },
+  { numero: 3,  nome: 'CDD',         rota: '/cdd' },
+  { numero: 4,  nome: 'CLT',         rota: '/clt' },
+  { numero: 5,  nome: 'OCL',         rota: '/ocl' },
+  { numero: 6,  nome: 'FinanceCar',  rota: '/financecar' },
+  { numero: 7,  nome: 'Equipe-7',    rota: '/equipe-7' },
+  { numero: 8,  nome: 'DASN-SIMEI',  rota: '/DASN' },
+  { numero: 9,  nome: 'Equipe-9',    rota: '/equipe-9' },
+  { numero: 10, nome: 'CalcPiscina', rota: '/piscina' },
+  { numero: 11, nome: 'Equipe-11',   rota: '/equipe-11' },
+  { numero: 12, nome: 'Equipe-12',   rota: '/equipe-12' },
+  { numero: 13, nome: 'FLP',         rota: '/flp' },
+  { numero: 14, nome: 'Equipe-14',   rota: '/equipe-14' },
+  { numero: 15, nome: 'Equipe-15',   rota: '/equipe-15' },
+  { numero: 16, nome: 'Equipe-16',   rota: '/equipe-16' },
+  { numero: 17, nome: "Livro-Caixa-Rural", rota: "/livrocaixa" },
+  { numero: 18, nome: 'Markup',      rota: '/markup' },
+  { numero: 19, nome: 'Equipe-19',   rota: '/equipe-19' },
+  { numero: 20, nome: 'Equipe-20',   rota: '/equipe-20' },
 ];
 
 // Auth middleware
@@ -118,7 +119,7 @@ function requireAuthETEC1(req, res, next) {
 
 app.get("/ETEC1/splash", (req, res) => res.render("Time_2(ETEC1)/splash"));
 app.get("/ETEC1/login", (req, res) =>
-  res.render("Time_2(ETEC1)/login", { erro: null }),
+    res.render("Time_2(ETEC1)/login", { erro: null }),
 );
 app.post("/ETEC1/login", (req, res) => {
   const { usuario, senha } = req.body;
@@ -129,13 +130,13 @@ app.post("/ETEC1/login", (req, res) => {
   res.render("Time_2(ETEC1)/login", { erro: "Usuário ou senha inválidos." });
 });
 app.get("/ETEC1/calculo", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/calculo"),
+    res.render("Time_2(ETEC1)/calculo"),
 );
 app.get("/ETEC1/sobre", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/sobre"),
+    res.render("Time_2(ETEC1)/sobre"),
 );
 app.get("/ETEC1/help", requireAuthETEC1, (req, res) =>
-  res.render("Time_2(ETEC1)/help"),
+    res.render("Time_2(ETEC1)/help"),
 );
 app.get("/ETEC1/logout", (req, res) => {
   req.session.destroy(() => {
@@ -327,27 +328,27 @@ app.post("/api/financecar/juros", requireFinanceAuth, async (req, res) => {
 });
 
 app.post(
-  "/api/financecar/financiamento",
-  requireFinanceAuth,
-  async (req, res) => {
-    try {
-      const fetch = (await import("node-fetch")).default;
-      const response = await fetch(`${API_URL}/api/financecar/financiamento`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(req.body),
-      });
-      const data = await response.json();
-      res.json(data);
-    } catch (err) {
-      res.status(400).json({ success: false, error: err.message });
-    }
-  },
+    "/api/financecar/financiamento",
+    requireFinanceAuth,
+    async (req, res) => {
+      try {
+        const fetch = (await import("node-fetch")).default;
+        const response = await fetch(`${API_URL}/api/financecar/financiamento`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(req.body),
+        });
+        const data = await response.json();
+        res.json(data);
+      } catch (err) {
+        res.status(400).json({ success: false, error: err.message });
+      }
+    },
 );
 
 app.post("/api/financecar/fundo", requireFinanceAuth, async (req, res) => {
   try {
-    const fetch = (await import("node-fetch")).default;
+    const fetch = (await (await import("node-fetch")).default);
     const response = await fetch(`${API_URL}/api/financecar/fundo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -373,7 +374,7 @@ app.post("/api/financecar/regra", requireFinanceAuth, async (req, res) => {
 
     console.log("STATUS =", response.status);
     console.log("URL =", response.url);
-    
+
     const data = await response.json();
     res.json(data);
   } catch (err) {
@@ -414,17 +415,17 @@ app.post("/piscina/calculo", requirePiscinaAuth, async (req, res) => {
   try {
     const fetch = (await import("node-fetch")).default;
     const response = await fetch(
-      `${API_URL}/api/Time_10_piscina/calcular-total`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          comprimento: Number(req.body.comprimento),
-          largura: Number(req.body.largura),
-          profundidade: Number(req.body.profundidade),
-          temIluminacao: req.body.temIluminacao === "on",
-        }),
-      },
+        `${API_URL}/api/Time_10_piscina/calcular-total`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            comprimento: Number(req.body.comprimento),
+            largura: Number(req.body.largura),
+            profundidade: Number(req.body.profundidade),
+            temIluminacao: req.body.temIluminacao === "on",
+          }),
+        },
     );
 
     const resultado = await response.json();
@@ -453,6 +454,11 @@ app.get("/cdd", (req, res) => {
   res.sendFile(path.join(__dirname, "views/cdd/index.html"));
 });
 
+// -- Time 17 (Livro Caixa Rural) --
+app.get('/livro-caixa', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
+});
+
 // -- Rotas MKP --
 app.get("/MKP", (req, res) => {
   res.render("mkp/mkp");
@@ -460,6 +466,7 @@ app.get("/MKP", (req, res) => {
 
 async function proxyMkpToApi(path, req, res) {
   try {
+    const fetch = (await import("node-fetch")).default;
     const target = `${API_URL}${path}`;
     const fetchRes = await fetch(target, {
       method: "POST",
@@ -471,15 +478,15 @@ async function proxyMkpToApi(path, req, res) {
   } catch (err) {
     console.error("Proxy error", err);
     res
-      .status(500)
-      .json({ error: "Erro ao encaminhar a requisição para a API." });
+        .status(500)
+        .json({ error: "Erro ao encaminhar a requisição para a API." });
   }
 }
 
 app.post("/MKP/markup", (req, res) => proxyMkpToApi("/MKP/markup", req, res));
 app.post("/MKP/custos", (req, res) => proxyMkpToApi("/MKP/custos", req, res));
 app.post("/MKP/preco-venda", (req, res) =>
-  proxyMkpToApi("/MKP/preco-venda", req, res),
+    proxyMkpToApi("/MKP/preco-venda", req, res),
 );
 
 // -- Rotas CLT --
@@ -801,7 +808,7 @@ app.get("/flp/help", requireFlpAuth, (req, res) => {
   res.render("flp/help", { user: req.session.flpUser });
 });
 
-// Time_8 DASN-SIMEI 
+// Time_8 DASN-SIMEI
 function requireAuthDASN(req, res, next) {
   if (req.session && req.session.dasnUser) return next();
   res.redirect("/DASN/login");
@@ -839,6 +846,47 @@ app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
     res.status(400).json({ success: false, error: err.message });
   }
 });
+
+// Time 17 Livro Caixa
+function requireAuthLivroCaixa(req, res, next) {
+  if (req.session && req.session.livroCaixaUser) return next();
+  res.redirect("/livrocaixa/login");
+}
+
+app.get("/livrocaixa", (req, res) => res.render("Time_17_LivroCaixa/splash"));
+app.get("/livrocaixa/login", (req, res) => res.render("Time_17_LivroCaixa/login", { erro: null }));
+app.post("/livrocaixa/login", (req, res) => {
+  const { usuario, senha } = req.body;
+  if (usuario === "admin" && senha === "1234") {
+    req.session.livroCaixaUser = { username: usuario };
+    return res.redirect("/livrocaixa/calculo");
+  }
+  res.render("Time_17_LivroCaixa/login", { erro: "Usuário ou senha inválidos." });
+});
+
+app.get("/livrocaixa/calculo", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/calculo"));
+app.get("/livrocaixa/sobre", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/sobre"));
+app.get("/livrocaixa/help", requireAuthLivroCaixa, (req, res) => res.render("Time_17_LivroCaixa/help"));
+app.get("/livrocaixa/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/livrocaixa/login"));
+});
+
+app.post("/livrocaixa/:rota", requireAuthLivroCaixa, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/livrocaixa/${req.params.rota}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+
 
 // -- Rotas Markup --
 function requireMarkupAuth(req, res, next) {
@@ -947,26 +995,93 @@ app.post("/markup/calcularDesconto", requireMarkupAuth, async (req, res) => {
 });
 
 app.post(
-  "/markup/calcularMarkupMultiplicador",
-  requireMarkupAuth,
-  async (req, res) => {
-    try {
-      const fetch = (await import("node-fetch")).default;
-      const response = await fetch(
-        `${API_URL}/api/markup/calcularMarkupMultiplicador`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(req.body),
-        },
-      );
-      const data = await response.json();
-      res.json(data);
-    } catch (err) {
-      res.status(400).json({ success: false, error: err.message });
-    }
-  },
+    "/markup/calcularMarkupMultiplicador",
+    requireMarkupAuth,
+    async (req, res) => {
+      try {
+        const fetch = (await import("node-fetch")).default;
+        const response = await fetch(
+            `${API_URL}/api/markup/calcularMarkupMultiplicador`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(req.body),
+            },
+        );
+        const data = await response.json();
+        res.json(data);
+      } catch (err) {
+        res.status(400).json({ success: false, error: err.message });
+      }
+    },
 );
+
+
+
+
+
+// ============================================================
+// OCL — Time 5 — Calculadora de custo de produção de óculos
+// ============================================================
+
+function requireOclAuth(req, res, next) {
+  if (req.session && req.session.oclUser) return next();
+  res.redirect("/ocl/login");
+}
+
+app.get("/ocl", (req, res) => {
+  res.render("ocl/splash");
+});
+
+app.get("/ocl/login", (req, res) => {
+  if (req.session.oclUser) return res.redirect("/ocl/calculo");
+  res.render("ocl/login", { error: null });
+});
+
+app.post("/ocl/login", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.render("ocl/login", { error: "Preencha todos os campos" });
+  }
+  if (username === "admin" && password === "admin") {
+    req.session.oclUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/ocl/calculo");
+  }
+  res.render("ocl/login", { error: "Usuário ou senha inválidos" });
+});
+
+app.get("/ocl/logout", (req, res) => {
+  req.session.oclUser = null;
+  res.redirect("/ocl/login");
+});
+
+app.get("/ocl/calculo", requireOclAuth, (req, res) => {
+  res.render("ocl/calculo", { user: req.session.oclUser });
+});
+
+app.get("/ocl/sobre", requireOclAuth, (req, res) => {
+  res.render("ocl/sobre", { user: req.session.oclUser });
+});
+
+app.get("/ocl/help", requireOclAuth, (req, res) => {
+  res.render("ocl/help", { user: req.session.oclUser });
+});
+
+app.post("/ocl/calcular", requireOclAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/ocl/custoTotal`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
@@ -976,34 +1091,6 @@ for (let i = 5; i <= 20; i++) {
   });
 }
 
-// -- Time_11(ETEC) - Encargos Trabalhistas Empregada Doméstica --
-app.get("/ETEC11", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
-});
-app.get("/ETEC11/*path", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
-});
-
-const ETEC11_ROTAS = ['salario', 'ferias', 'decimo-terceiro', 'rescisao'];
-ETEC11_ROTAS.forEach(rota => {
-  app.post(`/ETEC11/calcular/${rota}`, async (req, res) => {
-    try {
-      const fetch = (await import('node-fetch')).default;
-      const response = await fetch(`${API_URL}/ETEC11/${rota}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body),
-      });
-      const data = await response.json();
-      res.status(response.status).json(data);
-    } catch (err) {
-      res.status(400).json({ success: false, erro: err.message });
-    }
-  });
-});
-
-
-// ajuste 1
 app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
