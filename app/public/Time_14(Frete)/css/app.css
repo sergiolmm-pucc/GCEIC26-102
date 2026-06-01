@@ -223,6 +223,7 @@ textarea {
 .panel-raised {
   z-index: 2;
   box-shadow: var(--shadow-mid);
+  position: relative;
 }
 
 .panel-strong {
@@ -262,6 +263,7 @@ textarea {
 .hero-grid {
   grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.8fr);
   align-items: end;
+  position: relative;
 }
 
 .split-layout {
@@ -294,18 +296,16 @@ textarea {
 .hero-art {
   min-height: 18rem;
   padding: 1rem;
-  background:
-    linear-gradient(180deg, rgba(198, 88, 54, 0.18), rgba(233, 143, 55, 0.08)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
-  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .hero-art img {
-  width: 100%;
+  /* width: 175%;
   max-width: 32rem;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18)); */
+  position: absolute;
+  height: 100%;
 }
 
 .eyebrow {
