@@ -1,6 +1,8 @@
 console.log("Iniciando...");
 console.log("Deu certo");
 
+// funcionando
+
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
