@@ -25,6 +25,7 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
 app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
@@ -454,7 +455,6 @@ app.get("/cdd", (req, res) => {
 });
 
 // -- Time 17 (Livro Caixa Rural) --
-app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
 app.get('/livro-caixa', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
 });
