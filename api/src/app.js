@@ -17,9 +17,11 @@ const dasn = require("./Time_8(DASN)/dasn");
 const idpj = require("./Time_12(IDPJ)/idpj.route");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
+const tripRoutes = require('./Time_1(trip)/routes/tripRoutes');
 const freteRoutes = require("./Time_14(Frete)/frete.routes");
 const susRoutes = require('./Time_16(SUS)/susRoutes');
 const livrocaixa = require("./Time_17_LivroCaixa/livrocaixa");
+
 
 const app = express();
 
@@ -49,6 +51,8 @@ app.get("/api/tabelas", (req, res) => {
   });
 });
 
+// Rotas TRIP
+app.use('/api/v1/trip', tripRoutes);
 // POST /api/calcular
 app.post("/api/calcular", (req, res) => {
   try {

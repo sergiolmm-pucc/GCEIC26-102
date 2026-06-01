@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo TRIP</title>
+    <style>
+        /* Estilos Globais baseados no objeto styles do React */
+        .trip-container { 
+            padding: 20px; 
+            font-family: Arial, sans-serif; 
+            width: 100%; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            box-sizing: border-box;
+        }
+        .trip-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .trip-btn { padding: 8px 12px; cursor: pointer; background: #007bff; color: #fff; border: none; border-radius: 4px; font-weight: bold; }
+        .trip-btn-danger { background: #dc3545; }
+        .trip-btn-success { background: #28a745; width: 100%; padding: 12px; margin-top: 10px; }
+        .trip-input { display: block; width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        /* Classes utilitárias para gerenciar visibilidade das telas */
+        .screen { display: none; }
+        .screen.active { display: block; }
+    </style>
+</head>
+<body style="background-color: #f0f2f5; padding-top: 40px;">
+
+    <div class="trip-container">
+
+        <div id="screen-splash" class="screen active" style="text-align: center; padding: 60px 20px;">
+            <h1 style="font-size: '3rem'; color: #007bff; margin: 0 0 10px 0;">TRIP ✨</h1>
+            <p style="margin: 0 0 20px 0; color: #555;">Travel Routing & Cost Predictor</p>
+            <p style="color: #888; font-size: 14px;">Carregando módulo...</p>
+        </div>
+
+        <div id="screen-login" class="screen">
+            <h2 style="margin-top: 0;">Login - Módulo TRIP</h2>
+            <form id="loginForm">
+                <input class="trip-input" id="loginUsername" type="text" placeholder="Usuário (admin)" required />
+                <input class="trip-input" id="loginPassword" type="password" placeholder="Senha (1234)" required />
+                <button class="trip-btn" style="width: 100%; padding: 12px;" type="submit">Entrar</button>
+            </form>
+        </div>
+
+        <nav id="trip-main-nav" class="screen">
+            <div class="trip-nav">
+                <button class="trip-btn" onclick="navigateTo('dashboard')">Calculadora</button>
+                <button class="trip-btn" onclick="navigateTo('about')">Sobre a Equipe</button>
+                <button class="trip-btn" onclick="navigateTo('help')">Ajuda</button>
+                <button class="trip-btn trip-btn-danger" onclick="logout()">Sair</button>
+            </div>
+        </nav>
+
+        <div id="screen-dashboard" class="screen">
+            <h3 style="margin-top: 0;">📍 Planejar Nova Viagem</h3>
+            <form id="calcForm">
+                <input class="trip-input" type="text" placeholder="Origem" required />
+                <input class="trip-input" type="text" placeholder="Destino" required />
+                <input class="trip-input" id="km" type="number" placeholder="Distância (Km)" required />
+                <input class="trip-input" id="autonomy" type="number" placeholder="Consumo do Carro (Km/L)" required />
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="font-size: 12px; color: #666;">Preço Gasolina (R$)</label>
+                        <input class="trip-input" id="gasPrice" type="number" step="0.01" value="5.50" required />
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; color: #666;">Preço Álcool (R$)</label>
+                        <input class="trip-input" id="alcPrice" type="number" step="0.01" value="3.80" required />
+                    </div>
+                </div>
+
+                <button class="trip-btn trip-btn-success" type="submit">Calcular Custos</button>
+            </form>
+
+            <div id="results-box" style="display: none; margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; border-left: 5px solid #28a745; color: #212529;">
+                <h4 style="margin-top: 0; color: #212529;">📊 Resumo da Viagem:</h4>
+                <p style="color: #212529;">⛽ <b>Combustível Necessário:</b> <span id="res-liters">0</span> L</p>
+                <p style="color: #212529;">💵 <b>Gasto Gasolina:</b> R$ <span id="res-gasCost">0.00</span></p>
+                <p style="color: #212529;">🌱 <b>Gasto Álcool:</b> R$ <span id="res-alcCost">0.00</span></p>
+                <p style="color: #212529;">🛣️ <b>Pedágios:</b> <span id="res-tolls">0</span> passagens (Total: R$ <span id="res-tollCost">0.00</span>)</p>
+                <p style="color: #212529;">⏱️ <b>Tempo Estimado:</b> <span id="res-time">-</span></p>
+            </div>
+        </div>
+
+        <div id="screen-about" class="screen">
+            <h3 style="margin-top: 0; color: #212529; text-align: center; margin-bottom: 20px;">👥 Nossa Equipe</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 10px;">
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center; border: 1px solid #eee;">
+                    <img src="/public/trip/0c7e0bac-b672-4d43-bcbb-c3bbfad57452.jpg" alt="Foto do Paulo Cesar" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #007bff;" />
+                    <h4 style="margin: 5px 0; color: #212529; font-size: 15px;">Paulo Cesar</h4>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Desenvolvedor Backend</p>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center; border: 1px solid #eee;">
+                    <img src="/public/trip/6ccdeaa2-345d-4119-abd8-2ac30ac79d99.jpg" alt="Foto do Pedro Henrique" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #007bff;" />
+                    <h4 style="margin: 5px 0; color: #212529; font-size: 15px;">Pedro Henrique</h4>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Desenvolvedor Frontend</p>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center; border: 1px solid #eee;">
+                    <img src="/public/trip/eff0b287-0e77-4c79-923e-8318813d15df.jpg" alt="Foto do Kaio Burilli" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #007bff;" />
+                    <h4 style="margin: 5px 0; color: #212529; font-size: 15px;">Kaio Burilli</h4>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Gerente de Testes / QA</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="screen-help" class="screen">
+            <h3 style="margin-top: 0;">💡 Central de Ajuda</h3>
+            <p><b>Como funciona o cálculo de pedágios?</b></p>
+            <p style="color: #555; font-size: 14px;">O sistema estima automaticamente um pedágio fixo a cada 80km rodados baseado nas rotas da API.</p>
+            <p><b>Por que o valor do álcool é diferente?</b></p>
+            <p style="color: #555; font-size: 14px;">O cálculo leva em conta o coeficiente de rendimento energético do etanol (70%) comparado ao da gasolina.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Splash Screen Timeout (Equivalente ao useEffect do React)
+        setTimeout(() => {
+            navigateTo('login');
+        }, 2500);
+
+        // Função genérica para alternar as telas visibles
+        function navigateTo(targetScreen) {
+            // Oculta todas as telas
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            
+            // Gerencia o menu de navegação superior
+            const mainNav = document.getElementById('trip-main-nav');
+            if (targetScreen === 'splash' || targetScreen === 'login') {
+                mainNav.classList.remove('active');
+            } else {
+                mainNav.classList.add('active');
+            }
+
+            // Ativa a tela solicitada
+            document.getElementById('screen-' + targetScreen).classList.add('active');
+        }
+
+        // 2. Manipulação de Login Fixo
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUsername').value;
+            const pass = document.getElementById('loginPassword').value;
+
+            if (user === 'admin' && pass === '1234') {
+                navigateTo('dashboard');
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        });
+
+        // 3. Integração com a sua API Node.js utilizando Promise.all
+        document.getElementById('calcForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const API_URL = '/api/v1/trip'; // Usando rota relativa ou 'http://localhost:3000/api/v1/trip'
+            
+            const km = parseFloat(document.getElementById('km').value);
+            const autonomy = parseFloat(document.getElementById('autonomy').value);
+            const gasPrice = parseFloat(document.getElementById('gasPrice').value);
+            const alcPrice = parseFloat(document.getElementById('alcPrice').value);
+
+            try {
+                // Executa as chamadas em paralelo exatamente como no React
+                const [resCost, resTolls, resTime] = await Promise.all([
+                    fetch(`${API_URL}/cost`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ distanceKm: km, autonomyKmL: autonomy, priceGasoline: gasPrice, priceAlcohol: alcPrice })
+                    }),
+                    fetch(`${API_URL}/tolls`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ distanceKm: km })
+                    }),
+                    fetch(`${API_URL}/time`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ distanceKm: km, averageSpeedKmH: 90 })
+                    })
+                ]);
+
+                if (!resCost.ok || !resTolls.ok || !resTime.ok) {
+                    throw new Error('Erro ao processar dados no servidor.');
+                }
+
+                const dataCost = await resCost.json();
+                const dataTolls = await resTolls.json();
+                const dataTime = await resTime.json();
+
+                // Atualiza o DOM com os resultados retornados
+                document.getElementById('res-liters').innerText = dataCost.litersNeeded;
+                document.getElementById('res-gasCost').innerText = dataCost.costGasoline.toFixed(2);
+                document.getElementById('res-alcCost').innerText = dataCost.costAlcohol.toFixed(2);
+                document.getElementById('res-tolls').innerText = dataTolls.tollCount;
+                document.getElementById('res-tollCost').innerText = dataTolls.totalTollCost.toFixed(2);
+                document.getElementById('res-time').innerText = dataTime.formattedTime;
+
+                // Mostra a caixa de resultados
+                document.getElementById('results-box').style.display = 'block';
+
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        // Fluxo de Saída
+        function logout() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('calcForm').reset();
+            document.getElementById('results-box').style.display = 'none';
+            navigateTo('login');
+        }
+    </script>
+</body>
+</html>
