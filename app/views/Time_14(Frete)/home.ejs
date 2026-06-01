@@ -6,54 +6,111 @@
 
   <title>FastFrete | Home</title>
 
-  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
-  <link rel="stylesheet" href="/Time_14(Frete)/css/home.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
 </head>
-<body class="app-page">
-  <header class="app-header">
-    <div class="brand-area">
-      <div class="brand-icon">🚚</div>
-      <div>
-        <h1>FastFrete</h1>
-        <p>Sistema de cálculo de frete</p>
-      </div>
-    </div>
-
-    <nav class="app-nav">
-      <a href="/frete/home" class="nav-link active">Home</a>
-      <a href="/frete/calcular" class="nav-link">Calcular</a>
-      <a href="/frete/about" class="nav-link">Sobre</a>
-      <a href="/frete/help" class="nav-link">Help</a>
-      <a href="/frete/logout" class="nav-link logout">Sair</a>
-    </nav>
-  </header>
-
-  <main class="home-main">
-    <section class="hero-card hero-card-centered">
-      <div class="hero-content">
-        <p class="hero-label">Bem-vindo, <%= user.nome %></p>
-
-        <h2>Calcule o valor do frete de forma rápida e objetiva.</h2>
-
-        <p>
-          Informe dimensões, peso, distância, tipo de entrega, valor declarado,
-          importação e seguro para obter uma cotação completa.
-        </p>
-
-        <div class="hero-actions hero-actions-featured">
-          <a href="/frete/calcular" class="calculate-button">
-            Calcular frete agora
-          </a>
-
-          <a href="/frete/help" class="secondary-button link-button">
-            Ver ajuda
-          </a>
+<body class="app-shell">
+  <header class="site-header">
+    <div class="shell cluster cluster-between">
+      <div class="cluster">
+        <div class="brand-mark">🚚</div>
+        <div class="brand-copy stack-xs">
+          <h1>FastFrete</h1>
+          <p>Sistema de cálculo de frete</p>
         </div>
       </div>
 
-      <div class="hero-illustration">
-        📦
+      <nav class="nav-row">
+        <a href="/frete/home" class="nav-link active">Home</a>
+        <a href="/frete/calcular" class="nav-link">Calcular</a>
+        <a href="/frete/about" class="nav-link">Sobre</a>
+        <a href="/frete/help" class="nav-link">Help</a>
+        <a href="/frete/logout" class="nav-link logout">Sair</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell page-flow">
+    <section class="panel panel-strong panel-raised pad-xl">
+      <div class="hero-grid">
+        <div class="stack-lg">
+          <p class="eyebrow">Bem-vindo, <%= user.nome %></p>
+          <div class="stack-md">
+            <h2 class="hero-title">Cote o frete com clareza, ritmo e contexto.</h2>
+            <p class="panel-copy">
+              O FastFrete reúne dimensões, distância, peso faturado, importação e
+              seguro em uma única experiência. Menos ruído visual, mais decisão.
+            </p>
+          </div>
+
+          <div class="hero-actions">
+            <a href="/frete/calcular" class="btn btn-primary">Calcular frete agora</a>
+            <a href="/frete/help" class="btn btn-ghost">Ver metodologia</a>
+          </div>
+        </div>
+
+        <div class="hero-art">📦</div>
       </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="metric-card stack-sm">
+        <span class="metric-label">Fluxo</span>
+        <strong class="metric-value">3 etapas</strong>
+        <p class="support-copy">Preencha, confira o cálculo e ajuste a estratégia de envio.</p>
+      </article>
+
+      <article class="metric-card stack-sm">
+        <span class="metric-label">Variáveis</span>
+        <strong class="metric-value">8 entradas</strong>
+        <p class="support-copy">Dimensões, peso, distância, tipo, valor declarado, importação e seguro.</p>
+      </article>
+
+      <article class="metric-card stack-sm">
+        <span class="metric-label">Resultado</span>
+        <strong class="metric-value">Cotação final</strong>
+        <p class="support-copy">Peso cubado, peso faturado, valor base e taxas extras detalhadas.</p>
+      </article>
+    </section>
+
+    <section class="split-layout">
+      <article class="panel panel-soft pad-lg stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Visão geral</p>
+          <h3 class="section-title">Uma interface pensada para operação rápida.</h3>
+          <p class="panel-copy">
+            A aplicação prioriza leitura em blocos largos, hierarquia forte e ações
+            com contraste suficiente para uso contínuo sem fadiga visual.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          <article class="info-card stack-sm">
+            <strong>Painel direto</strong>
+            <p class="support-copy">O cálculo principal fica no centro da navegação.</p>
+          </article>
+          <article class="info-card stack-sm">
+            <strong>Ajuda objetiva</strong>
+            <p class="support-copy">A tela de help explica o racional antes da cotação.</p>
+          </article>
+          <article class="info-card stack-sm">
+            <strong>Leitura limpa</strong>
+            <p class="support-copy">Espaçamento amplo e superfícies retas sem ruído decorativo.</p>
+          </article>
+        </div>
+      </article>
+
+      <aside class="panel panel-accent panel-raised pad-lg stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Acesso rápido</p>
+          <h3 class="panel-title">Escolha o próximo passo</h3>
+        </div>
+
+        <div class="stack-md">
+          <a href="/frete/calcular" class="btn btn-primary">Abrir calculadora</a>
+          <a href="/frete/about" class="btn btn-secondary">Conhecer o projeto</a>
+          <a href="/frete/help" class="btn btn-secondary">Ler as regras do cálculo</a>
+        </div>
+      </aside>
     </section>
   </main>
 </body>

@@ -6,104 +6,110 @@
 
   <title>FastFrete | Sobre</title>
 
-  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
-  <link rel="stylesheet" href="/Time_14(Frete)/css/about.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
 </head>
-<body class="app-page">
-  <header class="app-header">
-    <div class="brand-area">
-      <div class="brand-icon">🚚</div>
-      <div>
-        <h1>FastFrete</h1>
-        <p>Sistema de cálculo de frete</p>
+<body class="app-shell">
+  <header class="site-header">
+    <div class="shell cluster cluster-between">
+      <div class="cluster">
+        <div class="brand-mark">🚚</div>
+        <div class="brand-copy stack-xs">
+          <h1>FastFrete</h1>
+          <p>Sistema de cálculo de frete</p>
+        </div>
       </div>
-    </div>
 
-    <nav class="app-nav">
-      <a href="/frete/home" class="nav-link">Home</a>
-      <a href="/frete/calcular" class="nav-link">Calcular</a>
-      <a href="/frete/about" class="nav-link active">Sobre</a>
-      <a href="/frete/help" class="nav-link">Help</a>
-      <a href="/frete/logout" class="nav-link logout">Sair</a>
-    </nav>
+      <nav class="nav-row">
+        <a href="/frete/home" class="nav-link">Home</a>
+        <a href="/frete/calcular" class="nav-link">Calcular</a>
+        <a href="/frete/about" class="nav-link active">Sobre</a>
+        <a href="/frete/help" class="nav-link">Help</a>
+        <a href="/frete/logout" class="nav-link logout">Sair</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="about-main">
-    <section class="about-hero">
-      <div>
-        <p class="page-label">Sobre o projeto</p>
-        <h2>FastFrete</h2>
-        <p>
-          Aplicação web desenvolvida para cálculo de frete, considerando dimensões
-          da encomenda, peso real, peso cubado, distância, tipo de entrega, valor
-          declarado, taxa de importação e seguro opcional.
-        </p>
-      </div>
+  <main class="shell page-flow">
+    <section class="panel panel-strong pad-xl">
+      <div class="hero-grid">
+        <div class="stack-lg">
+          <p class="eyebrow">Sobre o projeto</p>
+          <div class="stack-md">
+            <h2 class="hero-title">FastFrete</h2>
+            <p class="panel-copy">
+              Aplicação web para cálculo de frete com foco em leitura objetiva,
+              decomposição do preço final e navegação direta entre autenticação,
+              cotação, documentação e contexto do time.
+            </p>
+          </div>
+        </div>
 
-      <div class="about-badge">
-        Time 14
+        <div class="badge-block">Time 14</div>
       </div>
     </section>
 
-    <section class="about-content">
-      <article class="photo-card">
+    <section class="split-layout">
+      <article class="panel panel-raised pad-lg">
         <img
-            src="/Time_14(Frete)/img/equipe.jpg"
-            alt="Foto da equipe Time 14"
-            class="team-photo"
+          src="/Time_14(Frete)/img/equipe.jpg"
+          alt="Foto da equipe Time 14"
+          class="team-photo"
         />
       </article>
 
-      <article class="project-card">
-        <h3>Informações do trabalho</h3>
+      <article class="panel panel-soft pad-lg stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Informações do trabalho</p>
+          <h3 class="panel-title">Disciplina e entrega</h3>
+        </div>
 
-        <p class="project-title">
+        <p class="formula-box">
           Disciplina de Gerência de Configuração, Entrega e Integração Contínua
         </p>
 
-        <div class="project-info-grid">
-          <div class="project-info-item">
-            <span>Curso</span>
+        <div class="info-grid">
+          <div class="info-card stack-xs">
+            <span class="metric-label">Curso</span>
             <strong>Engenharia de Software</strong>
           </div>
 
-          <div class="project-info-item">
-            <span>Ano</span>
+          <div class="info-card stack-xs">
+            <span class="metric-label">Ano</span>
             <strong>2026</strong>
           </div>
 
-          <div class="project-info-item">
-            <span>Turma</span>
+          <div class="info-card stack-xs">
+            <span class="metric-label">Turma</span>
             <strong>102</strong>
           </div>
 
-          <div class="project-info-item">
-            <span>Equipe</span>
+          <div class="info-card stack-xs">
+            <span class="metric-label">Equipe</span>
             <strong>Time 14</strong>
           </div>
 
-          <div class="project-info-item">
-            <span>Aplicação</span>
+          <div class="info-card stack-xs">
+            <span class="metric-label">Aplicação</span>
             <strong>FastFrete</strong>
           </div>
 
-          <div class="project-info-item">
-            <span>Tema</span>
+          <div class="info-card stack-xs">
+            <span class="metric-label">Tema</span>
             <strong>Cálculo de frete</strong>
           </div>
         </div>
 
-        <div class="members-section">
-          <h4>Integrantes</h4>
+        <div class="notice-box">
+          <h4 class="panel-title">Integrantes</h4>
 
-          <ul class="members-list">
+          <ul class="list-clean">
             <li>Raphael Fernandes de Sellos Moreira</li>
             <li>Caio Ribeiro Abrahão</li>
             <li>João Vitor Roventini</li>
           </ul>
         </div>
 
-        <p class="project-description">
+        <p class="panel-copy">
           O projeto foi desenvolvido com separação entre a API de cálculo e o app
           web. A API concentra as regras de negócio do frete, enquanto a interface
           web permite ao usuário navegar pelas telas, autenticar-se e realizar

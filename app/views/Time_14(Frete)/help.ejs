@@ -6,43 +6,44 @@
 
   <title>FastFrete | Help</title>
 
-  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
-  <link rel="stylesheet" href="/Time_14(Frete)/css/help.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
 </head>
-<body class="app-page">
-  <header class="app-header">
-    <div class="brand-area">
-      <div class="brand-icon">🚚</div>
-      <div>
-        <h1>FastFrete</h1>
-        <p>Sistema de cálculo de frete</p>
+<body class="app-shell">
+  <header class="site-header">
+    <div class="shell cluster cluster-between">
+      <div class="cluster">
+        <div class="brand-mark">🚚</div>
+        <div class="brand-copy stack-xs">
+          <h1>FastFrete</h1>
+          <p>Sistema de cálculo de frete</p>
+        </div>
       </div>
-    </div>
 
-    <nav class="app-nav">
-      <a href="/frete/home" class="nav-link">Home</a>
-      <a href="/frete/calcular" class="nav-link">Calcular</a>
-      <a href="/frete/about" class="nav-link">Sobre</a>
-      <a href="/frete/help" class="nav-link active">Help</a>
-      <a href="/frete/logout" class="nav-link logout">Sair</a>
-    </nav>
+      <nav class="nav-row">
+        <a href="/frete/home" class="nav-link">Home</a>
+        <a href="/frete/calcular" class="nav-link">Calcular</a>
+        <a href="/frete/about" class="nav-link">Sobre</a>
+        <a href="/frete/help" class="nav-link active">Help</a>
+        <a href="/frete/logout" class="nav-link logout">Sair</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="help-main">
-    <section class="help-hero">
-      <p class="page-label">Central de ajuda</p>
-      <h2>Como o cálculo do frete funciona?</h2>
-      <p>
-        O FastFrete calcula a cotação usando dimensões da encomenda, peso real,
-        distância, tipo de frete, valor declarado e taxas opcionais.
+  <main class="shell page-flow">
+    <section class="panel panel-strong pad-xl stack-lg">
+      <p class="eyebrow">Central de ajuda</p>
+      <h2 class="section-title">Como o cálculo do frete funciona?</h2>
+      <p class="panel-copy">
+        O FastFrete usa dimensões da encomenda, peso real, distância, tipo de frete,
+        valor declarado e taxas opcionais para compor a cotação final.
       </p>
     </section>
 
-    <section class="help-grid">
-      <article class="help-card">
-        <span class="step-number">1</span>
+    <section class="steps-grid">
+      <article class="step-card">
+        <span class="step-index">1</span>
         <h3>Peso cubado</h3>
-        <p>
+        <p class="step-copy">
           O peso cubado estima o quanto a encomenda ocupa de espaço no transporte.
           Ele é útil porque um produto pode ser leve, mas muito volumoso.
         </p>
@@ -52,10 +53,10 @@
         </div>
       </article>
 
-      <article class="help-card">
-        <span class="step-number">2</span>
+      <article class="step-card">
+        <span class="step-index">2</span>
         <h3>Peso faturado</h3>
-        <p>
+        <p class="step-copy">
           Depois de calcular o peso cubado, o sistema compara esse valor com o peso
           real informado. O maior dos dois é usado como peso faturado.
         </p>
@@ -65,10 +66,10 @@
         </div>
       </article>
 
-      <article class="help-card">
-        <span class="step-number">3</span>
+      <article class="step-card">
+        <span class="step-index">3</span>
         <h3>Valor base</h3>
-        <p>
+        <p class="step-copy">
           O valor base considera a distância, o peso faturado e a alíquota do tipo
           de frete escolhido pelo usuário.
         </p>
@@ -78,26 +79,26 @@
         </div>
       </article>
 
-      <article class="help-card">
-        <span class="step-number">4</span>
+      <article class="step-card">
+        <span class="step-index">4</span>
         <h3>Tipo de frete</h3>
-        <p>
+        <p class="step-copy">
           Cada tipo de frete possui uma alíquota diferente. Fretes mais rápidos
           possuem alíquota maior.
         </p>
 
-        <ul class="help-list">
-          <li>Econômico: 1,5%</li>
-          <li>Normal: 2,5%</li>
-          <li>Expresso: 4%</li>
-          <li>Urgente: 6%</li>
+        <ul class="list-clean">
+          <li><span>Econômico</span><strong>1,5%</strong></li>
+          <li><span>Normal</span><strong>2,5%</strong></li>
+          <li><span>Expresso</span><strong>4%</strong></li>
+          <li><span>Urgente</span><strong>6%</strong></li>
         </ul>
       </article>
 
-      <article class="help-card">
-        <span class="step-number">5</span>
+      <article class="step-card">
+        <span class="step-index">5</span>
         <h3>Taxa de importação</h3>
-        <p>
+        <p class="step-copy">
           Se o produto for marcado como importado, o sistema aplica uma taxa
           simulada sobre o valor declarado do bem.
         </p>
@@ -107,10 +108,10 @@
         </div>
       </article>
 
-      <article class="help-card">
-        <span class="step-number">6</span>
+      <article class="step-card">
+        <span class="step-index">6</span>
         <h3>Seguro opcional</h3>
-        <p>
+        <p class="step-copy">
           Se o usuário escolher segurar o bem, o sistema aplica uma taxa adicional
           sobre o valor declarado.
         </p>
@@ -121,18 +122,18 @@
       </article>
     </section>
 
-    <section class="final-formula-card">
-      <h3>Fórmula final</h3>
-      <p>
+    <section class="panel panel-accent panel-raised pad-lg stack-lg">
+      <h3 class="panel-title">Fórmula final</h3>
+      <p class="panel-copy">
         Depois de calcular todas as etapas, o sistema soma o valor base com as
         taxas adicionais aplicáveis.
       </p>
 
-      <div class="formula-box formula-box-large">
+      <div class="formula-box">
         valorFinal = valorBase + taxaImportação + taxaSeguro
       </div>
 
-      <a href="/frete/calcular" class="calculate-button">
+      <a href="/frete/calcular" class="btn btn-primary">
         Ir para o cálculo de frete
       </a>
     </section>

@@ -6,8 +6,7 @@
 
   <title>FastFrete | Splash</title>
 
-  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
-  <link rel="stylesheet" href="/Time_14(Frete)/css/splash.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
 
   <script>
     setTimeout(() => {
@@ -15,24 +14,38 @@
     }, 2500);
   </script>
 </head>
-<body class="splash-page">
-  <main class="splash-container">
-    <section class="splash-card">
-      <div class="splash-icon">🚚</div>
+<body>
+  <main class="splash-shell">
+    <section class="splash-grid">
+      <article class="splash-panel panel panel-strong pad-xl stack-lg">
+        <div class="brand-mark">🚚</div>
+        <div class="stack-md">
+          <p class="eyebrow">Time 14</p>
+          <h1 class="splash-wordmark">FastFrete</h1>
+          <p class="panel-copy">
+            Sistema de cálculo de frete, cotação e composição transparente de taxas.
+          </p>
+        </div>
 
-      <p class="splash-label">Time 14</p>
+        <div class="kicker-row">
+          <span class="kicker-tag">Entrada rápida</span>
+          <span class="kicker-tag">Cálculo completo</span>
+          <span class="kicker-tag">Resultado claro</span>
+        </div>
+      </article>
 
-      <h1>FastFrete</h1>
+      <article class="splash-panel panel panel-accent panel-raised pad-xl stack-lg">
+        <div class="display-box">→</div>
+        <div class="stack-sm">
+          <p class="eyebrow">Inicializando</p>
+          <h2 class="panel-title">Carregando aplicação...</h2>
+          <p class="panel-copy">Você será redirecionado automaticamente para o login.</p>
+        </div>
 
-      <p class="splash-description">
-        Sistema de cálculo de frete, cotação e taxas adicionais.
-      </p>
-
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
-      </div>
-
-      <span class="loading-text">Carregando aplicação...</span>
+        <div class="loading-track">
+          <div class="loading-progress"></div>
+        </div>
+      </article>
     </section>
   </main>
 </body>

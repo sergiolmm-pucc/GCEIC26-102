@@ -6,83 +6,97 @@
 
   <title>FastFrete | Calcular Frete</title>
 
-  <link rel="stylesheet" href="/Time_14(Frete)/css/base.css" />
-  <link rel="stylesheet" href="/Time_14(Frete)/css/calcular.css" />
+  <link rel="stylesheet" href="/Time_14(Frete)/css/app.css" />
 </head>
-<body class="app-page">
-  <header class="app-header">
-    <div class="brand-area">
-      <div class="brand-icon">🚚</div>
-      <div>
-        <h1>FastFrete</h1>
-        <p>Sistema de cálculo de frete</p>
+<body class="app-shell">
+  <header class="site-header">
+    <div class="shell cluster cluster-between">
+      <div class="cluster">
+        <div class="brand-mark">🚚</div>
+        <div class="brand-copy stack-xs">
+          <h1>FastFrete</h1>
+          <p>Sistema de cálculo de frete</p>
+        </div>
       </div>
-    </div>
 
-    <nav class="app-nav">
-      <a href="/frete/home" class="nav-link">Home</a>
-      <a href="/frete/calcular" class="nav-link active">Calcular</a>
-      <a href="/frete/about" class="nav-link">Sobre</a>
-      <a href="/frete/help" class="nav-link">Help</a>
-      <a href="/frete/logout" class="nav-link logout">Sair</a>
-    </nav>
+      <nav class="nav-row">
+        <a href="/frete/home" class="nav-link">Home</a>
+        <a href="/frete/calcular" class="nav-link active">Calcular</a>
+        <a href="/frete/about" class="nav-link">Sobre</a>
+        <a href="/frete/help" class="nav-link">Help</a>
+        <a href="/frete/logout" class="nav-link logout">Sair</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="calcular-main">
-    <section class="calcular-hero">
-      <div>
-        <p class="page-label">Cotação de frete</p>
-        <h2>Calcule o valor final do frete</h2>
-        <p>
-          Informe os dados da encomenda para calcular peso cubado, peso faturado,
-          valor base, taxa de importação, seguro e valor final.
-        </p>
+  <main class="shell page-flow">
+    <section class="panel panel-strong pad-xl stack-lg">
+      <p class="eyebrow">Cotação de frete</p>
+      <div class="split-layout">
+        <div class="stack-md">
+          <h2 class="section-title">Calcule o valor final com peso, taxa e contexto operacional.</h2>
+          <p class="panel-copy">
+            Informe as dimensões da encomenda, o valor declarado e o modelo de entrega.
+            O resultado mostra cada componente da cotação, sem esconder nenhuma etapa.
+          </p>
+        </div>
+
+        <div class="notice-box">
+          <div class="kicker-row">
+            <span class="kicker-tag">Peso cubado</span>
+            <span class="kicker-tag">Taxas opcionais</span>
+            <span class="kicker-tag">Valor final</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="calcular-layout">
-      <article class="form-card">
-        <h3>Dados da encomenda</h3>
+    <section class="split-layout">
+      <article class="panel pad-lg stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Entrada</p>
+          <h3 class="panel-title">Dados da encomenda</h3>
+        </div>
 
         <% if (error) { %>
-          <div class="alert-error">
+          <div class="alert">
             <%= error %>
           </div>
         <% } %>
 
-        <form id="freteForm" class="frete-form">
+        <form id="freteForm" class="stack-lg">
           <div class="form-grid">
-            <div class="form-group">
+            <div class="field">
               <label for="comprimento">Comprimento (cm)</label>
               <input type="number" id="comprimento" name="comprimento" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group">
+            <div class="field">
               <label for="largura">Largura (cm)</label>
               <input type="number" id="largura" name="largura" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group">
+            <div class="field">
               <label for="altura">Altura (cm)</label>
               <input type="number" id="altura" name="altura" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group">
+            <div class="field">
               <label for="pesoReal">Peso real (kg)</label>
               <input type="number" id="pesoReal" name="pesoReal" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group">
+            <div class="field">
               <label for="distanciaKm">Distância (km)</label>
               <input type="number" id="distanciaKm" name="distanciaKm" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group">
+            <div class="field">
               <label for="valorDeclarado">Valor declarado (R$)</label>
               <input type="number" id="valorDeclarado" name="valorDeclarado" step="0.01" min="0" required />
             </div>
 
-            <div class="form-group form-group-full">
+            <div class="field field-full">
               <label for="tipoFrete">Tipo de frete</label>
               <select id="tipoFrete" name="tipoFrete" required>
                 <option value="">Selecione uma opção</option>
@@ -97,72 +111,76 @@
             </div>
           </div>
 
-          <div class="checkbox-area">
-            <label class="checkbox-card">
+          <div class="check-grid">
+            <label class="option-card">
               <input type="checkbox" id="importado" name="importado" />
-              <span>
+              <span class="stack-xs">
                 <strong>Produto importado</strong>
-                <small>Aplica taxa de importação sobre o valor declarado.</small>
+                <small class="field-help">Aplica taxa de importação sobre o valor declarado.</small>
               </span>
             </label>
 
-            <label class="checkbox-card">
+            <label class="option-card">
               <input type="checkbox" id="segurado" name="segurado" />
-              <span>
+              <span class="stack-xs">
                 <strong>Adicionar seguro</strong>
-                <small>Aplica taxa de seguro sobre o valor declarado.</small>
+                <small class="field-help">Aplica taxa de seguro sobre o valor declarado.</small>
               </span>
             </label>
           </div>
 
-          <button type="submit" class="calculate-button form-submit-button">
-            Calcular frete
-          </button>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Calcular frete</button>
+            <a href="/frete/help" class="btn btn-secondary">Consultar metodologia</a>
+          </div>
         </form>
       </article>
 
-      <aside class="result-card">
-        <h3>Resultado da cotação</h3>
-
-        <div id="emptyState" class="empty-state">
-          <div>📦</div>
-          <p>Preencha o formulário para visualizar o resultado do cálculo.</p>
+      <aside class="panel panel-soft panel-raised pad-lg sticky-panel stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Saída</p>
+          <h3 class="panel-title">Resultado da cotação</h3>
         </div>
 
-        <div id="loadingState" class="loading-state hidden">
+        <div id="emptyState" class="status-card stack-sm" data-tone="empty">
+          <div class="status-card-illustration">📦</div>
+          <p>Preencha o formulário para visualizar o resultado completo do cálculo.</p>
+        </div>
+
+        <div id="loadingState" class="status-card hidden" data-tone="loading">
           Calculando frete...
         </div>
 
-        <div id="errorState" class="result-error hidden"></div>
+        <div id="errorState" class="status-card hidden" data-tone="error"></div>
 
-        <div id="resultState" class="result-state hidden">
+        <div id="resultState" class="result-stack hidden">
           <div class="result-row">
-            <span>Peso cubado</span>
+            <span class="result-label">Peso cubado</span>
             <strong id="pesoCubado">-</strong>
           </div>
 
           <div class="result-row">
-            <span>Peso faturado</span>
+            <span class="result-label">Peso faturado</span>
             <strong id="pesoFaturado">-</strong>
           </div>
 
           <div class="result-row">
-            <span>Valor base</span>
+            <span class="result-label">Valor base</span>
             <strong id="valorBase">-</strong>
           </div>
 
           <div class="result-row">
-            <span>Taxa de importação</span>
+            <span class="result-label">Taxa de importação</span>
             <strong id="taxaImportacao">-</strong>
           </div>
 
           <div class="result-row">
-            <span>Taxa de seguro</span>
+            <span class="result-label">Taxa de seguro</span>
             <strong id="taxaSeguro">-</strong>
           </div>
 
           <div class="result-total">
-            <span>Valor final</span>
+            <span class="result-label">Valor final</span>
             <strong id="valorFinal">-</strong>
           </div>
         </div>
