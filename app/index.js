@@ -48,7 +48,7 @@ const equipes = [
   { numero: 9, nome: "Equipe-9", rota: "/equipe-9" },
   { numero: 10, nome: "CalcPiscina", rota: "/piscina" },
   { numero: 11, nome: 'ETEC - Doméstica', rota: '/ETEC11' },
-  { numero: 12, nome: "Equipe-12", rota: "/equipe-12" },
+  { numero: 12, nome: "IDPJ", rota: "/IDPJ" },
   { numero: 13, nome: "FLP", rota: "/flp" },
   { numero: 14, nome: "Equipe-14", rota: "/equipe-14" },
   { numero: 15, nome: "MKP", rota: "/MKP" },
@@ -839,6 +839,53 @@ app.post("/DASN/:rota", requireAuthDASN, async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// -- Time_12 IDPJ --
+function requireAuthIDPJ(req, res, next) {
+  if (req.session && req.session.idpjUser) return next();
+  res.redirect("/IDPJ/login");
+}
+
+app.get("/IDPJ", (req, res) => res.render("Time_12(IDPJ)/splash"));
+app.get("/IDPJ/login", (req, res) => {
+  if (req.session.idpjUser) return res.redirect("/IDPJ/calculo");
+  res.render("Time_12(IDPJ)/login", { erro: null });
+});
+app.post("/IDPJ/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "1234") {
+    req.session.idpjUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/IDPJ/calculo");
+  }
+  res.render("Time_12(IDPJ)/login", { erro: "Usuario ou senha invalidos." });
+});
+app.get("/IDPJ/calculo", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/calculo", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/sobre", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/sobre", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/help", requireAuthIDPJ, (req, res) =>
+  res.render("Time_12(IDPJ)/help", { user: req.session.idpjUser }),
+);
+app.get("/IDPJ/logout", (req, res) => {
+  req.session.idpjUser = null;
+  res.redirect("/IDPJ/login");
+});
+app.post("/IDPJ/:rota", requireAuthIDPJ, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/IDPJ/${req.params.rota}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    res.status(400).json({ success: false, erro: err.message });
   }
 });
 
