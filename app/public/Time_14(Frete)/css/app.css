@@ -117,10 +117,21 @@ textarea {
   aspect-ratio: 1;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--mojo), var(--fire-bush));
-  color: var(--paper);
-  font-size: 1.8rem;
+  padding: 0.32rem;
+  background: rgba(255, 253, 250, 0.9);
+  border: 1px solid rgba(34, 53, 57, 0.12);
   box-shadow: var(--shadow-mid);
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.panel-strong .brand-mark {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .brand-copy h1,
@@ -137,8 +148,11 @@ textarea {
   font-size: clamp(1.4rem, 2vw, 1.8rem);
 }
 
+.metric-label {
+  color: var(--outer-space);
+}
+
 .brand-copy p,
-.metric-label,
 .eyebrow,
 .support-copy,
 .field-help,
@@ -279,11 +293,19 @@ textarea {
 
 .hero-art {
   min-height: 18rem;
+  padding: 1rem;
   background:
     linear-gradient(180deg, rgba(198, 88, 54, 0.18), rgba(233, 143, 55, 0.08)),
     linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
   border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: clamp(4rem, 10vw, 7rem);
+}
+
+.hero-art img {
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
 }
 
 .eyebrow {
@@ -307,7 +329,6 @@ textarea {
 .panel-strong .eyebrow,
 .panel-strong .panel-copy,
 .panel-strong .support-copy,
-.panel-strong .metric-label,
 .panel-strong .hint-box,
 .panel-strong .list-clean,
 .panel-strong .status-card,
@@ -520,6 +541,7 @@ textarea {
   gap: 1rem;
   padding-bottom: 0.7rem;
   border-bottom: 1px solid rgba(34, 53, 57, 0.08);
+  color: var(--outer-space);
 }
 
 .list-clean li:last-child {
@@ -724,9 +746,17 @@ textarea {
 .kicker-tag {
   min-height: 2.4rem;
   padding: 0.65rem 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 248, 245, 0.86);
+  border: 1px solid rgba(198, 88, 54, 0.24);
+  background: rgba(228, 208, 209, 0.5);
+  color: var(--outer-space);
+  box-shadow: var(--shadow-low);
+}
+
+.panel-strong .kicker-tag {
+  border-color: rgba(34, 53, 57, 0.22);
+  background: rgba(34, 53, 57, 0.12);
+  color: var(--outer-space);
+  
 }
 
 .loading-track {
