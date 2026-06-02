@@ -11,8 +11,6 @@ const { calcularFolha } = require("./flpFuncoes");
 
 console.log("API_URL do env:", process.env.API_URL);
 const app = express();
-const crypto = require('crypto');
-app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "http://localhost:3001";
 
@@ -29,35 +27,6 @@ app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
 app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api/v1/trip', async (req, res) => {
-  try {
-    const fetch = globalThis.fetch || (await import('node-fetch')).default;
-    const backendUrl = `${API_URL}${req.originalUrl}`;
-    const headers = { ...req.headers };
-    delete headers.host;
-
-    const opts = {
-      method: req.method,
-      headers,
-    };
-
-    if (!['GET', 'HEAD'].includes(req.method)) {
-      // Se o body já foi parseado (JSON), reenvia como JSON
-      opts.body = req.body && Object.keys(req.body).length ? JSON.stringify(req.body) : undefined;
-    }
-
-    const response = await fetch(backendUrl, opts);
-
-    // Repassa headers e status
-    response.headers.forEach((value, key) => res.setHeader(key, value));
-    res.status(response.status);
-    const responseBody = await response.text();
-    return res.send(responseBody);
-  } catch (error) {
-    console.error('Erro ao proxy para API Trip:', error);
-    return res.status(502).json({ error: 'Erro ao conectar com o backend Trip.' });
-  }
-});
 app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
 app.use( 
   session({
@@ -87,7 +56,7 @@ const equipes = [
   { numero: 16, nome: "Sustentabilidade", rota: "/sus" },
   { numero: 17, nome: "Livro-Caixa-Rural", rota: "/livrocaixa" },
   { numero: 18, nome: "Markup", rota: "/markup" },
-  { numero: 19, nome: "Equipe-1(TRIP)", rota: "/equipe-1" },
+  { numero: 19, nome: "Equipe-19", rota: "/equipe-19" },
   { numero: 20, nome: "Equipe-20", rota: "/equipe-20" },
 ];
 
@@ -1053,9 +1022,6 @@ app.post(
     }
   },
 );
-app.get("/equipe-1", (req, res) => {
-  res.render("Time_1(trip)/trip");
-});
 
 // Time 17 Livro Caixa
 function requireAuthLivroCaixa(req, res, next) {
@@ -1213,7 +1179,6 @@ app.get("/sus/help", requireSusAuth, (req, res) => {
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
-  if (i === 12) continue;
   app.get(`/equipe-${i}`, (req, res) => {
     console.log(`/equipe-${i}/equipe`);
     res.render(`equipe`, { numero: i, nome: `Equipe-${i}` });
