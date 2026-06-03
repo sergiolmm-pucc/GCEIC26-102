@@ -1,17 +1,18 @@
+import express from "express";
+import session from "express-session";
+import bodyParser from "body-parser";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+import { calcularFolha } from "./flpFuncoes.js";
+import crypto from 'crypto';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 console.log("Iniciando...");
 console.log("Deu certo");
-
-// funcionando
-
-const express = require("express");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const path = require("path");
-const { calcularFolha } = require("./flpFuncoes");
-
 console.log("API_URL do env:", process.env.API_URL);
 const app = express();
-const crypto = require('crypto');
 app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "http://localhost:3001";
@@ -22,11 +23,11 @@ app.get("/env.js", (req, res) => {
 });
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/public", express.static(path.join(__dirname, "public")));
-app.use("/cdd", express.static(path.join(__dirname, "views/cdd")));
-app.use("/ETEC11", express.static(path.join(__dirname, "views/Time_11(ETEC)")));
+app.set("views", join(__dirname, "views"));
+app.use(express.static(join(__dirname, "public")));
+app.use("/public", express.static(join(__dirname, "public")));
+app.use("/cdd", express.static(join(__dirname, "views/cdd")));
+app.use("/ETEC11", express.static(join(__dirname, "views/Time_11(ETEC)")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/api/v1/trip', async (req, res) => {
@@ -58,7 +59,7 @@ app.use('/api/v1/trip', async (req, res) => {
     return res.status(502).json({ error: 'Erro ao conectar com o backend Trip.' });
   }
 });
-app.use('/livro-caixa', express.static(path.join(__dirname, 'views/Time_17_LivroCaixa')));
+app.use('/livro-caixa', express.static(join(__dirname, 'views/Time_17_LivroCaixa')));
 app.use( 
   session({
     secret: process.env.SESSION_SECRET || "domestic-worker-secret-2025",
@@ -484,7 +485,7 @@ app.get("/piscina/logout", (req, res) => {
 
 // -- Rota CDD (React compilado) --
 app.get("/cdd", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/cdd/index.html"));
+  res.sendFile(join(__dirname, "views/cdd/index.html"));
 });
 
 // -- Rotas MKP --
@@ -494,7 +495,7 @@ app.get("/MKP", (req, res) => {
 
 // -- Time 17 (Livro Caixa Rural) --
 app.get('/livro-caixa', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
+  res.sendFile(join(__dirname, 'views/Time_17_LivroCaixa', 'index.html'));
 });
 
 async function proxyMkpToApi(path, req, res) {
@@ -1222,10 +1223,10 @@ for (let i = 5; i <= 20; i++) {
 
 // -- Time_11(ETEC) - Encargos Trabalhistas Empregada Doméstica --
 app.get("/ETEC11", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
+  res.sendFile(join(__dirname, "views/Time_11(ETEC)/index.html"));
 });
 app.get("/ETEC11/*path", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/Time_11(ETEC)/index.html"));
+  res.sendFile(join(__dirname, "views/Time_11(ETEC)/index.html"));
 });
 
 const ETEC11_ROTAS = ['salario', 'ferias', 'decimo-terceiro', 'rescisao'];
@@ -1394,4 +1395,4 @@ app.listen(PORT, () => {
   console.log(`✅ App Doméstica rodando: http://localhost:${PORT}`);
 });
 
-module.exports = app;
+export default app;
