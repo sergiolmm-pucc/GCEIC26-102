@@ -1,4 +1,3 @@
-
 // Tabelas vigentes a partir de jan/2026
 const TABELA_INSS = {
   faixas: [
@@ -209,7 +208,7 @@ function calcularFolha(dados) {
   };
 }
 
-module.exports = {
+export {
   calcularINSS,
   calcularIRRF,
   calcularHorasExtras,
