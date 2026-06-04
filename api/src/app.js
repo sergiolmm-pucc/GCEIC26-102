@@ -1,6 +1,4 @@
 const express = require("express");
-const corsMiddleware = require("./middleware/cors");
-const legacyRoutes = require("./legacy/legacyRoutes");
 const helmet = require("helmet");
 
 const etec1 = require('./Time_2(ETEC1)/etec1.route');
@@ -28,7 +26,6 @@ const app = express();
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(corsMiddleware);
 app.use(express.json());
 
 // checa se api no ar
@@ -120,5 +117,4 @@ app.use("/SUS", susRoutes);
 // Rotas Livro Caixa Rural
 app.use("/livrocaixa", livrocaixa);
 
-app.use("/api", legacyRoutes);
 module.exports = app;
