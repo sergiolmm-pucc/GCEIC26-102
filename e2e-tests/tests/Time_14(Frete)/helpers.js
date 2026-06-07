@@ -13,7 +13,7 @@ if (!fs.existsSync(SCREENSHOTS_DIR)) {
 async function buildDriver() {
   return new Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options().addArguments("--headless=new"))
+    .setChromeOptions(new chrome.Options().addArguments("--headless=new", "--window-size=800,640"))
     .build();
 }
 
