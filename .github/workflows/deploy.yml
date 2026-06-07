@@ -103,7 +103,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Fotos dos testes
+          name: Fotos dos testes API
           # Path to the release files
           # Gravar as fotos na raiz do projeto no docker
 
@@ -229,7 +229,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Fotos dos testes
+          name: Fotos dos testes APP
           # Path to the release files
           # Gravar as fotos na raiz do projeto no docker
 
@@ -334,7 +334,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Fotos dos testes
+          name: Fotos dos testes RENDER
           # Path to the release files
           # Gravar as fotos na raiz do projeto no docker
 
