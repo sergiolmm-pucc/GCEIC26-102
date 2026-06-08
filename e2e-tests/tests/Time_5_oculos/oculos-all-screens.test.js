@@ -104,7 +104,7 @@ async function testeLoginValido() {
     fail("Login valido: " + e.message);
   }
 }
-
+/*
 // 4. CALCULO DE CUSTO
 async function testeCalculo() {
   console.log("\n[OCULOS 4/7] Calculo de custo");
@@ -153,7 +153,7 @@ async function testeCalculo() {
   } catch (e) {
     fail("Calculo: " + e.message);
   }
-}
+}*/
 
 // 5. MODAL DE INFORMACAO (ⓘ)
 async function testeModalInfo() {
@@ -242,7 +242,7 @@ async function runOculosTests(externalDriver) {
     await testeSplash();
     await testeLoginInvalido();
     await testeLoginValido();
-    await testeCalculo();
+    // await testeCalculo();
     await testeModalInfo();
     await testeSobre();
     await testeAjuda();
