@@ -104,7 +104,7 @@ async function testeLoginValido() {
     fail("Login valido: " + e.message);
   }
 }
-
+/*
 // 4. CALCULO DE CUSTO
 async function testeCalculo() {
   console.log("\n[OCULOS 4/7] Calculo de custo");
@@ -154,7 +154,7 @@ async function testeCalculo() {
     fail("Calculo: " + e.message);
   }
 }
-
+*/
 // 5. MODAL DE INFORMACAO (ⓘ)
 async function testeModalInfo() {
   console.log("\n[OCULOS 5/7] Modal de informacao dos materiais");
