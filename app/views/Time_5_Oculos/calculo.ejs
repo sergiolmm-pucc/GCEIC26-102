@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cálculo · ÓculosCalc</title>
+  <link rel="stylesheet" href="/oculos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><span class="dot"></span> Óculos<span style="color:var(--gold)">Calc</span></div>
+    <div class="nav-links">
+      <a href="/oculos/calculo" class="active">Cálculo</a>
+      <a href="/oculos/sobre">Sobre</a>
+      <a href="/oculos/help">Ajuda</a>
+      <a href="/oculos/logout" class="logout">Sair</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="page-head">
+      <div class="eyebrow">Custo de fabricação</div>
+      <h1>Simulador de custo do par de óculos</h1>
+      <p>Selecione materiais, defina a produção e os custos indiretos. Toque no <strong>ⓘ</strong> de cada item para entender o material e seu preço de referência. O custo unitário, o preço de venda e a projeção do lote são calculados em tempo real pela API.</p>
+    </div>
+
+    <div class="split">
+      <!-- ── FORM ── -->
+      <div class="panel">
+        <form id="form-oculos">
+
+          <div class="panel-title">🕶️ Materiais <span class="line"></span></div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="lbl-row">Material da armação <button type="button" class="info-i" data-info="armacao">i</button></label>
+              <div class="control">
+                <span class="ico">🛠️</span>
+                <select name="materialArmacao">
+                  <option value="injecao">Injeção (TR90)</option>
+                  <option value="acetato" selected>Acetato</option>
+                  <option value="metal">Metal</option>
+                  <option value="titanio">Titânio</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Tipo de lente <button type="button" class="info-i" data-info="tipoLente">i</button></label>
+              <div class="control">
+                <span class="ico">🔆</span>
+                <select name="tipoLente">
+                  <option value="sol" selected>Solar (plana)</option>
+                  <option value="grau">Grau (oftálmica)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Material da lente <button type="button" class="info-i" data-info="materialLente">i</button></label>
+              <div class="control">
+                <span class="ico">🔍</span>
+                <select name="materialLente">
+                  <option value="policarbonato" selected>Policarbonato</option>
+                  <option value="cr39">CR-39</option>
+                  <option value="vidro">Vidro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Taxa de perda (scrap) <button type="button" class="info-i" data-info="taxaPerda">i</button></label>
+              <div class="control">
+                <span class="ico">♻️</span>
+                <input type="number" name="taxaPerda" value="8" min="0" max="99" step="0.5">
+                <span class="suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="lbl-row">Tratamentos da lente <button type="button" class="info-i" data-info="tratamentos">i</button></label>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="tratamentos" value="uv" checked><span>☀️ Proteção UV</span></label>
+              <label class="chip"><input type="checkbox" name="tratamentos" value="antirreflexo"><span>✨ Antirreflexo</span></label>
+              <label class="chip"><input type="checkbox" name="tratamentos" value="coloracao"><span>🎨 Coloração</span></label>
+            </div>
+          </div>
+
+          <div class="panel-title">🏭 Produção <span class="line"></span></div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="lbl-row">Complexidade do design <button type="button" class="info-i" data-info="complexidade">i</button></label>
+              <div class="control">
+                <span class="ico">📐</span>
+                <select name="complexidade">
+                  <option value="simples">Simples</option>
+                  <option value="media" selected>Média</option>
+                  <option value="alta">Alta</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Custo da hora <button type="button" class="info-i" data-info="custoHora">i</button></label>
+              <div class="control">
+                <span class="ico">⏱️</span>
+                <input type="number" name="custoHora" value="28" min="1" step="0.5">
+                <span class="suffix">R$/h</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Volume de produção (lote) <button type="button" class="info-i" data-info="volumeProducao">i</button></label>
+              <div class="control">
+                <span class="ico">📦</span>
+                <input type="number" name="volumeProducao" value="1000" min="1" step="1">
+                <span class="suffix">un</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl-row">Margem de lucro <button type="button" class="info-i" data-info="margemLucro">i</button></label>
+              <div class="control">
+                <span class="ico">💰</span>
+                <input type="number" name="margemLucro" value="60" min="0" max="99" step="1">
+                <span class="suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn" id="btn-calc">Calcular custo</button>
+          <div id="form-error"></div>
+        </form>
+      </div>
+
+      <!-- ── RESULT ── -->
+      <div class="result" id="result">
+        <div class="empty" id="empty">
+          <div class="big">👓</div>
+          <p>Preencha os dados e clique em <strong>Calcular custo</strong><br>para ver o detalhamento e a projeção do lote.</p>
+        </div>
+
+        <div id="result-body" style="display:none">
+          <div class="report-head">
+            <div>
+              <div class="rh-prod">Relatório de custo</div>
+              <div class="rh-sub" id="rh-sub">—</div>
+            </div>
+          </div>
+
+          <div class="total-box">
+            <div class="lbl">Custo unitário de fabricação</div>
+            <div class="val"><small>R$</small> <span id="r-total">0,00</span></div>
+          </div>
+
+          <div class="segbar">
+            <i class="seg-mat" id="seg-mat"></i>
+            <i class="seg-mod" id="seg-mod"></i>
+            <i class="seg-ovh" id="seg-ovh"></i>
+            <i class="seg-emb" id="seg-emb"></i>
+          </div>
+
+          <div class="rows">
+            <div class="row">
+              <div class="k"><span class="swatch seg-mat"></span> Materiais (c/ perda)</div>
+              <div class="v">R$ <span id="r-mat">0,00</span></div>
+            </div>
+            <div class="row">
+              <div class="k"><span class="swatch seg-mod"></span> Mão de obra direta</div>
+              <div class="v">R$ <span id="r-mod">0,00</span></div>
+            </div>
+            <div class="row">
+              <div class="k"><span class="swatch seg-ovh"></span> Overhead (rateio)</div>
+              <div class="v">R$ <span id="r-ovh">0,00</span></div>
+            </div>
+            <div class="row">
+              <div class="k"><span class="swatch seg-emb"></span> Embalagem</div>
+              <div class="v">R$ <span id="r-emb">0,00</span></div>
+            </div>
+            <div class="row">
+              <div class="k">⏲️ Tempo de produção</div>
+              <div class="v"><span id="r-min">0</span> min</div>
+            </div>
+          </div>
+
+          <div class="sale">
+            <div class="k">Preço de venda sugerido<small id="r-margem">margem 0%</small></div>
+            <div class="v">R$ <span id="r-venda">0,00</span></div>
+          </div>
+
+          <div class="panel-title">📊 Projeção do lote <span class="line"></span></div>
+          <div class="proj">
+            <div class="proj-item"><span>Lote</span><strong id="p-lote">0 un</strong></div>
+            <div class="proj-item"><span>Custo total do lote</span><strong id="p-custo">R$ 0,00</strong></div>
+            <div class="proj-item"><span>Faturamento estimado</span><strong id="p-fat">R$ 0,00</strong></div>
+            <div class="proj-item highlight"><span>Lucro total estimado</span><strong id="p-lucro">R$ 0,00</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INFO MODAL ── -->
+  <div class="imodal" id="infoModal">
+    <div class="imodal-card">
+      <div class="imodal-head">
+        <h3 id="infoTitle">Informação</h3>
+        <button class="imodal-close" id="infoClose" type="button">&times;</button>
+      </div>
+      <div id="infoBody"></div>
+    </div>
+  </div>
+
+  <script>
+    let TABELAS = null;
+    let lastVolume = 0;
+
+    const fmt = (n) => Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const rs = (v) => 'R$ ' + fmt(v);
+    const somar = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
+
+    // Carrega a tabela de preços reais para alimentar os modais
+    fetch('/oculos/tabelas')
+      .then((r) => r.json())
+      .then((j) => { if (j.success) TABELAS = j.data; })
+      .catch(() => {});
+
+    // ── Conteúdo dos modais de informação ──
+    const INFO = {
+      armacao: {
+        titulo: '🛠️ Material da armação',
+        texto: 'Define o processo produtivo e o custo-base da frente do óculos (valor por par).',
+        linhas: (T) => [
+          ['Injeção (TR90)', rs(T.ARMACAO.injecao), 'Termoplástico injetado em molde. Altíssima escala e menor custo unitário; leve e flexível — ideal para grandes volumes.'],
+          ['Acetato', rs(T.ARMACAO.acetato), 'Placa de acetato usinada em CNC e polida. Acabamento premium e cores ricas; exige mais mão de obra.'],
+          ['Metal', rs(T.ARMACAO.metal), 'Monel / aço inox com soldagem e galvanoplastia. Resistente e fino; custo intermediário-alto.'],
+          ['Titânio', rs(T.ARMACAO.titanio), 'Hipoalergênico, ultraleve e resistente à corrosão. Processo nobre, linha premium.'],
+        ],
+      },
+      tipoLente: {
+        titulo: '🔆 Tipo de lente',
+        texto: 'Determina se a lente passa por surfagem (geração da curva do grau).',
+        linhas: (T) => [
+          ['Solar (plana)', '—', 'Sem grau. Foco em proteção e estética; não passa por surfagem.'],
+          ['Grau (oftálmica)', rs(T.SURFAGEM_GRAU) + ' /lente', 'Exige surfagem por lente, somando custo de usinagem óptica ao par.'],
+        ],
+      },
+      materialLente: {
+        titulo: '🔍 Material da lente',
+        texto: 'Custo por lente (multiplicado por 2 no par).',
+        linhas: (T) => [
+          ['CR-39', rs(T.LENTE_BASE.cr39), 'Resina de boa nitidez e baixo custo; mais espessa e menos resistente a impacto.'],
+          ['Policarbonato', rs(T.LENTE_BASE.policarbonato), 'Alta resistência a impacto e leveza; ideal para uso intenso, esportivo e infantil.'],
+          ['Vidro', rs(T.LENTE_BASE.vidro), 'Excelente nitidez e resistência a riscos; mais pesado e frágil a quedas.'],
+        ],
+      },
+      tratamentos: {
+        titulo: '✨ Tratamentos da lente',
+        texto: 'Aplicados por lente (×2 no par). Podem ser combinados.',
+        linhas: (T) => [
+          ['Proteção UV', rs(T.TRATAMENTO.uv), 'Bloqueio de raios UVA/UVB. Item de segurança praticamente obrigatório.'],
+          ['Antirreflexo', rs(T.TRATAMENTO.antirreflexo), 'Reduz reflexos e melhora a visão noturna; agrega valor percebido.'],
+          ['Coloração', rs(T.TRATAMENTO.coloracao), 'Tingimento (degradê ou sólido), comum em solares e linha fashion.'],
+        ],
+      },
+      taxaPerda: {
+        titulo: '♻️ Taxa de perda (scrap)',
+        texto: 'Percentual de matéria-prima perdida no corte ou rejeitada no controle de qualidade.',
+        nota: 'Eleva o custo real dos materiais: custo ÷ (1 − perda). Faixa típica da indústria: 5% a 15%.',
+      },
+      complexidade: {
+        titulo: '📐 Complexidade do design',
+        texto: 'Multiplica o tempo das etapas de produção (design, corte, montagem, polimento, QA e embalagem).',
+        linhas: (T) => [
+          ['Simples', '× ' + T.COMPLEXIDADE.simples.toFixed(1), 'Linhas retas e poucos acabamentos.'],
+          ['Média', '× ' + T.COMPLEXIDADE.media.toFixed(1), 'Acabamentos e ajustes moderados.'],
+          ['Alta', '× ' + T.COMPLEXIDADE.alta.toFixed(1), 'Pintura à mão, múltiplos componentes e detalhamento fino.'],
+        ],
+      },
+      custoHora: {
+        titulo: '⏱️ Custo da hora de trabalho',
+        texto: 'Valor da hora de mão de obra direta, com encargos. Multiplica o tempo total das etapas de produção.',
+        nota: (T) => 'Padrão de referência: ' + rs(T.CUSTO_HORA) + ' /h. O tempo de cada etapa é ajustado pela complexidade do design.',
+      },
+      volumeProducao: {
+        titulo: '📦 Volume de produção (lote)',
+        texto: 'Quantidade do lote produzido. Dilui os custos indiretos (overhead) por unidade.',
+        linhas: (T) => [
+          ['Depreciação /mês', rs(T.OVERHEAD_MENSAL.depreciacao), 'Injetoras, CNC, politrizes e surfaçadoras.'],
+          ['Energia /mês', rs(T.OVERHEAD_MENSAL.energia), 'Energia elétrica consumida pela fábrica.'],
+          ['Aluguel /mês', rs(T.OVERHEAD_MENSAL.aluguel), 'Aluguel do espaço de produção.'],
+        ],
+        nota: (T) => 'Overhead mensal total de ' + rs(somar(T.OVERHEAD_MENSAL)) + ', rateado pelo volume. Quanto maior o lote, menor o custo fixo por unidade.',
+      },
+      margemLucro: {
+        titulo: '💰 Margem de lucro',
+        texto: 'Margem aplicada sobre o preço de venda: preço = custo ÷ (1 − margem).',
+        nota: 'Resulta no preço de venda sugerido e no lucro unitário. Não inclui impostos sobre a venda, frete de distribuição nem marketing (CAC).',
+      },
+    };
+
+    function openInfo(cat) {
+      const info = INFO[cat];
+      if (!info) return;
+      let html = '<p class="modal-lead">' + info.texto + '</p>';
+      if (info.linhas && TABELAS) {
+        html += '<div class="price-list">';
+        for (const [label, right, desc] of info.linhas(TABELAS)) {
+          html += '<div class="pl-item"><div class="pl-head"><span>' + label +
+                  '</span><span class="pl-price">' + right + '</span></div>' +
+                  '<div class="pl-desc">' + desc + '</div></div>';
+        }
+        html += '</div>';
+      }
+      if (info.nota) {
+        const nota = typeof info.nota === 'function' ? (TABELAS ? info.nota(TABELAS) : '') : info.nota;
+        if (nota) html += '<p class="modal-note">' + nota + '</p>';
+      }
+      document.getElementById('infoTitle').textContent = info.titulo;
+      document.getElementById('infoBody').innerHTML = html;
+      document.getElementById('infoModal').classList.add('show');
+    }
+
+    document.querySelectorAll('.info-i').forEach((b) =>
+      b.addEventListener('click', () => openInfo(b.dataset.info))
+    );
+    const closeModal = () => document.getElementById('infoModal').classList.remove('show');
+    document.getElementById('infoClose').addEventListener('click', closeModal);
+    document.getElementById('infoModal').addEventListener('click', (e) => {
+      if (e.target.id === 'infoModal') closeModal();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // ── Cálculo ──
+    const form = document.getElementById('form-oculos');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-calc');
+      const errBox = document.getElementById('form-error');
+      errBox.innerHTML = '';
+      btn.disabled = true;
+      btn.textContent = 'Calculando...';
+
+      const fd = new FormData(form);
+      lastVolume = Number(fd.get('volumeProducao'));
+      const payload = {
+        materialArmacao: fd.get('materialArmacao'),
+        tipoLente: fd.get('tipoLente'),
+        materialLente: fd.get('materialLente'),
+        taxaPerda: Number(fd.get('taxaPerda')),
+        tratamentos: fd.getAll('tratamentos'),
+        complexidade: fd.get('complexidade'),
+        custoHora: Number(fd.get('custoHora')),
+        volumeProducao: lastVolume,
+        margemLucro: Number(fd.get('margemLucro')),
+      };
+
+      try {
+        const res = await fetch('/oculos/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Erro no cálculo');
+        render(json.data);
+      } catch (err) {
+        errBox.innerHTML = '<div class="alert" style="margin-top:14px">⚠️ ' + err.message + '</div>';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Calcular custo';
+      }
+    });
+
+    function render(data) {
+      const r = data.resumo;
+      document.getElementById('empty').style.display = 'none';
+      const body = document.getElementById('result-body');
+      body.style.display = 'block';
+      body.classList.remove('reveal');
+      void body.offsetWidth;
+      body.classList.add('reveal');
+
+      // Cabeçalho do relatório
+      document.getElementById('rh-sub').textContent =
+        'Gerado em ' + new Date().toLocaleDateString('pt-BR');
+
+      document.getElementById('r-total').textContent = fmt(r.custo_fabricacao);
+      document.getElementById('r-mat').textContent = fmt(r.custo_materiais);
+      document.getElementById('r-mod').textContent = fmt(r.custo_mao_de_obra);
+      document.getElementById('r-ovh').textContent = fmt(r.custo_overhead);
+      document.getElementById('r-emb').textContent = fmt(r.custo_embalagem);
+      document.getElementById('r-min').textContent = data.mao_de_obra.total_minutos;
+      document.getElementById('r-venda').textContent = fmt(r.preco_venda_sugerido);
+      document.getElementById('r-margem').textContent =
+        'margem ' + r.margem_lucro + '% · lucro ' + rs(r.lucro_unitario);
+
+      // Barra segmentada
+      const total = r.custo_fabricacao || 1;
+      const pct = (v) => (v / total * 100).toFixed(1) + '%';
+      document.getElementById('seg-mat').style.width = pct(r.custo_materiais);
+      document.getElementById('seg-mod').style.width = pct(r.custo_mao_de_obra);
+      document.getElementById('seg-ovh').style.width = pct(r.custo_overhead);
+      document.getElementById('seg-emb').style.width = pct(r.custo_embalagem);
+
+      // Projeção do lote
+      const vol = lastVolume || 0;
+      document.getElementById('p-lote').textContent = vol.toLocaleString('pt-BR') + ' un';
+      document.getElementById('p-custo').textContent = rs(r.custo_fabricacao * vol);
+      document.getElementById('p-fat').textContent = rs(r.preco_venda_sugerido * vol);
+      document.getElementById('p-lucro').textContent = rs(r.lucro_unitario * vol);
+    }
+  </script>
+</body>
+</html>

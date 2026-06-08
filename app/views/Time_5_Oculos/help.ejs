@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajuda · ÓculosCalc</title>
+  <link rel="stylesheet" href="/oculos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><span class="dot"></span> Óculos<span style="color:var(--gold)">Calc</span></div>
+    <div class="nav-links">
+      <a href="/oculos/calculo">Cálculo</a>
+      <a href="/oculos/sobre">Sobre</a>
+      <a href="/oculos/help" class="active">Ajuda</a>
+      <a href="/oculos/logout" class="logout">Sair</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="page-head">
+      <div class="eyebrow">Central de ajuda</div>
+      <h1>Como funciona o cálculo</h1>
+      <p>O custo unitário de fabricação é a soma de três pilares — materiais diretos, mão de obra direta e custos indiretos — sobre os quais aplicamos a margem para sugerir o preço de venda.</p>
+    </div>
+
+    <div class="cards">
+      <div class="info-card">
+        <div class="ic">🕶️</div>
+        <h3>Materiais diretos</h3>
+        <p>Armação, par de lentes (com surfagem no caso de grau), tratamentos, componentes e insumos. A taxa de perda eleva o custo real: <em>nominal ÷ (1 − perda)</em>.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">⏱️</div>
+        <h3>Mão de obra direta</h3>
+        <p>Soma do tempo das etapas (design, corte, montagem, polimento, QA e embalagem) ajustado pela complexidade e multiplicado pelo custo da hora.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">🏭</div>
+        <h3>Custos indiretos</h3>
+        <p>Depreciação, energia e aluguel da fábrica rateados pelo volume do lote. Quanto maior a produção, menor o custo fixo por unidade.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">📦</div>
+        <h3>Embalagem</h3>
+        <p>Estojo, flanela, caixa externa e certificado de garantia, somados ao custo unitário final do par.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">💰</div>
+        <h3>Preço de venda</h3>
+        <p>Aplica a margem sobre o preço: <em>custo ÷ (1 − margem)</em>. O resultado mostra o lucro unitário estimado.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">🛠️</div>
+        <h3>Tecnologias</h3>
+        <p>Front-end em EJS, CSS e JavaScript consumindo, via fetch, a API REST em Node.js/Express que executa todos os cálculos.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

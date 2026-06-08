@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre · ÓculosCalc</title>
+  <link rel="stylesheet" href="/oculos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><span class="dot"></span> Óculos<span style="color:var(--gold)">Calc</span></div>
+    <div class="nav-links">
+      <a href="/oculos/calculo">Cálculo</a>
+      <a href="/oculos/sobre" class="active">Sobre</a>
+      <a href="/oculos/help">Ajuda</a>
+      <a href="/oculos/logout" class="logout">Sair</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="page-head">
+      <div class="eyebrow">Time 5</div>
+      <h1>Sobre nós</h1>
+      <p>Conheça a equipe por trás do ÓculosCalc.</p>
+    </div>
+
+    <div class="about-hero">
+      <img src="/img/Time_5_Oculos.jpg" alt="Equipe do Time 5">
+      <p>
+        Somos a <strong>Equipe 5</strong> e desenvolvemos esta calculadora de custo de
+        fabricação de óculos como projeto acadêmico, aplicando conhecimentos em
+        desenvolvimento web, APIs em Node.js/Express e integração entre front-end e back-end.
+      </p>
+    </div>
+
+    <div class="team">
+      <div class="dev-card">
+        <div class="av">HG</div>
+        <strong>Henrique Gambin</strong>
+        <div class="role">API de Materiais</div>
+        <p>Desenvolveu os endpoints de cálculo dos materiais diretos — armação, par de lentes, surfagem de grau e tratamentos — com a aplicação da taxa de perda (scrap), além da tabela de preços de referência. <em>(/materiais e /tabelas)</em></p>
+      </div>
+      <div class="dev-card">
+        <div class="av">GB</div>
+        <strong>Guilherme Bars</strong>
+        <div class="role">API de Produção &amp; Overhead</div>
+        <p>Responsável pelo cálculo da mão de obra direta por etapas (com fator de complexidade), pelo rateio dos custos indiretos da fábrica pelo volume do lote e pelo custo de embalagem. <em>(/mao-de-obra, /overhead e /embalagem)</em></p>
+      </div>
+      <div class="dev-card">
+        <div class="av">VH</div>
+        <strong>Vitor Hugo Barbosa</strong>
+        <div class="role">API de Custo Total &amp; Preço</div>
+        <p>Implementou a consolidação do custo unitário de fabricação, a precificação por margem com o lucro estimado e a integração do front-end com a API. <em>(/calcular-total e /preco-venda)</em></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

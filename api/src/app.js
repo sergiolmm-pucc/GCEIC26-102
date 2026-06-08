@@ -16,6 +16,7 @@ const dasn = require("./Time_8(DASN)/dasn");
 const idpj = require("./Time_12(IDPJ)/idpj.route");
 const mkpRouter = require("./mkp/app");
 const piscina1 = require('./Time_10_piscina/app_piscina');
+const oculos = require('./Time_5_oculos/app_oculos');
 const tripRoutes = require('./Time_1(trip)/routes/tripRoutes');
 const freteRoutes = require("./Time_14(Frete)/frete.routes");
 const susRoutes = require('./Time_16(SUS)/susRoutes');
@@ -107,6 +108,8 @@ app.use("/IDPJ", idpj);
 app.use("/MKP", mkpRouter);
 // Rotas Piscina
 app.use("/api/Time_10_piscina", piscina1);
+// Rotas Óculos (Time 5)
+app.use("/api/Time_5_oculos", oculos);
 // Rotas CD (compilado TS)
 const cdRouter = require("./cdd/routes/dividendRouter").default;
 app.use("/api/cdd", cdRouter);

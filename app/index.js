@@ -74,7 +74,7 @@ const equipes = [
   { numero: 2, nome: "EXCHANGE", rota: "/exg" },
   { numero: 3, nome: "CDD", rota: "/cdd" },
   { numero: 4, nome: "CLT", rota: "/clt" },
-  { numero: 5, nome: "Equipe-5", rota: "/equipe-5" },
+  { numero: 5, nome: "Óculos", rota: "/oculos" },
   { numero: 6, nome: "FinanceCar", rota: "/financecar" },
   { numero: 7, nome: "Equipe-7", rota: "/equipe-7" },
   { numero: 8, nome: "DASN-SIMEI", rota: "/DASN" },
@@ -480,6 +480,76 @@ app.get("/piscina/help", requirePiscinaAuth, (req, res) => {
 app.get("/piscina/logout", (req, res) => {
   req.session.piscinaUser = null;
   res.redirect("/piscina/login");
+});
+//========================
+
+//======================
+// -- Time_5 Óculos --
+function requireOculosAuth(req, res, next) {
+  if (req.session && req.session.oculosUser) return next();
+  res.redirect("/oculos/login");
+}
+
+app.get("/oculos", (req, res) => {
+  res.render("Time_5_Oculos/splash");
+});
+
+app.get("/oculos/login", (req, res) => {
+  if (req.session.oculosUser) return res.redirect("/oculos/calculo");
+  res.render("Time_5_Oculos/login", { error: null });
+});
+
+app.post("/oculos/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "admin") {
+    req.session.oculosUser = { username: "admin", nome: "Administrador" };
+    return res.redirect("/oculos/calculo");
+  }
+  res.render("Time_5_Oculos/login", { error: "Usuário ou senha inválidos" });
+});
+
+app.get("/oculos/calculo", requireOculosAuth, (req, res) => {
+  res.render("Time_5_Oculos/calculo");
+});
+
+// Tabela de preços de referência (para os modais de informação)
+app.get("/oculos/tabelas", requireOculosAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/Time_5_oculos/tabelas`);
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    res.status(502).json({ success: false, error: "Erro ao conectar com a API." });
+  }
+});
+
+// Cálculo via fetch (retorna JSON para a UI montar o resultado ao vivo)
+app.post("/oculos/calcular", requireOculosAuth, async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const response = await fetch(`${API_URL}/api/Time_5_oculos/calcular-total`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(502).json({ success: false, error: "Erro ao conectar com a API." });
+  }
+});
+
+app.get("/oculos/sobre", requireOculosAuth, (req, res) => {
+  res.render("Time_5_Oculos/sobre");
+});
+app.get("/oculos/help", requireOculosAuth, (req, res) => {
+  res.render("Time_5_Oculos/help");
+});
+app.get("/oculos/logout", (req, res) => {
+  req.session.oculosUser = null;
+  res.redirect("/oculos/login");
 });
 //========================
 
@@ -1214,6 +1284,7 @@ app.get("/sus/help", requireSusAuth, (req, res) => {
 
 // Endpoints dinâmicos equipe-5 a equipe-20
 for (let i = 5; i <= 20; i++) {
+  if (i === 5) continue;
   if (i === 12) continue;
   app.get(`/equipe-${i}`, (req, res) => {
     console.log(`/equipe-${i}/equipe`);
