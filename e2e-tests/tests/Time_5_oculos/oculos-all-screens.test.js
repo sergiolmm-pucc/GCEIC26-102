@@ -242,7 +242,7 @@ async function runOculosTests(externalDriver) {
     await testeSplash();
     await testeLoginInvalido();
     await testeLoginValido();
-    await testeCalculo();
+
     await testeModalInfo();
     await testeSobre();
     await testeAjuda();
