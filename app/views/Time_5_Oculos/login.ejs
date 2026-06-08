@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar · ÓculosCalc</title>
+  <link rel="stylesheet" href="/oculos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="auth">
+    <div class="auth-card">
+      <div class="auth-head">
+        <div class="auth-logo">👓</div>
+        <h1>Óculos<span style="color:var(--gold)">Calc</span></h1>
+        <p>Acesse a calculadora de custos</p>
+      </div>
+
+      <form method="POST" action="/oculos/login">
+        <% if (error) { %>
+          <div class="alert">⚠️ <%= error %></div>
+        <% } %>
+
+        <div class="field">
+          <label>Usuário</label>
+          <div class="control">
+            <span class="ico">👤</span>
+            <input type="text" name="username" placeholder="admin" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Senha</label>
+          <div class="control">
+            <span class="ico">🔒</span>
+            <input type="password" name="password" placeholder="••••••" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
